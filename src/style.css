@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+.germania-one-regular {
+  font-family: "Germania One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.nunito-sans-uniquifier {
+  font-family: "Nunito Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style:normal;
+  font-variation-settings:
+    "wdth" 100,
+    "YTLC" 500;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+::selection {
+  background-color: var(--color-naranja);
+  color: var(--color-palido);
+}
+:root{
+  --color-naranja: #FF4719;
+  --color-oscuro: #2B2B2B;
+  --color-gris: #B7AAAA;
+  --color-palido: #F3F3F3;
+  --tamano-pequeno:18px;
+  --tamano-mediano:36px;
+  --tamano-grande:48px;
+  --tamano-titulo:80px;
+  --fuente-titulo: Germania One;
+  --fuente-texto: Nunito Sans;
+}
+.botonOK{
+  background-color: var(--color-naranja)!important;
+  color: white !important;
+}
+.botonCancelar{
+  background-color: var(--color-oscuro)!important;
+  color: white !important;
+}

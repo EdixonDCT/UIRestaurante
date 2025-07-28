@@ -1,0 +1,125 @@
+@import url(general.css);
+.personal,.trabajo{
+  margin: 30px;
+}
+.personal__contenedor,.trabajo__contenedor{
+  margin-top: 20px;
+}
+.personal__titulo,.trabajo__titulo{
+  font-weight: bolder;
+}
+.personal__textbox,.trabajo__textbox{
+  width: 90%;
+  display: block;
+  border-radius: 20px;
+  cursor:text;
+  padding: 15px 100px 15px 30px;
+  font-size: var(--tamano-mediano);
+  background-color: var(--color-palido);
+  border: solid 0px var(--color-palido);
+  outline: none;
+  transition: 0.3s;
+  color: var(--color-naranja);
+}
+.personal__fecha{
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  cursor:text;
+  padding: 15px 100px 15px 30px;
+  font-size: var(--tamano-mediano);
+  border: solid 0px var(--color-palido);
+  outline: none;
+  transition: 0.3s;
+  color: var(--color-naranja);
+}
+input::placeholder {
+  color: var(--color-gris);
+}
+.trabajo__fotografia{
+  display: grid;
+  width: 100%;
+  grid-template-columns:1fr 2fr;
+  grid-template-rows: 1fr;
+}
+.trabajo__foto{
+  display: flex;
+  justify-content: center;
+}
+.trabajo__perfil{
+  width: 250px;
+  height: 250px;
+  border: 7px solid var(--color-oscuro) ;
+}
+.trabajo_titulo{
+  font-weight: bolder;
+}
+.trabajo__subir{
+  display: flex;
+  flex-direction: column;
+}
+.trabajo__combox{
+  width: 90%;
+  display: block;
+  border-radius: 20px;
+  cursor:pointer;
+  padding: 15px 100px 15px 30px;
+  font-size: var(--tamano-mediano);
+  background-color: var(--color-palido);
+  border: solid 0px var(--color-palido);
+  outline: none;
+  color: var(--color-naranja);
+}
+.botones{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.botones__boton{
+  width: 20%;
+  height: 60%;
+  display: block;
+  padding: 10px;
+  text-align: center;
+  background-color: var(--color-naranja);
+  border: solid 0px var(--color-naranja);  
+  border-radius: 30px;
+  font-size: var(--tamano-mediano);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-palido);
+  transition: 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.botones__boton:hover{
+  background-color: var(--color-palido);
+  color: var(--color-naranja);
+  transform:scale(1.1)
+}
+#ArchivoFoto{
+  display: none;
+}
+.trabajo__boton{
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  background-color: var(--color-oscuro);
+  border: solid 0px var(--color-naranja);  
+  border-radius: 20px;
+  font-size: var(--tamano-mediano);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-palido);
+  transition: 0.3s;
+  cursor: pointer;
+  text-align: center;
+}
+.trabajo__boton:hover{
+  background-color: var(--color-palido);
+  color: var(--color-naranja);
+  transform:scale(1.05)
+}
+.trabajo__boton:active{
+  color: var(--color-palido);
+}

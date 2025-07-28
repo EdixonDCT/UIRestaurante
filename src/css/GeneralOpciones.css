@@ -1,0 +1,65 @@
+@import url(general.css);
+.header{
+  display: grid;
+  width: 100%;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows: 1fr;
+  z-index: 1;
+}
+.header p{
+  margin: 0 30px;
+}
+.section{
+  z-index: 0;
+}
+.header__derecha{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  color: var(--color-palido);
+}
+.header__izquierda{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.botones__boton{
+  height: 70%;
+  width: 30%;
+  background-color: var(--color-naranja);
+  border: solid 0px var(--color-naranja);  
+  border-radius: 50px;
+  font-size: var(--tamano-mediano);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-oscuro);
+  transition: 0.3s;
+  cursor: pointer;
+  margin: 0 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+.botones__boton:hover{
+  background-color: var(--color-palido);
+  color: var(--color-naranja);
+  transform:scale(1.1)
+}
+.botones{
+  display: grid;
+  width: 100%;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows: 1fr;
+  z-index: 1;
+}
+.botones__derecha{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.botones__izquierda{
+  display: flex;
+  justify-content: start;
+  align-items: center
+}
