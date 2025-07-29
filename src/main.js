@@ -1,4 +1,4 @@
-import { alertaError, alertaOK } from "./js/alertas";
+import { alertaError, alertaOK, alertaWarning } from "./js/alertas";
 
 const formulario = document.querySelector("form");
 const cedula = document.querySelector(".cedula");
@@ -24,7 +24,7 @@ const validar = async (e,) => {
     }
   });
   if (!errores == "") {
-    alertaError(`${errores} no puede${cant >= 2 ? "n" : ""} estar vacio${cant >= 2 ? "s" : ""} y solo puede${cant >= 2 ? "n" : ""} aceptar numeros.`)
+    alertaWarning(`${errores} no puede${cant >= 2 ? "n" : ""} estar vacio${cant >= 2 ? "s" : ""} y solo puede${cant >= 2 ? "n" : ""} aceptar numeros.`)
     e.preventDefault;
     return;
   }
@@ -70,4 +70,3 @@ const numeros = (event) => {
 
 formulario.addEventListener("submit", validar);
 cedula.addEventListener("keydown", numeros);
-contrasena.addEventListener("keydown", numeros);

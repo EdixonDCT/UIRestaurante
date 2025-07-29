@@ -1,70 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registrarse</title>
-  <link rel="stylesheet" href="../css/register.css">
-  <link rel="shortcut icon" href="../img/logo.png" />
-</head>
-<body>
-  <form class="container" action="login.html">
-    <header class="header">
-      <p>crear cuenta</p>
-    </header>
-    <section class="section">
-      <div class="personal">
-      <div class="personal__contenedor">
-        <p class="personal__titulo">documento:</p>
-        <input type="text" class="personal__textbox" placeholder="Ingrese el Documento">
-      </div>
-      <div class="personal__contenedor">
-        <p class="personal__titulo">nombres:</p>
-        <input type="text" class="personal__textbox" placeholder="Ingrese el Nombres">
-      </div>
-      <div class="personal__contenedor">
-        <p class="personal__titulo">apellidos:</p>
-        <input type="text" class="personal__textbox" placeholder="Ingrese el Apellidos">
-      </div>
-      <div class="personal__contenedor">
-        <p class="personal__titulo">fecha Nacimiento:</p>
-        <input type="date" class="personal__fecha">
-      </div>
-      </div>
-      <div class="trabajo">
-        <div class="trabajo__fotografia">
-          <div class="trabajo__foto">
-            <img src="../img/pfp.png" alt="perfil" class="trabajo__perfil">
-          </div>
-          <div class="trabajo__subir">
-            <p class="trabajo_titulo">fotografia:</p>
-            <label class="trabajo__boton" for="ArchivoFoto">Seleccionar fotografia</label>
-            <input type="file" id="ArchivoFoto">
-            <span id="ArchivoEstado">ningun archivo seleccionado</span>          
-            <button class="trabajo__boton"> eliminar fotografia</button>
-          </div>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse</title>
+    <link rel="stylesheet" href="../css/register.css">
+    <link rel="shortcut icon" href="../img/logo.png" />
+  </head>
+  <body>
+    <form class="container" action="../../index.html">
+      <header class="header">
+        <a class="header__boton" href="../../index.html">Volver</a>
+        <p>crear cuenta</p>
+      </header>
+      <section class="section">
+        <div class="personal">
+        <div class="personal__contenedor">
+          <p class="personal__titulo">Cedula:</p>
+          <input id="cedula" type="text" class="personal__textbox" placeholder="Ingrese el Cedula">
         </div>
-        <div class="trabajo__contenedor"></div>
-        <p class="trabajo__titulo">contraseña:</p>
-        <input type="password" class="trabajo__textbox" placeholder="Ingrese la Contraseña">
-        <div class="trabajo__contenedor">
-        <p class="trabajo__titulo">validar contraseña:</p>
-        <input type="password" class="trabajo__textbox" placeholder="Ingrese la Contraseña Nuevamente">
-      </div>
-          <div class="trabajo__contenedor">
-            <p for="oficio">tipo de oficio:</p>
-            <select class="trabajo__combox">
-              <option value="">N/A</option>
-              <option value="">Mesero</option>
-              <option value="">Cajero</option>
-            </select>  
+        <div class="personal__contenedor">
+          <p class="personal__titulo">nombres:</p>
+          <input id="nombre" type="text" class="personal__textbox" placeholder="Ingrese el Primer Nombre">
+        </div>
+        <div class="personal__contenedor">
+          <p class="personal__titulo">apellidos:</p>
+          <input id="apellido" type="text" class="personal__textbox" placeholder="Ingrese el Apellidos">
+        </div>
+        <div class="personal__contenedor">
+          <p class="personal__titulo">fecha Nacimiento:</p>
+          <input id="fecha" type="date" class="personal__fecha">
+        </div>
+        </div>
+        <div class="trabajo">
+          <div class="trabajo__fotografia">
+            <div class="trabajo__foto">
+              <img src="../img/pfp.png" alt="perfil" class="trabajo__perfil" id="imagenPerfil">
+            </div>
+            <div class="trabajo__subir">
+              <p class="trabajo_titulo">fotografia:</p>
+              <label class="trabajo__boton" for="ArchivoFoto">Seleccionar fotografia</label>
+              <input type="file" id="ArchivoFoto">
+              <span id="ArchivoEstado">ningun archivo seleccionado</span>       
+              <button id="borrarImagen" class="trabajo__boton"> eliminar fotografia</button>
+            </div>
           </div>
-      </div>
-    </section>
-    <section class="botones">
-      <button type="submit" class="botones__boton">registrarse</button>
-    </section>
-  </form>
-  <script type="module" src="../js/subirFoto.js"></script>
-</body>
-</html>
+          <div class="trabajo__contenedor"></div>
+          <p class="trabajo__titulo">contraseña:</p>
+          <input id="pass1" type="password" class="trabajo__textbox" placeholder="Ingrese la Contraseña">
+          <div class="trabajo__contenedor">
+          <p class="trabajo__titulo">validar contraseña:</p>
+          <input id="pass2" type="password" class="trabajo__textbox" placeholder="Ingrese la Contraseña Nuevamente">
+        </div>
+            <div class="trabajo__contenedor">
+              <p for="oficio">tipo de oficio:</p>
+              <select id="oficio" class="trabajo__combox">
+                <option value="0" hidden>N/A</option>
+              </select>  
+            </div>
+        </div>
+      </section>
+      <section class="botones">
+        <button type="submit" class="botones__boton">registrarse</button>
+      </section>
+    </form>
+    <script type="module" src="../js/register.js"></script>
+  </body>
+  </html>
