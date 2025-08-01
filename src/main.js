@@ -32,7 +32,7 @@ const validar = async (e,) => {
   if (valido) 
   {
     await alertaOK("Inicio Sesión EXITOSO.");
-    formulario.action = "/src/html/menu.html#" + cedula.value;
+    formulario.action = `/src/html/menu.html#${cedula.value}`;
     formulario.submit();
   }
 };

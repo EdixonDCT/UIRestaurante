@@ -58,34 +58,33 @@ const botones = async (oficios) => {
   let nombres = [];
   if (oficios == "Administrador") {
     nombres = [
-      "Mesas",
-      "Caja",
-      "Pedido",
-      "Reserva",
-      "Trabajadores",
-      "Ingredientes",
-      "Platillos"
+      "mesas",
+      "caja",
+      "pedidos",
+      "reserva",
+      "trabajadores",
+      "ingredientes",
+      "platillos"
     ];
   }
   else if (oficios == "Cajero") {
     nombres = [
-      "Mesas",
-      "Caja",
-      "Pedido",
-      "Reserva"
+      "mesas",
+      "caja",
+      "pedidos",
+      "reserva"
     ];
   }
   else if (oficios == "Mesero") {
     nombres = [
-      "Mesas",
-      "Pedido",
-      "Reserva"
+      "mesas",
+      "pedidos"
     ];
   }
   nombres.forEach(nombre => {
     const enlace = document.createElement("a");
     enlace.classList.add("asignaciones__boton");
-    enlace.href = `#${nombre}`;
+    enlace.href = `${nombre}.html#${hash}`;
     enlace.textContent = `Ir a ${nombre}`;
     contenedor.appendChild(enlace);
   });

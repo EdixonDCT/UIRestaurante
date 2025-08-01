@@ -40,7 +40,7 @@ export const alertaPregunta = (mensaje) => {
         icon: "question",
         showCancelButton: true,
         cancelButtonText: "No",
-        confirmButtonText: "Si, volver",
+        confirmButtonText: "Si",
         customClass: {
             confirmButton: 'botonOK',
             cancelButton: 'botonCancelar'
