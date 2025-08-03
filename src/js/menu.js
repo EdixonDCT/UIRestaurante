@@ -61,7 +61,7 @@ const botones = async (oficios) => {
       "mesas",
       "caja",
       "pedidos",
-      "reserva",
+      "reservas",
       "trabajadores",
       "ingredientes",
       "platillos"
@@ -72,7 +72,7 @@ const botones = async (oficios) => {
       "mesas",
       "caja",
       "pedidos",
-      "reserva"
+      "reservas"
     ];
   }
   else if (oficios == "Mesero") {

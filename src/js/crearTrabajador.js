@@ -1,7 +1,8 @@
 import { alertaError, alertaOK, alertaPregunta } from "./alertas";
 
+const hash = window.location.hash.slice(1);
 //formulario
-const registro = document.querySelector("form");
+const registro = document.getElementById("formRegistro");
 //valores a postear
 const cedula = document.getElementById("cedula");
 const nombre = document.getElementById("nombre");
@@ -10,14 +11,16 @@ const fecha = document.getElementById("fecha");
 const pass1 = document.getElementById("pass1");
 const pass2 = document.getElementById("pass2");
 const oficio = document.getElementById("oficio");
-const comboxOficio = document.querySelector(".trabajo__combox");
+const comboxOficio = document.getElementById("oficio");
 //control de imagen
 const inputPerfil = document.getElementById("ArchivoFoto");
 const imagenPerfil = document.getElementById("imagenPerfil");
 const spanImagen = document.getElementById("ArchivoEstado");
 const BotonborrarImg = document.getElementById("borrarImagen");
+const volver = document.getElementById("volver");
 
-
+volver.action = `trabajadores.html#${hash}`;
+registro.action = `trabajadores.html#${hash}`;
 
 const validar = async (e) => {
     e.preventDefault();
@@ -110,8 +113,9 @@ const cargarOficios = async () => {
             const mensaje = await response.text();
             throw new Error(mensaje);
         }
-
         const data = await response.json();
+        
+        console.log(data);
         data.forEach(oficio => {
             const option = document.createElement("option");
             option.value = oficio.codigo;

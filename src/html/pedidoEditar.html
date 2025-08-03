@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar Pedido</title>
+  <link rel="stylesheet" href="../css/general.css" />
+  <link rel="shortcut icon" href="../img/logo.png" />
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <form id="volver" type="post" action="">
+        <button type="submit">Volver</button>
+      </form>
+      <div class="flex">
+        <p>Nombre: Waza</p>
+        <img src="../img/pfp.png" />
+      </div>
+    </header>
+
+    <main class="main">
+      <h2>Editar Pedido</h2>
+      <form class="form" action="" method="post">
+        <label for="id">ID Pedido:</label>
+        <input type="text" id="id" disabled style="background-color: #e0e0e0;"><br /><br />
+
+        <label for="numeroMesa">Número de Mesa:</label>
+        <select id="numeroMesa"></select><br /><br />
+
+        <label for="idCaja">ID Caja:</label>
+        <select id="idCaja"></select><br /><br />
+
+        <label for="numeroClientes">Número de Clientes:</label>
+        <input type="text" id="numeroClientes" /><br /><br />
+
+        <label for="nota">Nota:</label>
+        <input type="text" id="nota" /><br /><br />
+
+        <label for="correoCliente">Correo Cliente:</label>
+        <input type="text" id="correoCliente" /><br /><br />
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" /><br /><br />
+
+        <label for="hora">Hora:</label>
+        <input type="time" id="hora" step="1" /><br /><br />
+
+        <label for="metodoPago">Método de Pago:</label>
+        <select id="metodoPago">
+          <option value="Efectivo">Efectivo</option>
+          <option value="Nequi">Nequi</option>
+          <option value="Tarjeta">Tarjeta</option>
+        </select><br /><br />
+
+        <button type="submit">Actualizar</button>
+      </form>
+    </main>
+
+    <footer class="footer"></footer>
+  </div>
+
+  <script type="module" src="../js/editarPedido.js"></script>
+</body>
+</html>

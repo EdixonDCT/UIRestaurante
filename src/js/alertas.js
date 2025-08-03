@@ -47,3 +47,35 @@ export const alertaPregunta = (mensaje) => {
         }
     })
 }
+export const alertaMensaje = (mensaje) => {
+    return Swal.fire({
+        title: mensaje,
+        customClass: {
+            confirmButton: "botonOK"
+        }
+    })
+}
+export const alertaTiempo = (tiempo) => {
+  let timerInterval;
+  return Swal.fire({
+    title: "Subiendo Imagen...",
+    html: 'Actualizando foto <span id="contador"></span> milisegundos.',
+    timer: tiempo,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+      const contador = Swal.getPopup().querySelector("#contador");
+      if (!contador) return;
+
+      timerInterval = setInterval(() => {
+        const tiempoRestante = Swal.getTimerLeft();
+        if (tiempoRestante !== undefined) {
+          contador.textContent = tiempoRestante;
+        }
+      }, 100);
+    },
+    willClose: () => {
+      clearInterval(timerInterval);
+    },
+  });
+};

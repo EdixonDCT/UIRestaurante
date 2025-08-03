@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editar Pedido con Reserva</title>
+  <link rel="stylesheet" href="../css/general.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <form id="volver" type="post" action="">
+        <button type="submit">Volver</button>
+      </form>
+      <div class="flex">
+        <p>Nombre: Waza</p>
+        <img src="../img/pfp.png" />
+      </div>
+    </header>
+
+    <main class="main">
+      <form id="formularioPedido" class="form">
+        <input type="hidden" id="id" />
+        <section class="form-group">
+          <label>Número de Mesa:</label>
+          <input type="text" id="numeroMesa" disabled />
+        </section>
+        <section class="form-group">
+          <label>Reserva:</label>
+          <input type="text" id="idReserva" disabled />
+        </section>
+        <section class="form-group">
+          <label>Caja:</label>
+          <select id="idCaja"></select>
+        </section>
+        <section class="form-group">
+          <label>Número de Clientes:</label>
+          <input type="number" id="numeroClientes" required />
+        </section>
+        <section class="form-group">
+          <label>Nota:</label>
+          <input type="text" id="nota" />
+        </section>
+        <section class="form-group">
+          <label>Correo del Cliente:</label>
+          <input type="email" id="correoCliente" disabled />
+        </section>
+        <section class="form-group">
+          <label>Método de Pago:</label>
+          <select id="metodoPago" required>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta">Tarjeta</option>
+            <option value="Transferencia">Transferencia</option>
+          </select>
+        </section>
+
+        <button type="submit">Guardar Cambios</button>
+      </form>
+    </main>
+    <footer class="footer"></footer>
+  </div>
+
+  <script type="module" src="../js/editarPedidoReserva.js"></script>
+</body>
+</html>

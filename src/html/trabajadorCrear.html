@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crear Trabajador</title>
+  <link rel="stylesheet" href="../css/general.css" />
+  <link rel="shortcut icon" href="../img/logo.png" />
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="header">
+      <form id="volver" method="post" action="">
+        <button type="submit">Volver</button>
+      </form>
+      <div class="flex">
+        <p>Crear Trabajador</p>
+        <img src="../img/pfp.png" />
+      </div>
+    </header>
+
+    <main class="main">
+      <form id="formRegistro" class="form" method="post" action="">
+        <label for="cedula">Cédula:</label>
+        <input id="cedula" type="text" placeholder="Ingrese la Cédula" />
+
+        <label for="nombre">Nombres:</label>
+        <input id="nombre" type="text" placeholder="Ingrese los Nombres" />
+
+        <label for="apellido">Apellidos:</label>
+        <input id="apellido" type="text" placeholder="Ingrese los Apellidos" />
+
+        <label for="fecha">Fecha Nacimiento:</label>
+        <input id="fecha" type="date"  />
+
+        <label for="ArchivoFoto">Fotografía:</label>
+        <input type="file" id="ArchivoFoto" />
+        <span id="ArchivoEstado">Ningún archivo seleccionado</span>
+
+        <img src="../img/pfp.png" alt="perfil" id="imagenPerfil" style="max-width: 100px; margin-top: 10px;" />
+        <button type="button" id="borrarImagen">Eliminar Fotografía</button>
+
+        <label for="pass1">Contraseña:</label>
+        <input id="pass1" type="password" placeholder="Ingrese la Contraseña" />
+
+        <label for="pass2">Validar Contraseña:</label>
+        <input id="pass2" type="password" placeholder="Repita la Contraseña" />
+
+        <label for="oficio">Tipo de Oficio:</label>
+        <select id="oficio" >
+          <option value="0" hidden>N/A</option>
+        </select>
+
+        <button type="submit">Registrarse</button>
+      </form>
+    </main>
+
+    <footer class="footer"></footer>
+  </div>
+
+  <script type="module" src="../js/crearTrabajador.js"></script>
+</body>
+
+</html>
