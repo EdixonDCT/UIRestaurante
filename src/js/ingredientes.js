@@ -1,0 +1,72 @@
+import { alertaOK, alertaError, alertaPregunta } from "./alertas.js";
+
+const hash = window.location.hash.slice(1);
+const section = document.querySelector(".main");
+
+const cargarTabla = async () => {
+  const botonVolver = document.getElementById("volver");
+  botonVolver.action = `menu.html#${hash}`;
+
+  const nuevoForm = document.createElement("form");
+  nuevoForm.action = `ingredienteCrear.html#${hash}`;
+  nuevoForm.innerHTML = `<button type="submit">Nuevo</button>`;
+  section.appendChild(nuevoForm);
+
+  const table = document.createElement("table");
+  const headerRow = document.createElement("tr");
+  const headers = ["ID", "Nombre", "Acciones"];
+  headers.forEach(text => {
+    const th = document.createElement("th");
+    th.textContent = text;
+    headerRow.appendChild(th);
+  });
+  table.appendChild(headerRow);
+
+  try {
+    const res = await fetch("http://localhost:8080/ApiRestaurente/api/ingredientes");
+    const data = await res.json();
+    
+    data.forEach(ingrediente => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${ingrediente.id}</td>
+        <td>${ingrediente.nombre}</td>
+        <td>
+          <button class="btnEliminar" value="${ingrediente.id}" type="button">Eliminar</button>
+        </td>
+      `;
+      table.appendChild(row);
+    });
+
+    section.appendChild(table);
+  } catch (error) {
+    section.innerHTML = "<p>Error al cargar los ingredientes.</p>";
+    console.error("Error:", error);
+  }
+};
+
+const eliminarIngrediente = async (e) => {
+  const id = e.target.value;
+  const confirmar = await alertaPregunta(`¿Desea eliminar el ingrediente #${id}?`);
+  if (confirmar.isConfirmed) {
+    try {
+      const response = await fetch(`http://localhost:8080/ApiRestaurente/api/ingredientes/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      });
+      const mensaje = await response.text();
+      if (!response.ok) throw new Error(mensaje);
+      await alertaOK(mensaje);
+      location.reload();
+    } catch (error) {
+      alertaError(error.message);
+    }
+  }
+};
+
+document.addEventListener("DOMContentLoaded", cargarTabla);
+window.addEventListener("click", async (e) => {
+  if (e.target.matches(".btnEliminar")) eliminarIngrediente(e);
+});
