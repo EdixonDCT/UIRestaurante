@@ -1,4 +1,5 @@
 import { alertaOK, alertaError, alertaPregunta } from "./alertas";
+import { cargarHeader } from "./header";
 
 const hash = window.location.hash.slice(1);
 const section = document.querySelector(".main");
@@ -102,7 +103,10 @@ const EliminarMesa = async (e) => {
   }
 }
 
-document.addEventListener("DOMContentLoaded", cargarTabla);
+document.addEventListener("DOMContentLoaded", () => {
+  cargarHeader(hash)
+  cargarTabla();
+});
 window.addEventListener("click", async (e) => {
   if (e.target.matches("#cambiarEstado")) cambiarEstado(e)
   else if (e.target.matches("#BotonEliminar")) EliminarMesa(e)

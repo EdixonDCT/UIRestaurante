@@ -1,4 +1,5 @@
 import { alertaOK, alertaError, alertaPregunta, alertaMensaje } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const section = document.querySelector(".main");
@@ -113,7 +114,10 @@ const CobrarPedido = async (e) => {
         }
     }
 };
-document.addEventListener("DOMContentLoaded", cargarReservas);
+document.addEventListener("DOMContentLoaded", () => {
+  cargarHeader(hash);
+  cargarReservas();
+});
 window.addEventListener("click", (e) => {
     if (e.target.matches("#BotonBorrar")) eliminarPedido(e);
     if (e.target.matches("#BotonCobrar")) CobrarPedido(e);

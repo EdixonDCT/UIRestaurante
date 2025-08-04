@@ -1,4 +1,5 @@
 import { alertaOK, alertaError } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const form = document.querySelector(".form");
@@ -12,10 +13,9 @@ const metodoPago = document.getElementById("metodoPago");
 
 // POBLAR selects de mesas y cajas al cargar la página
 document.addEventListener("DOMContentLoaded", async () => {
-    // configurar botón volver
+    cargarHeader(hash)
     const botonVolver = document.getElementById("volver");
     botonVolver.action = `pedidos.html#${hash}`;
-
     try {
         // Traer mesas
         const resMesas = await fetch("http://localhost:8080/ApiRestaurente/api/mesas");
@@ -48,8 +48,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ENVIAR el nuevo pedido
 const validar = async (e) => {
     e.preventDefault();
-    console.log(typeof(numeroClientes.value));
-    
     const datos = {
         numeroMesa: numeroMesa.value,
         idCaja: idCaja.value,

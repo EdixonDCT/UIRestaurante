@@ -1,4 +1,5 @@
 import { alertaError, alertaOK } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const [cedula, idCaja] = hash.split("/");
@@ -50,6 +51,7 @@ const validar = async (e) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  cargarHeader(cedula)
     cargarCaja();
 });
 

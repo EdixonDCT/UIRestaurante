@@ -1,4 +1,5 @@
 import { alertaOK, alertaError, alertaPregunta, alertaMensaje } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const section = document.querySelector(".main");
@@ -241,7 +242,10 @@ Método de pago: ${pedido.metodoPago.toUpperCase()}
     }
 };
 
-document.addEventListener("DOMContentLoaded", cargarPedidos);
+document.addEventListener("DOMContentLoaded", () => {
+  cargarHeader(hash);
+  cargarPedidos();
+});
 window.addEventListener("click", (e) => {
     if (e.target.matches("#BotonEliminar")) eliminarPedido(e);
     if (e.target.matches("#BotonCobrar")) CobrarPedido(e);

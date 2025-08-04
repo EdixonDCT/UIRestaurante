@@ -1,4 +1,5 @@
 import { alertaError, alertaOK } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const lista = hash.split("/");
@@ -74,5 +75,9 @@ const infoTrabajador = async () => {
     }
 };
 
-document.addEventListener("DOMContentLoaded", infoTrabajador);
+document.addEventListener("DOMContentLoaded", () => {
+  cargarHeader(idUser);
+  infoTrabajador();
+}
+);
 formulario.addEventListener("submit", validar);

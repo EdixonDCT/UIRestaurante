@@ -1,4 +1,5 @@
 import { alertaOK, alertaError, alertaTiempo } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const lista = hash.split("/");
@@ -84,5 +85,9 @@ const enviarImagen = async (e) => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", cargarImagen);
+document.addEventListener("DOMContentLoaded", () =>
+{
+  cargarHeader(trabajador);
+  cargarImagen();
+});
 formulario.addEventListener("submit", enviarImagen);

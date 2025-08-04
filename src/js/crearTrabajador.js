@@ -1,8 +1,11 @@
 import { alertaError, alertaOK, alertaPregunta } from "./alertas";
+import { cargarHeader } from "./header";
 
 const hash = window.location.hash.slice(1);
 //formulario
 const registro = document.getElementById("formRegistro");
+//header informacion del usuario
+
 //valores a postear
 const cedula = document.getElementById("cedula");
 const nombre = document.getElementById("nombre");
@@ -114,8 +117,6 @@ const cargarOficios = async () => {
             throw new Error(mensaje);
         }
         const data = await response.json();
-        
-        console.log(data);
         data.forEach(oficio => {
             const option = document.createElement("option");
             option.value = oficio.codigo;
@@ -144,7 +145,7 @@ const EliminarVistaPreviaImg = () => {
     inputPerfil.value = "";
     spanImagen.textContent = "Ningún archivo seleccionado";
 }
-
+document.addEventListener("DOMContentLoaded",cargarHeader(hash));
 document.addEventListener("DOMContentLoaded", cargarOficios);
 inputPerfil.addEventListener('change', vistaPreviaImg);
 BotonborrarImg.addEventListener('click', EliminarVistaPreviaImg);

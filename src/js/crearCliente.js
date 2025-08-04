@@ -1,4 +1,5 @@
 import { alertaError, alertaOK } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const formulario = document.querySelector(".form");
@@ -35,6 +36,7 @@ formulario.addEventListener("submit", async (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    cargarHeader(hash)
     formularioIr.action =`pedidoCrear.html#${hash}`;
-    document.getElementById("volver").action = `crearPedido.html#${hash}`;
+    document.getElementById("volver").action = `pedidoCrear.html#${hash}`;
 });

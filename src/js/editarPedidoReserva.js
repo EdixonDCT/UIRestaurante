@@ -1,4 +1,5 @@
 import { alertaOK, alertaError } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const [cedula, idPedido] = hash.split("/");
@@ -80,8 +81,8 @@ const validar = async (e) => {
 
 document.addEventListener("DOMContentLoaded", async () => {
     const botonVolver = document.getElementById("volver");
-    botonVolver.action = `pedidos.html#${cedula}`;
-
+    botonVolver.action = `reservas.html#${cedula}`;
+  cargarHeader(cedula);
     await cargarCajas();
     await cargarPedido();
 });

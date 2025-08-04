@@ -9,12 +9,14 @@
 <body>
   <div class="container">
     <header class="header">
-      <form id="volver" method="post">
-        <button type="submit">Volver</button>
+      <form id="volver" method="post" >
+        <button class="boton" type="submit">Volver</button>
       </form>
-      <p>Editar Imagen de Trabajador</p>
+      <div class="perfil">
+        <p class="perfil__nombre">Nombre</p>
+        <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
+      </div>
     </header>
-
     <main class="main">
       <form class="form" id="formularioImagen" enctype="multipart/form-data">
         <label for="fotoActual">Foto actual:</label><br>
@@ -28,7 +30,7 @@
     </main>
 
     <footer class="footer">
-      <!-- pie de página -->
+      QuickOrder
     </footer>
   </div>
 

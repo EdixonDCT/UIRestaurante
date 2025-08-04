@@ -1,4 +1,5 @@
 import { alertaError, alertaOK, alertaPregunta } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const formulario = document.querySelector(".form");
@@ -52,8 +53,8 @@ const validar = async (e) => {
 formulario.addEventListener("submit", validar);
 
 document.addEventListener("DOMContentLoaded", () => {
+    cargarHeader(hash)  
     cargarTrabajadores();
-
     const botonVolver = document.getElementById("volver");
     botonVolver.action = `caja.html#${hash}`;
 });

@@ -1,4 +1,5 @@
 import { alertaError, alertaOK, alertaPregunta } from "./alertas";
+import { cargarHeader } from "./header";
 
 const hash = window.location.hash.slice(1);
 const formulario = document.querySelector(".form")
@@ -33,7 +34,8 @@ const validar = async (e) => {
     }
 }
 formulario.addEventListener("submit", validar);
-document.addEventListener("DOMContentLoaded", () =>{
+document.addEventListener("DOMContentLoaded", () => {
+    cargarHeader(hash)
     const botonVolver = document.getElementById("volver")
     botonVolver.action = `mesas.html#${hash}`;    
 })

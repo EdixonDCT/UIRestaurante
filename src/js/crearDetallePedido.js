@@ -1,4 +1,5 @@
 import { alertaOK } from "./alertas";
+import { cargarHeader } from "./header";
 
 const contenedor = document.getElementById("contenedorItems");
 const formulario = document.getElementById("formularioDetalle");
@@ -133,7 +134,8 @@ formulario.addEventListener("submit", async (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    cargarHeader(idUser)
     cargarItems();
     const botonVolver = document.getElementById("volver");
-    botonVolver.action = `pedido.html#${window.location.hash.slice(1)}`;
+    botonVolver.action = `pedidos.html#${idUser}`;
 });

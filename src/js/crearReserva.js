@@ -1,4 +1,5 @@
 import { alertaOK, alertaError } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const formulario = document.querySelector(".form");
 const correo = document.getElementById("correo");
@@ -13,6 +14,7 @@ volver.action = `reservas.html#${hash}`;
 const crearCliente = document.querySelector(".formIr");
 crearCliente.action = `clienteCrearReserva.html#${hash}`;
 document.addEventListener("DOMContentLoaded", async () => {
+  cargarHeader(hash);
   try {
     const res = await fetch("http://localhost:8080/ApiRestaurente/api/mesas");
     const mesas = await res.json();
@@ -28,7 +30,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     alertaError(err);
   }
 });
-
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
   const datos= {
@@ -68,8 +69,9 @@ formulario.addEventListener("submit", async (e) => {
 
     const mensajePedido = await resPedido.text();
     if (!resPedido.ok) throw new Error(mensajePedido);
-
     await alertaOK("Reserva y Pedido creados EXITOSAMENTE");
+    formulario.action = `reservas.html#${hash}`
+    formulario.submit();
   } catch (err) {
     alertaError(err.message);
   }

@@ -1,4 +1,5 @@
 import { alertaOK } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const contenedor = document.getElementById("contenedorItems");
 const formulario = document.getElementById("formularioDetalle");
@@ -164,6 +165,7 @@ formulario.addEventListener("submit", async (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
+    cargarHeader(idUser)
     await cargarDetalleExistente();
     await cargarItems();
     const botonVolver = document.getElementById("volver");

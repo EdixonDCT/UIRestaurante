@@ -1,4 +1,5 @@
 import { alertaOK, alertaError, alertaPregunta } from "./alertas.js";
+import { cargarHeader } from "./header.js";
 
 const hash = window.location.hash.slice(1);
 const section = document.querySelector(".main");
@@ -75,7 +76,10 @@ const EliminarTrabajador = async (e) => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", cargarTabla);
+document.addEventListener("DOMContentLoaded", () => {
+  cargarHeader(hash);
+  cargarTabla();
+});
 window.addEventListener("click", async (e) => {
   if (e.target.matches("#BotonEliminar")) EliminarTrabajador(e);
 });

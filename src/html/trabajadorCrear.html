@@ -11,54 +11,55 @@
 
 <body>
   <div class="container">
-
     <header class="header">
-      <form id="volver" method="post" action="">
-        <button type="submit">Volver</button>
+      <form id="volver" method="post" >
+        <button class="boton" type="submit">Volver</button>
       </form>
-      <div class="flex">
-        <p>Crear Trabajador</p>
-        <img src="../img/pfp.png" />
+      <div class="perfil">
+        <p class="perfil__nombre">Nombre</p>
+        <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
       </div>
     </header>
 
     <main class="main">
-      <form id="formRegistro" class="form" method="post" action="">
+      <h2>Crear Trabajador</h2>
+
+      <form class="form" id="formRegistro" method="post" action="">
         <label for="cedula">Cédula:</label>
-        <input id="cedula" type="text" placeholder="Ingrese la Cédula" />
+        <input id="cedula" type="text" placeholder="Ingrese la Cédula" required /><br /><br />
 
         <label for="nombre">Nombres:</label>
-        <input id="nombre" type="text" placeholder="Ingrese los Nombres" />
+        <input id="nombre" type="text" placeholder="Ingrese los Nombres" required /><br /><br />
 
         <label for="apellido">Apellidos:</label>
-        <input id="apellido" type="text" placeholder="Ingrese los Apellidos" />
+        <input id="apellido" type="text" placeholder="Ingrese los Apellidos" required /><br /><br />
 
-        <label for="fecha">Fecha Nacimiento:</label>
-        <input id="fecha" type="date"  />
+        <label for="fecha">Fecha de Nacimiento:</label>
+        <input id="fecha" type="date" required /><br /><br />
 
         <label for="ArchivoFoto">Fotografía:</label>
-        <input type="file" id="ArchivoFoto" />
-        <span id="ArchivoEstado">Ningún archivo seleccionado</span>
+        <input type="file" id="ArchivoFoto" /><br />
+        <span id="ArchivoEstado">Ningún archivo seleccionado</span><br /><br />
 
-        <img src="../img/pfp.png" alt="perfil" id="imagenPerfil" style="max-width: 100px; margin-top: 10px;" />
-        <button type="button" id="borrarImagen">Eliminar Fotografía</button>
+        <img src="../img/pfp.png" alt="perfil" id="imagenPerfil" style="max-width: 100px; margin-top: 10px;" /><br />
+        <button type="button" id="borrarImagen">Eliminar Fotografía</button><br /><br />
 
         <label for="pass1">Contraseña:</label>
-        <input id="pass1" type="password" placeholder="Ingrese la Contraseña" />
+        <input id="pass1" type="password" placeholder="Ingrese la Contraseña" required /><br /><br />
 
         <label for="pass2">Validar Contraseña:</label>
-        <input id="pass2" type="password" placeholder="Repita la Contraseña" />
+        <input id="pass2" type="password" placeholder="Repita la Contraseña" required /><br /><br />
 
         <label for="oficio">Tipo de Oficio:</label>
-        <select id="oficio" >
-          <option value="0" hidden>N/A</option>
-        </select>
+        <select id="oficio" required>
+          <option value="0" hidden>Seleccione un oficio</option>
+        </select><br /><br />
 
-        <button type="submit">Registrarse</button>
+        <button type="submit">Guardar</button>
       </form>
     </main>
 
-    <footer class="footer"></footer>
+    <footer class="footer">QuickOrder</footer>
   </div>
 
   <script type="module" src="../js/crearTrabajador.js"></script>
