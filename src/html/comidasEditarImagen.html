@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editar Imagen Comida</title>
+  <link rel="stylesheet" href="../css/general.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <form id="volver" method="post">
+        <button class="boton" type="submit">Volver</button>
+      </form>
+      <div class="perfil">
+        <p class="perfil__nombre">Nombre</p>
+        <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
+      </div>
+    </header>
+    <main class="main">
+      <form class="form" id="formularioImagen" enctype="multipart/form-data">
+        <label for="fotoActual">Foto actual:</label><br>
+        <img id="fotoActual" src="" alt="Foto de comida" width="150"><br><br>
+
+        <label for="nuevaFoto">Nueva Foto:</label>
+        <input type="file" id="nuevaFoto" accept="image/*" required><br><br>
+
+        <button type="submit">Actualizar Imagen</button>
+      </form>
+    </main>
+
+    <footer class="footer">QuickOrder</footer>
+  </div>
+
+  <script type="module" src="../js/editarImagenComida.js"></script>
+</body>
+</html>

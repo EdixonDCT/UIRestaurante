@@ -43,7 +43,7 @@ const cargarTabla = async () => {
           <form action="trabajadorEditarImagen.html#${hash}/${trabajador.cedula}" method="post">
             <button type="submit">Editar Foto</button>
           </form>
-          <button id="BotonEliminar" value="${trabajador.cedula}" type="button">Eliminar</button>
+          <button id="BotonEliminar" value="${trabajador.cedula}" type="button" ${trabajador.cedula == hash ? "disabled" : ""}>Eliminar</button>
         </td>`;
       table.appendChild(row);
     });

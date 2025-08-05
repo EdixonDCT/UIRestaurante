@@ -1,4 +1,4 @@
-import { alertaError, alertaOK, alertaPregunta } from "./alertas";
+import { alertaError, alertaOK, alertaPregunta, alertaTiempo } from "./alertas";
 import { cargarHeader } from "./header";
 
 const hash = window.location.hash.slice(1);
@@ -101,7 +101,7 @@ const actualizarFotoTrabajador = async (nombreFoto) => {
         });
         const mensajeImagen = await actualizar.text();
         if (!actualizar.ok) { throw new Error(mensajeImagen); }
-        console.log(mensajeImagen);
+        await alertaTiempo(5000);
         await alertaOK("Trabajador Creado con Exito.");
         registro.submit();
 
