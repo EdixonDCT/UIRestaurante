@@ -23,29 +23,35 @@ const cargarItems = async () => {
             if (!res.ok) throw new Error("Error cargando " + endpoint.tipo);
             const lista = await res.json();
             const divPadre = document.createElement("div");
+            divPadre.className = "itemPadre";
             const textPadre = document.createElement("h2");
             textPadre.textContent = endpoint.tipo;
-            divPadre.appendChild(textPadre);
             lista.forEach(item => {
-                const divHijo = document.createElement("div");
-                divHijo.className = "item";
-                divHijo.classList.add(`item${endpoint.tipo}`);
-                divHijo.dataset.valorId = item.id;
+                if (item.disponible == "1") {
+                    const divHijo = document.createElement("div");
+                    divHijo.className = "item";
+                    divHijo.classList.add(`item${endpoint.tipo}`);
+                    divHijo.dataset.valorId = item.id;
 
-                divHijo.innerHTML = `
-                    <p><strong>${endpoint.tipo}:</strong> ${item.nombre}</p>
-                    <button type="button" class="btn-restar">-</button>
-                    <span class="cantidad">0</span>
-                    <button type="button" class="btn-sumar">+</button>
+                    divHijo.innerHTML = `
+                <p>${item.nombre}</p>
+                <img src=http://localhost:8080/ApiRestaurente/IMAGENES/${item.imagen}>
+                <div class="itemBotones">                    
+                <button type="button" class="btn-restar">-</button>
+                <span class="cantidad">0</span>
+                <button type="button" class="btn-sumar">+</button>
+                </div>
                 `;
-                divPadre.appendChild(divHijo);
+                    divPadre.appendChild(divHijo);
+                }
             })
-            contenedor.append(divPadre);
+            contenedor.append(textPadre, divPadre);
         } catch (e) {
             console.error("Error:", e);
         }
     }
 };
+
 
 // Manejar clics para sumar/restar
 window.addEventListener("click", (e) => {
@@ -98,16 +104,16 @@ formulario.addEventListener("submit", async (e) => {
         }
     })
     let mayor = Math.max(listaComidas.length, listaBebidas.length, listaCocteles.length);
-    
+
     for (let cont = 0; cont < mayor; cont++) {
         const datos = {
             id_pedido: idPedido,
-            id_comida: !listaComidas[cont] ? "":listaComidas[cont].id,
-            cantidad_comida: !listaComidas[cont] ? "":listaComidas[cont].cantidad,
-            id_bebida: !listaBebidas[cont] ? "":listaBebidas[cont].id,
-            cantidad_bebida: !listaBebidas[cont] ? "":listaBebidas[cont].cantidad,
-            id_coctel: !listaCocteles[cont] ? "":listaCocteles[cont].id,
-            cantidad_coctel: !listaCocteles[cont] ? "":listaCocteles[cont].cantidad,
+            id_comida: !listaComidas[cont] ? "" : listaComidas[cont].id,
+            cantidad_comida: !listaComidas[cont] ? "" : listaComidas[cont].cantidad,
+            id_bebida: !listaBebidas[cont] ? "" : listaBebidas[cont].id,
+            cantidad_bebida: !listaBebidas[cont] ? "" : listaBebidas[cont].cantidad,
+            id_coctel: !listaCocteles[cont] ? "" : listaCocteles[cont].id,
+            cantidad_coctel: !listaCocteles[cont] ? "" : listaCocteles[cont].cantidad,
         };
         try {
             const response = await fetch("http://localhost:8080/ApiRestaurente/api/detallePedido", {
@@ -128,8 +134,8 @@ formulario.addEventListener("submit", async (e) => {
         }
     }
     await alertaOK(`Pedido #${idPedido}: Añadido platillos con EXITO.`);
-        formulario.action = `pedidos.html#${idUser}`
-        formulario.submit();
+    formulario.action = `pedidos.html#${idUser}`
+    formulario.submit();
     ;
 });
 

@@ -9,7 +9,7 @@ const lista = hash.split("/");
 const idUser = lista[0];
 const idPedido = lista[1];
 const proviene = lista[2]
-let  volverIrse = "";
+let volverIrse = "";
 if (proviene == "r") volverIrse = `reservas.html#${idUser}`;
 else if (proviene == "p") volverIrse = `pedidos.html#${idUser}`;
 
@@ -40,48 +40,88 @@ const cargarItems = async () => {
             if (!res.ok) throw new Error("Error cargando " + endpoint.tipo);
             const lista = await res.json();
             const divPadre = document.createElement("div");
+            divPadre.className = "itemPadre";
             const textPadre = document.createElement("h2");
             textPadre.textContent = endpoint.tipo;
-            divPadre.appendChild(textPadre);
+            lista.forEach(async (item) => {
+                if (item.disponible == "1") {
+                    const divHijo = document.createElement("div");
+                    divHijo.className = "item";
+                    divHijo.classList.add(`item${endpoint.tipo}`);
+                    divHijo.dataset.valorId = item.id;
 
-            lista.forEach(item => {
-                const divHijo = document.createElement("div");
-                divHijo.className = "item";
-                divHijo.classList.add(`item${endpoint.tipo}`);
-                divHijo.dataset.valorId = item.id;
-
-                const cantidadExistente = obtenerCantidadExistente(endpoint.tipo.toLowerCase(), item.id);
-
-                divHijo.innerHTML = `
-                    <p><strong>${endpoint.tipo}:</strong> ${item.nombre}</p>
-                    <button type="button" class="btn-restar">-</button>
-                    <span class="cantidad">${cantidadExistente}</span>
-                    <button type="button" class="btn-sumar">+</button>
+                    divHijo.innerHTML = `
+                <p>${item.nombre}</p>
+                <img src=http://localhost:8080/ApiRestaurente/IMAGENES/${item.imagen}>
+                <div class="itemBotones">                    
+                <button type="button" class="btn-restar">-</button>
+                <span class="cantidad">0</span>
+                <button type="button" class="btn-sumar">+</button>
+                </div>
                 `;
-                divPadre.appendChild(divHijo);
-            });
-            contenedor.append(divPadre);
+                    if (endpoint.tipo == "Comida" || endpoint.tipo == "Coctel") {
+                        const ingredientes = await ingredientesCargar(endpoint.tipo, item.id);
+                        const divIngredientes = document.createElement("div");
+                        divIngredientes.innerHTML = `<span class="itemSpan">${ingredientes}</span>`
+                        divHijo.appendChild(divIngredientes)
+                    }
+                     if (endpoint.tipo == "Bebida") {
+                        const divIngredientes = document.createElement("div");
+                        divIngredientes.innerHTML = `<span class="itemSpan">${item.unidad},${item.tipo}</span>`
+                        divHijo.appendChild(divIngredientes)
+                    }
+                    divPadre.appendChild(divHijo);
+                    
+                }
+            })
+            contenedor.append(textPadre, divPadre);
         } catch (e) {
             console.error("Error:", e);
         }
     }
 };
 
-const obtenerCantidadExistente = (tipo, idItem) => {
-    const campo = {
-        comida: "id_comida",
-        bebida: "id_bebida",
-        coctel: "id_coctel"
-    }[tipo];
+const ingredientesCargar = async (tipo, id) => {
+    if (tipo == "Comida" || tipo == "Coctel") {
+        try {
+            let ingredientes = "";
+            let cont = 0;
 
-    const cantidadCampo = `cantidad_${tipo}`;
+            const res = await fetch(`http://localhost:8080/ApiRestaurente/api/ingredientes${tipo}`);
+            if (!res.ok) throw new Error("Error al obtener caja");
+            const data = await res.json();
+            data.forEach(element => {
+                if (tipo == "Comida") {
+                    if (element.idComida == id) {
+                        if (cont == 0) {
+                            cont++
+                            ingredientes += "Ingredientes:" + element.nombreIngrediente;
+                        }
+                        else {
+                            ingredientes += "," + element.nombreIngrediente
+                        }
+                    }
+                }
+                if (tipo == "Coctel") {
+                    if (element.idCoctel == id) {
+                        if (cont == 0) {
+                            cont++
+                            ingredientes += "Ingredientes:" + element.nombreIngrediente;
+                        }
+                        else {
+                            ingredientes += "," + element.nombreIngrediente
+                        }
+                    }
+                }
+            });
+            return ingredientes;
+        } catch (err) {
+            alertaError("Error al cargar la ingrediente: " + err.message);
+            return "Ingredientes: desconocido"
+        }
+    }
 
-    const encontrado = detalleActual.find(d =>
-        d[campo] && d[campo].toString() === idItem.toString()
-    );
-
-    return encontrado ? encontrado[cantidadCampo] : 0;
-};
+}
 
 window.addEventListener("click", (e) => {
     if (e.target.classList.contains("btn-sumar") || e.target.classList.contains("btn-restar")) {
