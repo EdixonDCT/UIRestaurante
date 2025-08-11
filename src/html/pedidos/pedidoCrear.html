@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido Crear</title>
+    <link rel="stylesheet" href="../../css/GeneralHeaderPerfil.css">
+    <link rel="shortcut icon" href="../../img/logo.png" />
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <form id="volver" method="post">
+                <button class="boton" type="submit">Volver</button>
+            </form>
+            <p>Pedido: Crear</p>
+            <div class="perfil">
+                <p class="perfil__nombre">Nombre</p>
+                <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
+            </div>
+        </header>
+        <main class="main">
+            <form id="crearCliente" method="post" action="">
+                <button class="boton" type="submit">¿Cliente no exite?</button>
+            </form>
+            <form class="form" action="" method="post">
+                <div class="input">
+                    <label>Numero de Mesa:</label>
+                    <select class="numero">
+                        <option value="0" hidden>Seleccione una mesa</option>
+                    </select>
+                </div>
+                <div class="input">
+                    <label>ID de Caja:</label>
+                    <select class="caja">
+                        <option value="0" hidden>Seleccione una Caja</option>
+                    </select>
+                </div>
+                <div class="input">
+                    <label>Numero de Clientes:</label>
+                    <input class="numeroClientes" type="text" placeholder="Ingrese el Numero de Clientes"
+                        autocomplete="off">
+                </div>
+                <div class="input">
+                    <label>Correo de Cliente:</label>
+                    <input class="correoCliente" type="text" placeholder="Ingrese el Correo del Cliente"
+                        autocomplete="off">
+                </div>
+                <div class="input">
+                    <label>Metodo de pago:</label>
+                    <select class="metodoPago">
+                        <option value="0" hidden>Seleccione un metodo de Pago</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Nequi">Nequi</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                    </select>
+                </div>
+                <button class="boton" type="submit">Guardar Pedido</button>
+            </form>
+        </main>
+        <footer class="footer">QuickOrder
+        </footer>
+    </div>
+</body>
+<script type="module" src="../../js/pedidos/crear.js"></script>
+
+</html>

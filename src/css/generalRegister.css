@@ -1,0 +1,148 @@
+@import url(../style.css);
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  font-family: var(--fuente-texto);
+  overflow-x: hidden;
+}
+
+.header {
+  width: 100%;
+  height: 8%;
+  background-color: var(--color-oscuro);
+  color: var(--color-palido);
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  color: var(--color-naranja);
+  padding: 0px 20px;
+  font-size: var(--tamano-mediano);
+  font-family: var(--fuente-importante);
+  letter-spacing: 3px;
+}
+
+.main {
+  width: 100%;
+  min-height: 84%;
+  background-color: var(--color-gris);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--tamano-mediano);
+}
+
+.footer {
+  width: 100%;
+  height: 8%;
+  background-color: var(--color-oscuro);
+  color: var(--color-naranja);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--tamano-mediano);
+  font-family: var(--fuente-importante);
+  letter-spacing: 3px;
+}
+
+.boton {
+  padding: 10px;
+  background-color: var(--color-naranja);
+  border: solid 0px var(--color-naranja);
+  border-radius: 20px;
+  font-size: var(--tamano-pequeno);
+  font-family: var(--fuente-importante);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-palido);
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.boton:hover {
+  background-color: var(--color-palido);
+  color: var(--color-naranja);
+  transform: scale(1.1);
+}
+.form{
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-palido);
+  width: 50%;
+  padding: 40px;
+  margin: 20px;
+  border-radius: 30px;
+}
+.input{
+  display: flex;
+  flex-direction: column;
+  color: var(--color-naranja);
+  font-family: var(--fuente-normal);
+}
+.input > input{
+  font-size: var(--tamano-pequeno);
+  font-family: var(--fuente-normal);
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  cursor:text;
+  padding: 15px 100px 15px 30px;
+  background-color: var(--color-palido  );
+  border: solid 3px var(--color-gris);
+  outline: none;
+  transition: 0.3s;
+  color: var(--color-naranja);
+}
+.input > select{
+  font-size: var(--tamano-pequeno);
+  font-family: var(--fuente-normal);
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  cursor:pointer;
+  padding: 15px 100px 15px 30px;
+  background-color: var(--color-palido  );
+  border: solid 3px var(--color-gris);
+  outline: none;
+  transition: 0.3s;
+  color: var(--color-naranja);
+}
+.inputFoto{
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr;
+}
+.boton[type="file"]{
+    display: none;
+}
+.inputFoto > div > .boton
+{
+  background-color: var(--color-oscuro);
+}
+.inputFoto > div > .boton:hover
+{
+  background-color: var(--color-naranja);
+  color: var(--color-palido);
+}
+.inputFoto > img{
+  margin: auto auto;
+  width: 160px;
+  height: 160px;
+  border: 5px var(--color-naranja) solid;
+  border-radius: 20px;
+}
+.inputFoto > div{
+  display: flex;
+  flex-direction: column;
+  color: var(--color-naranja);
+  font-size: var(--tamano-mediano);
+}
+.inputFotoBoton{
+  display: none;
+}
+.form > .boton{
+  margin-top: 20px;
+}

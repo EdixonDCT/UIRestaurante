@@ -1,0 +1,15 @@
+@import url(GeneralHeaderPerfil.css);
+
+.titulos{
+    font-family: var(--fuente-importante);
+    color: var(--color-oscuro);
+    letter-spacing: 3px;
+}
+.subtitulos{
+    font-family: var(--fuente-importante);
+    color: var(--color-oscuro);
+    letter-spacing: 3px;
+    text-align: start;
+    width: 100%;
+    margin-left: 50px;
+}

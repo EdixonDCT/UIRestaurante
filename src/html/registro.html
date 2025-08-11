@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro</title>
+  <link rel="stylesheet" href="../css/generalRegister.css">
+  <link rel="shortcut icon" href="../img/logo.png" />
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <form id="volver" method="post" action="../../index.html">
+        <button class="boton" type="submit">volver</button>
+      </form>
+      <p>Registro: Crear Cuenta</p>
+    </header>
+    <main class="main">
+      <form class="form" method="post" action="../../index.html">
+        <div class="inputFoto">
+          <img src="../img/pfp.png" alt="perfil" id="imagenPerfil">
+          <div>
+            <label>Fotografía:</label>
+            <label class="boton" class="ArchivoFoto" for="ArchivoFoto">Seleccionar Fotografia</label>
+            <input class="boton" type="file" id="ArchivoFoto" />
+            <span id="ArchivoEstado">Ningún archivo seleccionado</span>
+            <a class="boton" id="borrarImagen">Eliminar Fotografía</a>
+          </div>
+        </div>
+        <div class="input">
+          <label>Cédula:</label>
+          <input class="cedula" type="text" placeholder="Ingrese la Cédula" autocomplete="off">
+        </div>
+        <div class="input">
+          <label>Primer Nombre:</label>
+          <input class="nombre" type="text" placeholder="Ingrese los Nombres" autocomplete="off">
+        </div>
+        <div class="input">
+          <label>Primer Apellido:</label>
+          <input class="apellido" type="text" placeholder="Ingrese los Apellidos" autocomplete="off">
+        </div>
+        <div class="input">
+          <label>Fecha de Nacimiento:</label>
+          <input class="fecha" type="date">
+        </div>
+        <div class="input">
+          <label>Contraseña:</label>
+          <input class="contrasena" type="password" placeholder="Ingrese la Contraseña" autocomplete="off">
+        </div>
+        <div class="input">
+          <label>Contraseña:</label>
+          <input class="contrasenaValidar" type="password" placeholder="Ingrese la Contraseña" autocomplete="off">
+        </div>
+        <div class="input">
+          <label>Tipo de Oficio:</label>
+          <select class="oficio comboxOficio">
+            <option value="0" hidden>Seleccione un oficio</option>
+          </select>
+        </div>
+        <button class="boton" type="submit">Enviar Peticion</button>
+      </form>
+    </main>
+    <footer class="footer">QuickOrder
+    </footer>
+  </div>
+</body>
+<script type="module" src="../js/register.js"></script>
+
+</html>

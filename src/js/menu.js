@@ -59,7 +59,7 @@ const botones = async (oficios) => {
   if (oficios == "Administrador") {
     nombres = [
       "mesas",
-      "caja",
+      "cajas",
       "pedidos",
       "reservas",
       "trabajadores",
@@ -84,7 +84,7 @@ const botones = async (oficios) => {
   nombres.forEach(nombre => {
     const enlace = document.createElement("a");
     enlace.classList.add("asignaciones__boton");
-    enlace.href = `${nombre}.html#${hash}`;
+    enlace.href = `${nombre}/${nombre}Tablas.html#${hash}`;
     enlace.textContent = `Ir a ${nombre}`;
     contenedor.appendChild(enlace);
   });

@@ -40,17 +40,23 @@ const validar = async (e,) => {
 const esValido = async (e,cedula, contrasena) => {
   try {
     const response = await fetch(`http://localhost:8080/ApiRestaurente/api/trabajadores/${cedula}`);
-
+    
     if (!response.ok) {
       const mensaje = await response.text();
       throw new Error(mensaje);
     }
     const data = await response.json();
-    if (cedula == data.cedula && contrasena == data.contrasena) {
+
+    if (cedula == data.cedula && contrasena == data.contrasena && data.activo == "1") {
       return true;
     }
-    else if (cedula == data.cedula) {
+    else if (cedula == data.cedula && data.activo == "1") {
       const mensaje = "Contraseña INCORRECTA.";
+      throw new Error(mensaje);
+    }
+    else if (cedula == data.cedula && !data.activo ||cedula == data.cedula && data.activo == "0")
+    {
+      const mensaje = "Usuario NO ACTIVADO";
       throw new Error(mensaje);
     }
   } catch (error) {

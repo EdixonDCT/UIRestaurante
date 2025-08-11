@@ -29,12 +29,12 @@
   --color-oscuro: #2B2B2B;
   --color-gris: #B7AAAA;
   --color-palido: #F3F3F3;
-  --tamano-pequeno:18px;
-  --tamano-mediano:36px;
-  --tamano-grande:48px;
-  --tamano-titulo:80px;
-  --fuente-titulo: Germania One;
-  --fuente-texto: Nunito Sans;
+  --tamano-pequeno: 1rem;
+  --tamano-mediano:2rem;
+  --tamano-grande:3rem;
+  --tamano-titulo:4rem;
+  --fuente-importante: Germania One;
+  --fuente-normal: Nunito Sans;
 }
 .botonOK{
   background-color: var(--color-naranja)!important;

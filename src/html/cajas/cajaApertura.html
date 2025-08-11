@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caja Apertura</title>
+  <link rel="stylesheet" href="../../css/GeneralHeaderPerfil.css">
+  <link rel="shortcut icon" href="../../img/logo.png" />
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <form id="volver" method="post">
+        <button class="boton" type="submit">Volver</button>
+      </form>
+      <p>Caja: Apertura</p>
+      <div class="perfil">
+        <p class="perfil__nombre">Nombre</p>
+        <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
+      </div>
+    </header>
+    <main class="main">
+      <form class="form" action="" method="post">
+        <div class="input">
+          <label>Monto apertura:</label>
+          <input class="montoApertura" type="text" placeholder="Ingrese el Monto de Apertura" autocomplete="off">
+        </div>
+        <button class="boton" type="submit">Crear Caja</button>
+      </form>
+    </main>
+    <footer class="footer">QuickOrder
+    </footer>
+  </div>
+</body>
+<script type="module" src="../../js/cajas/apertura.js"></script>
+
+</html>

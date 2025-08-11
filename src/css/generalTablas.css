@@ -1,0 +1,87 @@
+@import url(GeneralHeaderPerfil.css);
+.tituloTable{
+    font-family: var(--fuente-importante);
+    color: var(--color-oscuro);
+    letter-spacing: 3px;
+}
+.tablas {
+  width: 80%;
+  border-collapse: collapse;
+  font-size: var(--tamano-pequeno);
+  background-color: var(--color-palido);
+  font-family: var(--fuente-normal);
+}
+.tablas th{
+    font-family: var(--fuente-importante);
+    color: var(--color-palido);
+    background-color: var(--color-naranja);
+    letter-spacing: 3px;
+}
+.tablas th,
+.tablas td {
+  border: 5px solid var(--color-gris);
+  padding: 10px;
+  text-align: center;
+}
+
+.tablas tr:nth-child(even) {
+  background-color: #DED8D8;
+}
+.botonTabla{
+    display: flex;
+    justify-content: start;
+    width: 80%;
+}
+.botonTabla > button{
+    background-color: var(--color-oscuro);
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.tablaAcciones{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.tablaAcciones button{
+    background-color: var(--color-oscuro);
+}
+.tablaAcciones button:disabled{
+    background-color: var(--color-oscuro);
+    color: var(--color-gris);
+}
+.tablaCheckBox{
+    width: 200px;
+    display: flex;
+}
+.TablaCheckbox > input{
+    display: none;
+}
+.TablaCheckbox > .checkboxFalse{
+    display: block;
+    width: 140px;
+    background-color: var(--color-oscuro);
+    color: var(--color-palido);
+    border-radius: 10px;
+    text-align: start;
+    padding-left: 10px;
+    transition: 0.3s;
+}
+.TablaCheckbox > .checkboxTrue{
+    display: block;
+    width: 140px;
+    background-color: var(--color-naranja);
+    color: var(--color-palido);
+    border-radius: 10px;
+    text-align: end;
+    padding-right: 10px;
+    transition: 0.3s;
+}
+.tablas img{
+    width: 50px;
+    height: 50px;
+    border: 2px var(--color-oscuro) solid;
+}

@@ -8,7 +8,7 @@
   grid-template-rows: 1fr;
   color: var(--color-palido);
   font-size: var(--tamano-mediano);
-  font-family: var(--fuente-texto);
+  font-family: var(--fuente-normal);
   text-transform: capitalize;
   background-color: var(--color-gris);
 }
@@ -31,6 +31,7 @@
   font-size: var(--tamano-mediano);
   color: var(--color-palido);
   background-color: var(--color-naranja);
+  font-family: var(--fuente-importante);
   border-radius: 20px;
   text-transform: uppercase;
   transition: 0.3s;
@@ -38,6 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+    letter-spacing: 3px;
 }
 
 .asignaciones__boton:hover {
@@ -111,7 +113,7 @@
   text-transform: uppercase;
   transition: 0.3s;
   cursor: pointer;
-    border: black 0px solid;
+  border: black 0px solid;
 }
 
 .informacion__boton:hover {
