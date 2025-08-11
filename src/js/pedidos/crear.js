@@ -59,8 +59,6 @@ const validar = async (e) => {
         correoCliente: correoCliente.value,
         metodoPago: metodoPago.value
     };
-    console.log(datos);
-    
     try {
         const res = await fetch("http://localhost:8080/ApiRestaurente/api/pedidos", {
             method: "POST",
@@ -71,13 +69,31 @@ const validar = async (e) => {
         const mensaje = await res.json();
         
         if (!res.ok) throw new Error(mensaje);
-
-        await alertaOK(mensaje.mensaje);
-        form.action = `../detallePedidos/detallePedidoCrear.html#${hash}/${mensaje.id}`
-        form.submit();
+        cambiarEstado(mensaje.mensaje, numeroMesa.value,mensaje.id);
     } catch (error) {
         alertaError(error.message);
     }
 };
+const cambiarEstado = async (mensaje,id,pedido) => {
+  try {
+    const disponibles = { disponible: "0" };
+    const respuesta = await fetch(`http://localhost:8080/ApiRestaurente/api/mesas/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(disponibles)
+    });
+
+    if (!respuesta.ok) throw new Error("Error al cambiar el estado");
+    const resultado = await respuesta.text();
+    console.log(resultado);
+    await alertaOK(mensaje);
+    form.action = `../detallePedidos/detallePedidoCrear.html#${hash}/${pedido}`
+    form.submit();
+  } catch (error) {
+    console.error("Falló el cambio de estado:", error);
+  }
+}
 
 form.addEventListener("submit", validar);

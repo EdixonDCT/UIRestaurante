@@ -13,3 +13,92 @@
     width: 100%;
     margin-left: 50px;
 }
+.comidas{
+  display: flex;
+  gap: 50px;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+.bebidas{
+  display: flex;
+  gap: 50px;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+.cocteles{
+  display: flex;
+  gap: 50px;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+.item{
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  justify-content: start;
+  align-items: center;
+  background-color: var(--color-palido);
+  border-radius: 30px;
+}
+.item > p{
+    margin: 10px 0px;
+    font-family: var(--fuente-importante);
+    color: var(--color-naranja);
+    letter-spacing: 3px;
+}
+.item > img{
+  width: 80%;
+  aspect-ratio: 1 / 1;
+  border: 5px var(--color-oscuro) solid;
+  border-radius: 30px;
+}
+p.descripcion{
+  margin-top: 10px;
+  width: 80%;
+  color: var(--color-oscuro);
+  font-size: var(--tamano-pequeno); 
+  font-family: var(--fuente-normal);
+  letter-spacing: 0px;
+  font-weight: bolder;
+}
+.itemBotones{
+  display: flex;
+  width: 80%;
+}
+.itemBotones > button{
+  width: 50%;
+  padding: 5px 0px;
+  background-color: var(--color-naranja);
+  border: solid 3px var(--color-palido);
+  border-radius: 30px;
+  cursor: pointer;
+  color: var(--color-palido);
+  font-size: var(--tamano-pequeno);
+  font-weight: bolder;
+}
+input.cantidad{
+  width: 80%;
+  margin:5px 0px;
+  border: 2px var(--color-naranja) solid;
+  border-radius: 30px;
+  background-color: var(--color-palido);
+  color: var(--color-naranja);
+  font-size: var(--tamano-pequeno);
+  cursor:text;
+  text-align: center;
+}
+textarea.nota{
+  width: 80%;
+  margin-bottom: 20px;
+  border: 2px var(--color-oscuro) solid;
+  border-radius: 4px;
+  background-color: var(--color-palido);
+  color: var(--color-oscuro);
+  font-size: var(--tamano-pequeno);
+  cursor:text;
+  resize: none;
+}
+main > form > .boton{
+  padding: 30px;
+  margin: 20px 0px;
+}

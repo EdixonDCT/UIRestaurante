@@ -20,18 +20,18 @@ const cargarPedidos = async () => {
     const tituloCompletos = document.createElement("h2");
     const tablaCompletos = document.createElement("table");
 
-    tituloIncompletos.textContent = "Pedidos Incompletos";
-    tituloCompletos.textContent = "Pedidos Completos";
+    tituloIncompletos.textContent = "Pedidos no Facturados";
+    tituloCompletos.textContent = "Pedidos Facturados";
     tituloCompletos.classList.add("tituloTable");
     tituloIncompletos.classList.add("tituloTable");
     const encabezados = [
-        "ID", "Mesa", "Fecha", "Hora", "Total", "ID Caja",
-        "Clientes", "Reserva", "Nota", "Correo", "Método de Pago", "Acciones"
+        "ID","Fecha", "Hora","ID Caja","No.Mesa",
+        "No.Clientes","Cli.Correo","Reserva", "Método de Pago","Total","Eliminado","Acciones"
     ];
 
     const encabezadosIncompleto = [
-        "ID", "Mesa", "Fecha", "Hora", "ID Caja",
-        "Clientes", "Nota", "Correo", "Método de Pago", "Acciones"
+        "ID","Fecha", "Hora", "ID Caja","No.Mesa",
+        "No.Clientes","Cli.Correo", "Método de Pago","Total", "Acciones"
     ];
     const crearEncabezado = () => {
         const fila = document.createElement("tr");
@@ -58,32 +58,36 @@ const cargarPedidos = async () => {
     try {
         const res = await fetch("http://localhost:8080/ApiRestaurente/api/pedidos");
         const data = await res.json();
-
-        data.forEach(pedido => {
-            if (!pedido.idReserva && pedido.valorTotal == 0) {
+      let contadorNoFacturado = 0;
+      data.forEach(pedido => {
+          if (pedido.facturado == "0" || !pedido.idReserva)
+          {
+                contadorNoFacturado++
                 const fila = document.createElement("tr");
                 fila.innerHTML = `
                 <td>${pedido.id}</td>
-                <td>${pedido.numeroMesa}</td>
                 <td>${pedido.fecha}</td>
                 <td>${pedido.hora}</td>
                 <td>${pedido.idCaja}</td>
+                <td>#${pedido.numeroMesa}</td>
                 <td>${pedido.numeroClientes}</td>
-                <td>${pedido.nota || "-"}</td>
                 <td>${pedido.correoCliente || "-"}</td>
+                <td>${pedido.valorTotal}$</td>
                 <td>${pedido.metodoPago || "-"}</td>
                 <td>
+                    <div class="tablaAcciones">
                     <form action="pedidoEditar.html#${hash}/${pedido.id}/p" method="post">
                         <input type="hidden" name="id" value="${pedido.id}">
-                        <button type="submit">Editar Pedido</button>
+                        <button class="boton" type="submit">Editar Pedido</button>
                     </form>
                     <form action="detallePedidoEditar.html#${hash}/${pedido.id}/p" method="post">
                         <input type="hidden" name="id" value="${pedido.id}">
-                        <button type="submit">Editar Platos</button>
+                        <button class="boton" type="submit">Editar Platillos</button>
                     </form>
-                    <button id="BotonCobrar" value="${pedido.id}" type="button">Pagar</button>
-
-                    
+                    <button class="boton" id="VerFactura" value="${pedido.id}" type="button">Ver Factura</button>
+                    <button class="boton" value="${pedido.id}" type="button">Pagar Factura</button>
+                    <button class="boton" value="${pedido.id}" id="BotonEliminar" type="button">Eliminar</button>
+                    </div>
                 </td>
             `;
                 tablaIncompletos.appendChild(fila);
@@ -92,26 +96,31 @@ const cargarPedidos = async () => {
                 const fila = document.createElement("tr");
                 fila.innerHTML = `
                 <td>${pedido.id}</td>
-                <td>${pedido.numeroMesa}</td>
                 <td>${pedido.fecha}</td>
                 <td>${pedido.hora}</td>
-                <td>${pedido.valorTotal}$</td>
                 <td>${pedido.idCaja}</td>
+                <td>#${pedido.numeroMesa}</td>
                 <td>${pedido.numeroClientes}</td>
+                <td>${pedido.correoCliente}</td>
                 <td>${pedido.idReserva}</td>
-                <td>${pedido.nota || "-"}</td>
-                <td>${pedido.correoCliente || "-"}</td>
-                <td>${pedido.metodoPago || "-"}</td>
+                <td>${pedido.metodoPago}</td>
+                <td>${pedido.valorTotal}$</td>
+                <td>${pedido.eliminado == "1" ? "Si" : "No"}</td>
                 <td>
-                    <button id="VerFactura" value="${pedido.id}" type="button">Ver Factura</button>
-                    <button id="BotonEliminar" value="${pedido.id}" type="button">Eliminar</button>
-
+                <div class="tablaAcciones">
+                    <button class="boton" id="VerFactura" value="${pedido.id}" type="button">Ver Factura</button>
+                    <button class="boton" value="${pedido.id}" type="button">Eliminado</button>
+                </div>
                 </td>
             `;
                 tablaCompletos.appendChild(fila);
             }
         });
-
+        if (contadorNoFacturado == 0)
+        {
+          tituloIncompletos.style.display = "none";
+          tablaIncompletos.style.display = "none";
+        }
         section.append(tituloIncompletos, tablaIncompletos, tituloCompletos, tablaCompletos);
     } catch (error) {
         section.innerHTML = "<p>Error al cargar los pedidos.</p>";
@@ -126,27 +135,6 @@ const eliminarPedido = async (e) => {
         try {
             const res = await fetch(`http://localhost:8080/ApiRestaurente/api/pedidos/${id}`, {
                 method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            const mensaje = await res.text();
-            if (!res.ok) throw new Error(mensaje);
-            await alertaOK(mensaje);
-            location.reload();
-        } catch (err) {
-            alertaError(err.message);
-        }
-    }
-};
-
-const CobrarPedido = async (e) => {
-    const id = e.target.value;
-    const confirmacion = await alertaPregunta(`¿Desea cobrar el pedido #${id}?`);
-    if (confirmacion.isConfirmed) {
-        try {
-            const res = await fetch(`http://localhost:8080/ApiRestaurente/api/pedidos/${id}`, {
-                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -252,6 +240,5 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 window.addEventListener("click", (e) => {
     if (e.target.matches("#BotonEliminar")) eliminarPedido(e);
-    if (e.target.matches("#BotonCobrar")) CobrarPedido(e);
     if (e.target.matches("#VerFactura")) VerFactura(e);
 });
