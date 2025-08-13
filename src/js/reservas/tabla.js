@@ -83,7 +83,7 @@ const cargarReservas = async () => {
           tabla.appendChild(fila);
         }
       }
-      else if (pedido.facturado == "0" && pedido.idCaja) {
+      else if (pedido.facturado == "0" && pedido.idCaja && pedido.idReserva) {
         contadorActivos++;
         const fila = document.createElement("tr");
         fila.innerHTML = `
