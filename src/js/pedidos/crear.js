@@ -15,9 +15,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     cargarHeader(hash)
     const botonVolver = document.getElementById("volver");
     botonVolver.action = `pedidosTablas.html#${hash}`;
-    
+
     const botonCrear = document.getElementById("crearCliente");
-    botonCrear.action = `clienteCrear.html#${hash}`;
+    botonCrear.action = `clienteCrear.html#${hash}/pc`;
     try {
         const resMesas = await fetch("http://localhost:8080/ApiRestaurente/api/mesas");
         const mesas = await resMesas.json();
@@ -32,18 +32,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         const resCajas = await fetch("http://localhost:8080/ApiRestaurente/api/caja");
         const cajas = await resCajas.json();
         cajas.forEach(c => {
-            if (!c.montoCierre && !c.horaCierre && !c.horaCierre)
-            {
-            const opt = document.createElement("option");
-            opt.value = c.id;
-            opt.textContent = `Caja #${c.id}:${c.nombreCajero}`;
-            idCaja.appendChild(opt);
+            if (!c.montoCierre && !c.horaCierre && !c.horaCierre) {
+                const opt = document.createElement("option");
+                opt.value = c.id;
+                opt.textContent = `Caja #${c.id}:${c.nombreCajero}`;
+                idCaja.appendChild(opt);
             }
 
         });
-        if (id)
-        {
-            correoCliente.value = id;    
+        if (id) {
+            correoCliente.value = id;
         }
     } catch (err) {
         console.error("Error al cargar listas:", err);
@@ -65,35 +63,39 @@ const validar = async (e) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         });
-
-        const mensaje = await res.json();
-        
-        if (!res.ok) throw new Error(mensaje);
-        cambiarEstado(mensaje.mensaje, numeroMesa.value,mensaje.id);
+        const texto = await res.text();
+        try {
+            const mensaje = JSON.parse(texto);
+            console.log("JSON recibido:", mensaje);
+            cambiarEstado(mensaje.mensaje, numeroMesa.value, mensaje.id);
+        } catch (e) {
+            console.log("Error o texto plano:", texto);
+        }
+        if (!res.ok) throw new Error(texto);
     } catch (error) {
         alertaError(error.message);
     }
 };
-const cambiarEstado = async (mensaje,id,pedido) => {
-  try {
-    const disponibles = { disponible: "0" };
-    const respuesta = await fetch(`http://localhost:8080/ApiRestaurente/api/mesas/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(disponibles)
-    });
+const cambiarEstado = async (mensaje, id, pedido) => {
+    try {
+        const disponibles = { disponible: "0" };
+        const respuesta = await fetch(`http://localhost:8080/ApiRestaurente/api/mesas/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(disponibles)
+        });
 
-    if (!respuesta.ok) throw new Error("Error al cambiar el estado");
-    const resultado = await respuesta.text();
-    console.log(resultado);
-    await alertaOK(mensaje);
-    form.action = `../detallePedidos/detallePedidoCrear.html#${hash}/${pedido}`
-    form.submit();
-  } catch (error) {
-    console.error("Falló el cambio de estado:", error);
-  }
+        if (!respuesta.ok) throw new Error("Error al cambiar el estado");
+        const resultado = await respuesta.text();
+        console.log(resultado);
+        await alertaOK(mensaje);
+        form.action = `../detallePedidos/detallePedidoCrear.html#${hash}/${pedido}`
+        form.submit();
+    } catch (error) {
+        console.error("Falló el cambio de estado:", error);
+    }
 }
 
 form.addEventListener("submit", validar);

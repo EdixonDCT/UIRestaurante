@@ -1,0 +1,22 @@
+@import url(GeneralHeaderPerfil.css);
+
+.form > h3{
+  color: var(--color-naranja);
+  font-family: var(--fuente-importante);
+  letter-spacing: 3px;
+}
+.input > label{
+  font-family: var(--fuente-normal);
+  color: var(--color-oscuro);
+
+}
+.input input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: blue;
+  transition: 0.3s;
+}
+.input input[type="checkbox"]:checked {
+  accent-color: var(--color-naranja);
+}

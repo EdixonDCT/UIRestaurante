@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserva Editar</title>
+  <link rel="stylesheet" href="../../css/GeneralHeaderPerfil.css">
+  <link rel="shortcut icon" href="../../img/logo.png" />
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <form id="volver" method="post">
+        <button class="boton" type="submit">Volver</button>
+      </form>
+      <p>Reserva: Editar</p>
+      <div class="perfil">
+        <p class="perfil__nombre">Nombre</p>
+        <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
+      </div>
+    </header>
+    <main class="main">
+      <form id="crearCliente" method="post" action="">
+        <button class="boton" type="submit">¿Cliente no exite?</button>
+      </form>
+      <form class="form" action="" method="post">
+        <div class="input">
+          <label>ID Pedido:</label>
+          <input class="id" type="text" placeholder="Ingrese el Correo del Cliente" autocomplete="off" disabled>
+        </div>
+      <form class="form" action="" method="post">
+        <div class="input">
+          <label>Correo Cliente:</label>
+          <input class="correo" type="text" placeholder="Ingrese el Correo del Cliente" autocomplete="off">
+        </div>
+        <div class="input">
+          <label>Numero de Mesa:</label>
+          <select class="numero">
+            <option value="0" hidden>Seleccione una mesa</option>
+          </select>
+        </div>
+        <div class="input">
+          <label>Cantidad Tentativa:</label>
+          <input class="cantidad" type="text" placeholder="Ingrese la Cantidad Tentativa" autocomplete="off">
+        </div>
+        <div class="input">
+          <label>Fechas Tentativa:</label>
+          <input class="fecha" type="date" placeholder="Ingrese la Cantidad Tentativa" autocomplete="off">
+        </div>
+        <div class="input">
+          <label>Hora Tentativa:</label>
+          <input class="hora" type="time" placeholder="Ingrese la Cantidad Tentativa" autocomplete="off">
+        </div>
+        <button class="boton" type="submit">Guardar Mesa</button>
+      </form>
+    </main>
+    <footer class="footer">QuickOrder
+    </footer>
+  </div>
+</body>
+<script type="module" src="../../js/reservas/editar.js"></script>
+
+</html>

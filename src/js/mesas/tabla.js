@@ -71,8 +71,6 @@ const cambiarEstado = async (e) => {
   let valor = e.target.checked ? "1" : "0";
   let checkbox = document.querySelector(`[data-valor-id="${id}"]`); 
   let labelBoton = document.querySelector(`[boton-id="${id}"]`);
-  console.log(labelBoton);
-  
   try {
     const disponibles = { disponible: valor };
     const respuesta = await fetch(`http://localhost:8080/ApiRestaurente/api/mesas/${id}`, {
@@ -115,7 +113,7 @@ const EliminarMesa = async (e) => {
       await alertaOK(mensaje);
       location.reload();
     } catch (error) {
-      alertaError(error.message);
+      alertaError("Error: no se puede eliminar Mesa porque esta asociada a un Pedido.");
     }
   }
 }

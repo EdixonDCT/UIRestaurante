@@ -1,7 +1,15 @@
 import { alertaError, alertaOK } from "../alertas.js";
 import { cargarHeader } from "../header.js";
 
-const hash = window.location.hash.slice(1);
+const hasher = window.location.hash.slice(1);
+const [hash,metodo,idEditar] = hasher.split("/");
+let rutaVolverIrse = ""
+if (metodo == "pc") rutaVolverIrse = `pedidoCrear.html#${hash}`
+else if (metodo == "pe") rutaVolverIrse = `pedidoEditar.html#${hash}/${idEditar}/pe`
+else if (metodo == "rc") rutaVolverIrse = `../reservas/reservaCrear.html#${hash}`
+else if (metodo == "re") rutaVolverIrse = `../reservas/reservaEditar.html#${hash}/${idEditar}`
+else if (metodo == "rpe") rutaVolverIrse = `pedidoEditar.html#${hash}/${idEditar}/rpe`
+else if (metodo == "repa") rutaVolverIrse = `pedidoEditar.html#${hash}/${idEditar}/repa`
 const formulario = document.querySelector(".form");
 const correo = document.querySelector(".correo");
 const cedula = document.querySelector(".cedula");
@@ -25,7 +33,7 @@ formulario.addEventListener("submit", async (e) => {
         if (!response.ok) throw new Error(mensaje);
 
         await alertaOK(mensaje);
-        formulario.action = `pedidoCrear.html#${hash}/${correo.value}`;
+        formulario.action = `${rutaVolverIrse}/${correo.value}`;
         formulario.submit();
     } catch (error) {
         alertaError(error.message);
@@ -34,5 +42,5 @@ formulario.addEventListener("submit", async (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
     cargarHeader(hash)
-    document.getElementById("volver").action = `pedidoCrear.html#${hash}`;
+    document.getElementById("volver").action = rutaVolverIrse;
 });

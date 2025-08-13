@@ -134,7 +134,7 @@ const EliminarCaja = async (e) => {
             await alertaOK(mensaje);
             location.reload();
         } catch (error) {
-            alertaError(error.message);
+                  alertaError("Error: no se puede eliminar Caja porque esta asociada a un Pedido.");
         }
     }
 };

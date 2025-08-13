@@ -70,7 +70,7 @@ const botones = async (oficios) => {
   else if (oficios == "Cajero") {
     nombres = [
       "mesas",
-      "caja",
+      "cajas",
       "pedidos",
       "reservas"
     ];

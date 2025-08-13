@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platillos Editar Imagen Comida</title>
+  <link rel="stylesheet" href="../../css/GeneralHeaderPerfil.css">
+  <link rel="shortcut icon" href="../../img/logo.png" />
+</head>
+
+<body>
+  <div class="container">
+<header class="header">
+      <form id="volver" method="post">
+        <button class="boton" type="submit">Volver</button>
+      </form>
+      <p>Platillos: Editar Imagen Comida</p>
+      <div class="perfil">
+        <p class="perfil__nombre">Nombre</p>
+        <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
+      </div>
+    </header>
+    <main class="main">
+      <form class="form" method="post" action="">
+        <div class="input">
+        <label>Imagen Actual:</label>
+        <img class="fotoVieja" src="../../img/pfp.png" alt="perfil" id="imagenPerfilVieja">
+        </div>
+        <div class="input">
+        <label>Imagen Nueva:</label>
+        </div>
+        <div class="inputFoto">
+          <img src="../../img/pfp.png" alt="perfil" id="imagenPerfil">
+          <div>
+            <label>Fotografía:</label>
+            <label class="boton" class="ArchivoFoto" for="ArchivoFoto">Seleccionar Fotografia</label>
+            <input class="boton" type="file" id="ArchivoFoto" />
+            <span id="ArchivoEstado">Ningún archivo seleccionado</span>
+            <a class="boton" id="borrarImagen">Eliminar Fotografía</a>
+          </div>
+        </div>
+        <button class="boton" type="submit">Actualizar Imagen</button>
+      </form>
+    </main>
+    <footer class="footer">QuickOrder
+    </footer>
+  </div>
+</body>
+<script type="module" src="../../js/platillos/editarImagenComida.js"></script>
+</html>

@@ -1,214 +1,346 @@
-import { alertaOK } from "../alertas.js";
+import { alertaOK, alertaError, alertaWarning } from "../alertas.js";
 import { cargarHeader } from "../header.js";
 
-const contenedor = document.getElementById("contenedorItems");
-const formulario = document.getElementById("formularioDetalle");
+const formulario = document.getElementById("form");
 
+const comidas = document.querySelector(".comidas");
+const bebidas = document.querySelector(".bebidas");
+const cocteles = document.querySelector(".cocteles");
 const hash = window.location.hash.slice(1);
-const lista = hash.split("/");
-const idUser = lista[0];
-const idPedido = lista[1];
-const proviene = lista[2]
-let volverIrse = "";
-if (proviene == "r") volverIrse = `reservas.html#${idUser}`;
-else if (proviene == "p") volverIrse = `pedidos.html#${idUser}`;
+const [idUser, idPedido, metodo] = hash.split("/");
+let rutaVolverIrse = ""
+if (metodo == "p") rutaVolverIrse = `../pedidos/pedidosTablas.html#${idUser}`
+else if (metodo == "r") rutaVolverIrse = `../reservas/reservasTablas.html#${idUser}`
+// Funciones para cargar productos con await y for..of para garantizar carga ordenada
 
-const endpoints = [
-    { url: "http://localhost:8080/ApiRestaurente/api/comidas", tipo: "Comida" },
-    { url: "http://localhost:8080/ApiRestaurente/api/bebidas", tipo: "Bebida" },
-    { url: "http://localhost:8080/ApiRestaurente/api/cocteles", tipo: "Coctel" }
-];
-
-let detalleActual = [];
-
-const cargarDetalleExistente = async () => {
+const cargarComidas = async () => {
     try {
-        const res = await fetch(`http://localhost:8080/ApiRestaurente/api/detallePedido/${idPedido}`);
-        if (!res.ok) throw new Error("Error cargando detalle actual");
-        detalleActual = await res.json();
-    } catch (e) {
-        console.error("Error cargando detalles:", e);
-    }
-};
+        const res = await fetch("http://localhost:8080/ApiRestaurente/api/comidas");
+        if (!res.ok) throw new Error("Error cargando comidas");
+        const lista = await res.json();
 
-const cargarItems = async () => {
-    contenedor.innerHTML = ""; //Esta línea limpia los datos viejos
+        for (const item of lista) {
+            if (item.disponible == "1") {
+                try {
+                    const ingredientesRes = await fetch(`http://localhost:8080/ApiRestaurente/api/ingredientesComida/comida/${item.id}`);
+                    if (!ingredientesRes.ok) throw new Error("Error cargando ingredientes");
+                    const ingredientes = await ingredientesRes.json();
 
-    for (const endpoint of endpoints) {
-        try {
-            const res = await fetch(endpoint.url);
-            if (!res.ok) throw new Error("Error cargando " + endpoint.tipo);
-            const lista = await res.json();
-            const divPadre = document.createElement("div");
-            divPadre.className = "itemPadre";
-            const textPadre = document.createElement("h2");
-            textPadre.textContent = endpoint.tipo;
-            lista.forEach(async (item) => {
-                if (item.disponible == "1") {
+                    let ingredienteTexto = "Ingredientes: " + ingredientes.map(i => i.nombreIngrediente).join(", ");
+
                     const divHijo = document.createElement("div");
-                    divHijo.className = "item";
-                    divHijo.classList.add(`item${endpoint.tipo}`);
+                    divHijo.className = "item itemComida";
                     divHijo.dataset.valorId = item.id;
 
                     divHijo.innerHTML = `
-                <p>${item.nombre}</p>
-                <img src=http://localhost:8080/ApiRestaurente/IMAGENES/${item.imagen}>
-                <div class="itemBotones">                    
-                <button type="button" class="btn-restar">-</button>
-                <span class="cantidad">0</span>
-                <button type="button" class="btn-sumar">+</button>
-                </div>
-                `;
-                    if (endpoint.tipo == "Comida" || endpoint.tipo == "Coctel") {
-                        const ingredientes = await ingredientesCargar(endpoint.tipo, item.id);
-                        const divIngredientes = document.createElement("div");
-                        divIngredientes.innerHTML = `<span class="itemSpan">${ingredientes}</span>`
-                        divHijo.appendChild(divIngredientes)
-                    }
-                     if (endpoint.tipo == "Bebida") {
-                        const divIngredientes = document.createElement("div");
-                        divIngredientes.innerHTML = `<span class="itemSpan">${item.unidad},${item.tipo}</span>`
-                        divHijo.appendChild(divIngredientes)
-                    }
-                    divPadre.appendChild(divHijo);
-                    
+            <p>${item.nombre}</p>
+            <img src="http://localhost:8080/ApiRestaurente/IMAGENES/${item.imagen}" alt="${item.nombre}" />
+            <p class="descripcion">Tipo: ${item.tipo}, ${ingredienteTexto}, Precio: ${item.precio}$</p>
+            <div class="itemBotones">
+              <button type="button" class="btn-restar">-</button>
+              <button type="button" class="btn-sumar">+</button>
+            </div>
+            <input class="cantidad" type="text" value="0" autocomplete="off" />
+            <p class="descripcion">Nota:(opcional)</p>
+            <textarea class="nota" autocomplete="off"></textarea>
+          `;
+
+                    comidas.appendChild(divHijo);
+                } catch (error) {
+                    alertaError(error.message);
                 }
-            })
-            contenedor.append(textPadre, divPadre);
-        } catch (e) {
-            console.error("Error:", e);
+            }
         }
+    } catch (error) {
+        alertaError(error.message);
     }
 };
 
-const ingredientesCargar = async (tipo, id) => {
-    if (tipo == "Comida" || tipo == "Coctel") {
-        try {
-            let ingredientes = "";
-            let cont = 0;
+const cargarBebidas = async () => {
+    try {
+        const res = await fetch("http://localhost:8080/ApiRestaurente/api/bebidas");
+        if (!res.ok) throw new Error("Error cargando bebidas");
+        const lista = await res.json();
 
-            const res = await fetch(`http://localhost:8080/ApiRestaurente/api/ingredientes${tipo}`);
-            if (!res.ok) throw new Error("Error al obtener caja");
-            const data = await res.json();
-            data.forEach(element => {
-                if (tipo == "Comida") {
-                    if (element.idComida == id) {
-                        if (cont == 0) {
-                            cont++
-                            ingredientes += "Ingredientes:" + element.nombreIngrediente;
-                        }
-                        else {
-                            ingredientes += "," + element.nombreIngrediente
-                        }
-                    }
-                }
-                if (tipo == "Coctel") {
-                    if (element.idCoctel == id) {
-                        if (cont == 0) {
-                            cont++
-                            ingredientes += "Ingredientes:" + element.nombreIngrediente;
-                        }
-                        else {
-                            ingredientes += "," + element.nombreIngrediente
-                        }
-                    }
-                }
-            });
-            return ingredientes;
-        } catch (err) {
-            alertaError("Error al cargar la ingrediente: " + err.message);
-            return "Ingredientes: desconocido"
+        for (const item of lista) {
+            if (item.disponible == "1") {
+                const divHijo = document.createElement("div");
+                divHijo.className = "item itemBebida";
+                divHijo.dataset.valorId = item.id;
+
+                divHijo.innerHTML = `
+          <p>${item.nombre}</p>
+          <img src="http://localhost:8080/ApiRestaurente/IMAGENES/${item.imagen}" alt="${item.nombre}" />
+          <p class="descripcion">Unidad: ${item.unidad}, Tipo: ${item.tipo}, Precio: ${item.precio}$</p>
+          <div class="itemBotones">
+            <button type="button" class="btn-restar">-</button>
+            <button type="button" class="btn-sumar">+</button>
+          </div>
+          <input class="cantidad" type="text" value="0" autocomplete="off" />
+          <p class="descripcion">Nota:(opcional)</p>
+          <textarea class="nota" autocomplete="off"></textarea>
+        `;
+
+                bebidas.appendChild(divHijo);
+            }
         }
+    } catch (error) {
+        alertaError(error.message);
     }
+};
 
-}
+const cargarCocteles = async () => {
+    try {
+        const res = await fetch("http://localhost:8080/ApiRestaurente/api/cocteles");
+        if (!res.ok) throw new Error("Error cargando cocteles");
+        const lista = await res.json();
 
-window.addEventListener("click", (e) => {
+        for (const item of lista) {
+            if (item.disponible == "1") {
+                try {
+                    const ingredientesRes = await fetch(`http://localhost:8080/ApiRestaurente/api/ingredientesCoctel/coctel/${item.id}`);
+                    if (!ingredientesRes.ok) throw new Error("Error cargando ingredientes coctel");
+                    const ingredientes = await ingredientesRes.json();
+
+                    let ingredienteTexto = "Ingredientes: " + ingredientes.map(i => i.nombreIngrediente).join(", ");
+
+                    const divHijo = document.createElement("div");
+                    divHijo.className = "item itemCoctel";
+                    divHijo.dataset.valorId = item.id;
+
+                    divHijo.innerHTML = `
+            <p>${item.nombre}</p>
+            <img src="http://localhost:8080/ApiRestaurente/IMAGENES/${item.imagen}" alt="${item.nombre}" />
+            <p class="descripcion">${ingredienteTexto}, Precio: ${item.precio}$</p>
+            <div class="itemBotones">
+              <button type="button" class="btn-restar">-</button>
+              <button type="button" class="btn-sumar">+</button>
+            </div>
+            <input class="cantidad" type="text" value="0" autocomplete="off" />
+            <p class="descripcion">Nota:(opcional)</p>
+            <textarea class="nota" autocomplete="off"></textarea>
+          `;
+
+                    cocteles.appendChild(divHijo);
+                } catch (error) {
+                    alertaError(error.message);
+                }
+            }
+        }
+    } catch (error) {
+        alertaError(error.message);
+    }
+};
+
+// Función para cargar los detalles actuales del pedido y setear cantidades y notas
+const cargarDetallePedido = async () => {
+    try {
+        const res = await fetch(`http://localhost:8080/ApiRestaurente/api/detallePedido/${idPedido}`);
+        if (!res.ok) throw new Error("Error al cargar detalle del pedido");
+        const detalles = await res.json();
+
+        detalles.forEach(detalle => {
+            if (detalle.id_comida) {
+                const item = comidas.querySelector(`.itemComida[data-valor-id="${detalle.id_comida}"]`);
+                if (item) {
+                    item.querySelector(".cantidad").value = detalle.cantidad_comida;
+                    item.querySelector(".nota").value = detalle.nota_comida || "";
+                }
+            }
+            if (detalle.id_bebida) {
+                const item = bebidas.querySelector(`.itemBebida[data-valor-id="${detalle.id_bebida}"]`);
+                if (item) {
+                    item.querySelector(".cantidad").value = detalle.cantidad_bebida;
+                    item.querySelector(".nota").value = detalle.nota_bebida || "";
+                }
+            }
+            if (detalle.id_coctel) {
+                const item = cocteles.querySelector(`.itemCoctel[data-valor-id="${detalle.id_coctel}"]`);
+                if (item) {
+                    item.querySelector(".cantidad").value = detalle.cantidad_coctel;
+                    item.querySelector(".nota").value = detalle.nota_coctel || "";
+                }
+            }
+        });
+    } catch (error) {
+        alertaError(error.message);
+    }
+};
+
+// Botones + y - para cantidades
+window.addEventListener("click", async (e) => {
     if (e.target.classList.contains("btn-sumar") || e.target.classList.contains("btn-restar")) {
         const padre = e.target.closest(".item");
-        const spanCantidad = padre.querySelector(".cantidad");
-        let cantidad = parseInt(spanCantidad.textContent);
+        const inputCantidad = padre.querySelector(".cantidad");
+        let cantidad = parseInt(inputCantidad.value) || 0;
 
-        if (e.target.classList.contains("btn-sumar")) {
+        if (e.target.classList.contains("btn-sumar") && cantidad < 90) {
             cantidad++;
-        } else if (cantidad > 0) {
+        } else if (e.target.classList.contains("btn-restar") && cantidad > 0) {
             cantidad--;
+        } else if (cantidad == 90) {
+            await alertaWarning("Cuidado: el límite es 90");
         }
 
-        spanCantidad.textContent = cantidad;
+        inputCantidad.value = cantidad;
+    }
+});
+
+// Validar solo números y max 2 dígitos (max 90)
+const validarTeclado = (e) => {
+    const tecla = e.key;
+    if (["Backspace", "ArrowLeft", "ArrowRight", "Tab"].includes(tecla)) return;
+
+    if (!/^[0-9]$/.test(tecla)) {
+        e.preventDefault();
+        return;
+    }
+
+    const nuevoValor = e.target.value + tecla;
+    if (nuevoValor.length > 2 || parseInt(nuevoValor) > 90) {
+        e.preventDefault();
+    }
+};
+
+// Validar nota max 250 caracteres
+const validarTeclado255 = (e) => {
+    const tecla = e.key;
+    if (["Backspace", "ArrowLeft", "ArrowRight", "Tab"].includes(tecla)) return;
+
+    const nuevoValor = e.target.value + tecla;
+    if (nuevoValor.length > 250) {
+        e.preventDefault();
+    }
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await cargarHeader(idUser);
+    await cargarComidas();
+    await cargarBebidas();
+    await cargarCocteles();
+    await cargarDetallePedido();
+
+    const botonVolver = document.getElementById("volver");
+    botonVolver.action = rutaVolverIrse;
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.target.classList.contains("cantidad")) {
+        validarTeclado(e);
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.target.classList.contains("nota")) {
+        validarTeclado255(e);
     }
 });
 
 formulario.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    try {
-        await fetch(`http://localhost:8080/ApiRestaurente/api/detallePedido/${idPedido}`, {
-            method: "DELETE"
-        });
-    } catch (err) {
-        console.error("Error borrando detalles antiguos:", err);
-    }
-
     const listaComidas = [];
     const listaBebidas = [];
     const listaCocteles = [];
 
     document.querySelectorAll(".itemComida").forEach(item => {
-        const cantidad = parseInt(item.querySelector(".cantidad").textContent);
+        const cantidad = parseInt(item.querySelector(".cantidad").value) || 0;
+        const nota = item.querySelector(".nota").value.trim();
         if (cantidad >= 1) {
-            listaComidas.push({ id: item.dataset.valorId, cantidad });
+            listaComidas.push({
+                id: item.dataset.valorId,
+                cantidad,
+                nota
+            });
         }
     });
+
     document.querySelectorAll(".itemBebida").forEach(item => {
-        const cantidad = parseInt(item.querySelector(".cantidad").textContent);
+        const cantidad = parseInt(item.querySelector(".cantidad").value) || 0;
+        const nota = item.querySelector(".nota").value.trim();
         if (cantidad >= 1) {
-            listaBebidas.push({ id: item.dataset.valorId, cantidad });
+            listaBebidas.push({
+                id: item.dataset.valorId,
+                cantidad,
+                nota
+            });
         }
     });
+
     document.querySelectorAll(".itemCoctel").forEach(item => {
-        const cantidad = parseInt(item.querySelector(".cantidad").textContent);
+        const cantidad = parseInt(item.querySelector(".cantidad").value) || 0;
+        const nota = item.querySelector(".nota").value.trim();
         if (cantidad >= 1) {
-            listaCocteles.push({ id: item.dataset.valorId, cantidad });
+            listaCocteles.push({
+                id: item.dataset.valorId,
+                cantidad,
+                nota
+            });
         }
     });
-
-    const mayor = Math.max(listaComidas.length, listaBebidas.length, listaCocteles.length);
-
-    for (let i = 0; i < mayor; i++) {
+    if (listaComidas.length == 0 && listaBebidas.length == 0 && listaCocteles == 0) {
+        return await alertaError("Error: seleccione almenos un platillo: Comida,Bebida o Coctel")
+    }
+    // Guardar todos los nuevos detalles
+    const maxLen = Math.max(listaComidas.length, listaBebidas.length, listaCocteles.length);
+    try {
+        const response = await fetch(`http://localhost:8080/ApiRestaurente/api/detallePedido/${idPedido}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+        });
+        const mensaje = await response.text();
+        if (!response.ok) {
+            throw new Error(mensaje);
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+    for (let i = 0; i < maxLen; i++) {
         const datos = {
             id_pedido: idPedido,
-            id_comida: listaComidas[i]?.id || "",
-            cantidad_comida: listaComidas[i]?.cantidad || "",
-            id_bebida: listaBebidas[i]?.id || "",
-            cantidad_bebida: listaBebidas[i]?.cantidad || "",
-            id_coctel: listaCocteles[i]?.id || "",
-            cantidad_coctel: listaCocteles[i]?.cantidad || ""
-        };
+            id_comida: listaComidas[i] ? listaComidas[i].id : "",
+            cantidad_comida: listaComidas[i] ? listaComidas[i].cantidad : "",
+            nota_comida: listaComidas[i] ? listaComidas[i].nota : "",
 
+            id_bebida: listaBebidas[i] ? listaBebidas[i].id : "",
+            cantidad_bebida: listaBebidas[i] ? listaBebidas[i].cantidad : "",
+            nota_bebida: listaBebidas[i] ? listaBebidas[i].nota : "",
+
+            id_coctel: listaCocteles[i] ? listaCocteles[i].id : "",
+            cantidad_coctel: listaCocteles[i] ? listaCocteles[i].cantidad : "",
+            nota_coctel: listaCocteles[i] ? listaCocteles[i].nota : ""
+        };
         try {
-            const res = await fetch("http://localhost:8080/ApiRestaurente/api/detallePedido", {
+            const response = await fetch("http://localhost:8080/ApiRestaurente/api/detallePedido", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(datos)
             });
-            const mensaje = await res.text();
-            if (!res.ok) throw new Error(mensaje);
+            const mensaje = await response.text();
+            console.log(mensaje);
+            if (!response.ok) {
+                throw new Error(mensaje);
+            }
         } catch (error) {
-            console.error("Error al enviar:", error.message);
+            alertaError(error.message);
+            return;
         }
     }
 
-    await alertaOK(`Pedido #${idPedido}: Editado con ÉXITO.`);
-    formulario.action = volverIrse;
+    try {
+        const res = await fetch(`http://localhost:8080/ApiRestaurente/api/pedidos/${idPedido}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" }
+        });
+        if (!res.ok) {
+            const msg = await res.text();
+            throw new Error(msg);
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+
+    await alertaOK(`Pedido #${idPedido}: Detalles actualizados con éxito.`);
+    formulario.action = rutaVolverIrse;
     formulario.submit();
 });
-
-document.addEventListener("DOMContentLoaded", async () => {
-    cargarHeader(idUser)
-    await cargarDetalleExistente();
-    await cargarItems();
-    const botonVolver = document.getElementById("volver");
-    botonVolver.action = volverIrse;
-});
-

@@ -1,33 +1,44 @@
-  <!DOCTYPE html>
-  <html lang="es">
-  <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>Editar Detalle Pedido</title>
-      <link rel="stylesheet" href="../css/general.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header class="header">
-        <form id="volver" method="post" >
-          <button class="boton" type="submit">Volver</button>
-        </form>
-        <div class="perfil">
-          <p class="perfil__nombre">Nombre</p>
-          <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
-        </div>
-      </header>
-      <main class="main">
-          <form id="formularioDetalle">
-              <section id="contenedorItems">
-                  <!-- Aquí se cargarán comidas, bebidas y cocteles -->
-              </section>
-              <button type="submit">Guardar Detalle</button>
-          </form>
-      </main>
-      <footer class="footer">QuickOrder</footer>
-    </div>
+<!DOCTYPE html>
+<html lang="es">
 
-      <script type="module" src="../js/editarDetallePedido.js"></script>
-  </body>
-  </html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Detalle Pedido Editar</title>
+  <link rel="stylesheet" href="../../css/detallesPedidos.css" />
+  <link rel="shortcut icon" href="../../img/logo.png" />
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <form id="volver" method="post">
+        <button class="boton" type="submit">Volver</button>
+      </form>
+      <p>Detalle Pedido: Editar</p>
+      <div class="perfil">
+        <p class="perfil__nombre">Nombre</p>
+        <img class="perfil__imagen" src="../img/pfp.png" alt="perfil" />
+      </div>
+    </header>
+    <main class="main">
+      <h1 class="titulos">Agregar Platillos:</h1>
+      <h2 class="subtitulos">Comidas:</h2>
+      <div class="comidas"></div>
+
+      <h2 class="subtitulos">Bebidas:</h2>
+      <div class="bebidas"></div>
+
+      <h2 class="subtitulos">Cocteles:</h2>
+      <div class="cocteles"></div>
+
+      <form id="form" method="post">
+        <button class="boton" type="submit">Guardar Detalles del Pedido</button>
+      </form>
+    </main>
+    <footer class="footer">QuickOrder</footer>
+  </div>
+  <script type="module" src="../../js/detallePedidos/editar.js"></script>
+</body>
+
+</html>

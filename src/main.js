@@ -69,9 +69,6 @@ const numeros = (event) => {
   if (!/^\d$/.test(event.key) && event.key !== "Backspace" && event.key !== "Tab") {
     event.preventDefault();
   }
-  if (event.target.value.length >= 10) {
-    event.preventDefault();
-  }
 };
 
 formulario.addEventListener("submit", validar);

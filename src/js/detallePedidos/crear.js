@@ -276,7 +276,10 @@ formulario.addEventListener("submit", async (e) => {
             });
         }
     });  
-
+  if (listaComidas.length == 0 && listaBebidas.length == 0 && listaCocteles == 0)
+  {
+    return await alertaError("Error: seleccione almenos un platillo: Comida,Bebida o Coctel")  
+  }
   let mayor = Math.max(listaComidas.length, listaBebidas.length, listaCocteles.length);
   
     for (let cont = 0; cont < mayor; cont++) {
@@ -302,7 +305,7 @@ formulario.addEventListener("submit", async (e) => {
             });
 
             const mensaje = await response.text();
-
+            console.log(mensaje);
             if (!response.ok) {
                 throw new Error(mensaje);
             }
