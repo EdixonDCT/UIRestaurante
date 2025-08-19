@@ -86,14 +86,14 @@ async function cargarDatosPedido(idPedido) {
         opt.textContent = `#${mesas.numero} (capacidad ${mesas.capacidad})`;
         ![...numeroMesa.options].some(o => o.value == mesas.numero) && numeroMesa.appendChild(opt);
         numeroMesaViejo = mesas.numero;
-        numeroMesa.value = pedido.numeroMesa || "";
-        idCaja.value = pedido.idCaja || "";
+        numeroMesa.value = pedido.numeroMesa || 0;
+        idCaja.value = pedido.idCaja || 0;
         numeroClientes.value = pedido.numeroClientes || "";
         correoCliente.value = pedido.correoCliente || "";
         if (corCli) {
            correoCliente.value = corCli;  
         }
-        metodoPago.value = pedido.metodoPago || "";
+        metodoPago.value = pedido.metodoPago || 0;
     } catch (error) {
         alertaError("Error al cargar datos del pedido: " + error.message);
     }

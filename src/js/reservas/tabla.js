@@ -76,7 +76,7 @@ const cargarReservas = async () => {
             <form action="../pedidos/PedidoEditar.html#${hash}/${pedido.id}/rpe" method="post">
             <button class="boton" type="submit">Activar Reserva</button>
             </form>
-            <button class="boton" data-id-reserva="${pedido.idReserva}" id="BotonBorrar" value="${pedido.id}" type="button">Eliminar</button>
+            <button class="boton" data-id-reserva="${pedido.idReserva}" id="BotonEliminar" value="${pedido.id}" type="button">Eliminar</button>
           </div>
           </td>
       `;
@@ -107,8 +107,8 @@ const cargarReservas = async () => {
             <input type="hidden" name="id" value="${pedido.id}">
             <button class="boton" type="submit">Editar Platillos</button>
           </form>
-            <button class="boton" id="VerFactura" value="${pedido.id}" type="button">Ver Factura</button>
-            <button class="boton" data-id-mesa="${pedido.numeroMesa}" id="Facturar" value="${pedido.id}" type="button">Pagar Factura</button>
+            <button class="boton" id="VerFactura" value="${pedido.id}" data-id-total="${pedido.valorTotal}" type="button">Ver Factura</button>
+            <button class="boton" data-id-mesa="${pedido.numeroMesa}" data-id-total="${pedido.valorTotal}" id="Facturar" value="${pedido.id}" type="button">Pagar Factura</button>
             <button class="boton" data-id-reserva="${pedido.idReserva}" data-id-mesa="${pedido.numeroMesa}" id="BotonEliminar" value="${pedido.id}"  type="button">Eliminar</button>
           </div>
         </td>
@@ -165,6 +165,8 @@ const eliminarPedido = async (e) => {
   }
 };
 const VerFactura = async (e) => {
+    const total = parseFloat(e.target.dataset.idTotal);
+  if (total == 0) return await alertaError("Error: no se puede mostrar factura porque no tiene ningun pedido.");
   try {
     const idPedido = e.target.value;
 
@@ -265,6 +267,8 @@ Método de pago: ${pedido.metodoPago.toUpperCase()}
 const facturar = async (e) => {
   const id = e.target.value;
   const mesa = e.target.dataset.idMesa;
+  const total = parseFloat(e.target.dataset.idTotal);
+  if (total == 0) return await alertaError("Error: no se puede facturar con Total 0$");
   const confirmacion = await alertaPregunta(`¿Desea facturar el pedido #${id}?`);
   if (confirmacion.isConfirmed) {
     try {

@@ -42,10 +42,15 @@ const subirBebida = async (datos) => {
       body: JSON.stringify(datos)
     });
 
-    const resultado = await res.json();
-    if (!res.ok) throw new Error(resultado.error);
+    let mensaje;
 
-    subirImagen(resultado.id);
+if (res.ok) {
+  mensaje = await res.json(); // Si la respuesta es correcta, parseas como JSON
+} else {
+  const errorText = await res.text(); // Si hay error, parseas como texto plano
+  throw new Error(errorText); // Lanzas el error con el texto
+}
+    subirImagen(mensaje.id);
   } catch (error) {
     alertaError(error.message);
   }

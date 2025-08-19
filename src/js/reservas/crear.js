@@ -84,12 +84,13 @@ formulario.addEventListener("submit", async (e) => {
       },
       body: JSON.stringify(datos)
     });
-
-    const mensaje = await response.json();
-    if (!response.ok) {
-      throw new Error(mensaje);
-    }
-    
+    let mensaje;
+if (response.ok) {
+  mensaje = await response.json();
+} else {
+  const errorText = await response.text();
+  throw new Error(errorText);
+}  
     const idReserva = mensaje.id;
 
     const datosPedido = {
@@ -110,7 +111,7 @@ formulario.addEventListener("submit", async (e) => {
     await alertaOK("Reserva y Pedido creados EXITOSAMENTE");
     formulario.action = `reservasTablas.html#${hash}`
     formulario.submit();
-  } catch (err) {
-    alertaError(err.message);
+  } catch (error) {
+    alertaError(error.message);
   }
 });

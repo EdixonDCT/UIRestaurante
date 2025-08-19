@@ -41,10 +41,16 @@ const subirCoctel = async (datos) => {
       body: JSON.stringify(datos)
     });
 
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.error);
+    let mensaje;
 
-    subirImagen(result.id); // el ID retornado del nuevo cóctel
+if (response.ok) {
+  mensaje = await response.json(); // Si la respuesta es correcta, parseas como JSON
+} else {
+  const errorText = await response.text(); // Si hay error, parseas como texto plano
+  throw new Error(errorText); // Lanzas el error con el texto
+};
+
+    subirImagen(mensaje.id); // el ID retornado del nuevo cóctel
   } catch (error) {
     alertaError(error.message);
   }

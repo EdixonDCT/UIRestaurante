@@ -42,10 +42,16 @@ const subirComida = async (datos) => {
             body: JSON.stringify(datos)
         });
 
-        const resultado = await response.json();
-        if (!response.ok) throw new Error(resultado.error);
+    let mensaje;
 
-        subirImagen(resultado.id); // el backend debe devolver el ID insertado
+if (response.ok) {
+  mensaje = await response.json(); // Si la respuesta es correcta, parseas como JSON
+} else {
+  const errorText = await response.text(); // Si hay error, parseas como texto plano
+  throw new Error(errorText); // Lanzas el error con el texto
+}
+
+        subirImagen(mensaje.id); // el backend debe devolver el ID insertado
     } catch (error) {
         alertaError(error.message);
     }
