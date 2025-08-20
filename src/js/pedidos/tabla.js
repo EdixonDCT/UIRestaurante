@@ -26,9 +26,8 @@ const cargarPedidos = async () => {
     tituloIncompletos.classList.add("tituloTable");
     const encabezados = [
         "ID","Fecha", "Hora","ID Caja","No.Mesa",
-        "No.Clientes","Cli.Correo","Reserva", "Método de Pago","Total","Eliminado","Acciones"
-    ];
-
+        "No.Clientes","Cli.Correo","Reserva", "Método de Pago","Total"];
+  esAdmin ? encabezados.push("Eliminado", "Acciones") : encabezados.push("Acciones"); 
     const encabezadosIncompleto = [
         "ID","Fecha", "Hora", "ID Caja","No.Mesa",
         "No.Clientes","Cli.Correo", "Método de Pago","Total", "Acciones"
@@ -92,9 +91,10 @@ const cargarPedidos = async () => {
             `;
                 tablaIncompletos.appendChild(fila);
             }
-            else if(pedido.facturado == "1" || pedido.facturado == "1" && pedido.idReserva){
-                const fila = document.createElement("tr");
-                fila.innerHTML = `
+        else if (pedido.facturado == "1" || pedido.facturado == "1" && pedido.idReserva) {
+          if (pedido.eliminado != "1" || pedido.eliminado == "1" && esAdmin) {
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
                 <td>${pedido.id}</td>
                 <td>${pedido.fecha}</td>
                 <td>${pedido.hora}</td>
@@ -105,7 +105,7 @@ const cargarPedidos = async () => {
                 <td>${pedido.idReserva || "-"}</td>
                 <td>${pedido.metodoPago}</td>
                 <td>${pedido.valorTotal}$</td>
-                <td>${pedido.eliminado == "1" ? "Si" : "No"}</td>
+                ${esAdmin ? `<td>${pedido.eliminado == "1" ? "Si" : "No"}</td>` : ""}
                 <td>
                 <div class="tablaAcciones">
                     <button class="boton" id="VerFactura" value="${pedido.id}" type="button">Ver Factura</button>
@@ -113,7 +113,8 @@ const cargarPedidos = async () => {
                 </div>
                 </td>
             `;
-                tablaCompletos.appendChild(fila);
+            tablaCompletos.appendChild(fila);
+          }
             }
         });
         if (contadorNoFacturado == 0)
