@@ -3,7 +3,7 @@ import { cargarHeader } from "../header.js";
 
 const hash = window.location.hash.slice(1);
 const section = document.querySelector(".main");
-
+let esAdmin = false;
 const cargarPedidos = async () => {
     const botonVolver = document.getElementById("volver");
     botonVolver.action = `../menu.html#${hash}`;
@@ -109,7 +109,7 @@ const cargarPedidos = async () => {
                 <td>
                 <div class="tablaAcciones">
                     <button class="boton" id="VerFactura" value="${pedido.id}" type="button">Ver Factura</button>
-                    <button class="boton" id="EliminadoSuave" data-id-eliminado="${pedido.eliminado}" value="${pedido.id}" type="button">${pedido.eliminado == "0" ? "Eliminado" : "Incluir"}</button>
+                    ${esAdmin ? `<button class="boton" id="EliminadoSuave" data-id-eliminado="${pedido.eliminado}" value="${pedido.id}" type="button">${pedido.eliminado == "0" ? "Eliminado" : "Incluir"}</button>` : ""}
                 </div>
                 </td>
             `;
@@ -333,8 +333,18 @@ const EliminadoSuave = async (e) =>
     }
     
 }
-document.addEventListener("DOMContentLoaded", () => {
+const validarAdmin = async () => {
+    try {
+        const res = await fetch(`http://localhost:8080/ApiRestaurente/api/trabajadores/${hash}`);
+        const data = await res.json();
+        data.idOficio == "1" ? esAdmin = true : esAdmin = false;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+document.addEventListener("DOMContentLoaded",async () => {
   cargarHeader(hash);
+  await validarAdmin()    
   cargarPedidos();
 });
 window.addEventListener("click", (e) => {

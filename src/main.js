@@ -46,7 +46,7 @@ const esValido = async (e,cedula, contrasena) => {
       throw new Error(mensaje);
     }
     const data = await response.json();
-
+    
     if (cedula == data.cedula && contrasena == data.contrasena && data.activo == "1") {
       return true;
     }

@@ -14,7 +14,9 @@ const nacimiento = document.querySelector(".fecha");
 const contrasena = document.querySelector(".contrasena");
 const contrasenaValidar = document.querySelector(".contrasenaValidar");
 const oficio = document.querySelector(".oficio");
-
+const botonAdminTemporal = document.getElementById("adminTemporal")
+let admin = false;
+let adminTemporal = false;
 const validar = async (e) => {
     e.preventDefault();
     if (!nacimiento.value == "") {
@@ -28,7 +30,7 @@ const validar = async (e) => {
         apellido: apellido.value,
         nacimiento: nacimiento.value,
         contrasena: contrasena.value,
-        idOficio: oficio.value,
+        idOficio: admin ? "1" : oficio.value,
     };
     ActualizarTrabajador(datos);
 };
@@ -90,7 +92,7 @@ const cargarOficios = async () => {
     try {
         const res = await fetch("http://localhost:8080/ApiRestaurente/api/oficios");
         const data = await res.json();
-        oficio.innerHTML = data.map(o => `<option value="${o.codigo}">${o.tipo}</option>`).join("");
+        oficio.innerHTML = data.map(o => `${o.codigo != 1 ? `<option value="${o.codigo}">${o.tipo}</option>` : ""}`).join("");
     } catch (error) {
         console.error("Error cargando oficios:", error);
     }
@@ -113,14 +115,35 @@ const infoTrabajador = async () => {
         contrasena.value = data.contrasena;
         contrasenaValidar.value = data.contrasena;
         oficio.value = data.idOficio;
+        if (data.idOficio == "1") {
+            oficio.parentElement.style.display = "none"
+            admin = true;
+        } 
+        if (adminTemporal) {
+            oficio.parentElement.style.display = "none"
+        }
+        if (data.idOficio == "1" || data.idOficio == "3") botonAdminTemporal.style.display = "none";
+        if (adminTemporal) {
+            botonAdminTemporal.style.display = "none"
+        }
     } catch (error) {
         console.error("Error:", error);
     }
 };
-
-document.addEventListener("DOMContentLoaded", () => {
+const ValidaradminTemporal = async () => {
+    try {
+        const res = await fetch(`http://localhost:8080/ApiRestaurente/api/trabajadores/${idUser}`);
+        const data = await res.json();
+        data.adminTemporalFin && data.adminTemporalInicio ? adminTemporal = true : adminTemporal = false;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+document.addEventListener("DOMContentLoaded",async () => {
     cargarHeader(idUser);
+    await ValidaradminTemporal()
     infoTrabajador();
+    botonAdminTemporal.action = `trabajadorAdminTemporal.html#${idUser}/${cedulaTrabajador}`;
 }
 );
 formulario.addEventListener("submit", validar);

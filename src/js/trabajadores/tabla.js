@@ -3,7 +3,7 @@ import { cargarHeader } from "../header.js";
 
 const hash = window.location.hash.slice(1);
 const section = document.querySelector(".main");
-
+let adminTemporal = false;
 const cargarTabla = async () => {
   const botonVolver = document.getElementById("volver");
   botonVolver.action = `../menu.html#${hash}`;
@@ -48,7 +48,7 @@ const cargarTabla = async () => {
         <td>${trabajador.nombre}</td>
         <td>${trabajador.apellido}</td>
         <td>${trabajador.nacimiento}</td>
-        <td>${trabajador.nombreOficio}</td>
+        <td>${adminTemporal && hash == trabajador.cedula ? "Admin(Temporal)" : trabajador.nombreOficio}</td>
         <td><img src="http://localhost:8080/ApiRestaurente/IMAGENES/${trabajador.foto}" alt="Foto"></td>
         <td data-valor-id=${trabajador.cedula}>${trabajador.activo == "1" ? "Activo" : "Inactivo"}</td>
         <td>
@@ -197,8 +197,18 @@ const cambiarEstado = async (e) => {
     console.error("Falló el cambio de estado:", error);
   }
 }
-document.addEventListener("DOMContentLoaded", () => {
+const ValidaradminTemporal = async () => {
+    try {
+        const res = await fetch(`http://localhost:8080/ApiRestaurente/api/trabajadores/${hash}`);
+        const data = await res.json();
+        data.adminTemporalFin && data.adminTemporalInicio ? adminTemporal = true : adminTemporal = false;        
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+document.addEventListener("DOMContentLoaded",async () => {
   cargarHeader(hash);
+  await ValidaradminTemporal();
   cargarTabla();
 });
 window.addEventListener("click", async (e) => {

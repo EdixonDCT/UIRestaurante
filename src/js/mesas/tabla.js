@@ -3,12 +3,12 @@ import { cargarHeader } from "../header";
 
 const hash = window.location.hash.slice(1);
 const section = document.querySelector(".main");
-
+const nuevoForm = document.createElement("form");
+let esMesero = false;
 const cargarTabla = async () => {
   const botonVolver = document.getElementById("volver")
-  botonVolver.action = `../menu.html#${hash}`;    
+  botonVolver.action = `../menu.html#${hash}`;
 
-  const nuevoForm = document.createElement("form");
   nuevoForm.action = `mesaCrear.html#${hash}`;
   nuevoForm.method = "post"
   nuevoForm.innerHTML = `<button class="boton" type="submit">Añadir Nueva Mesa</button>`;
@@ -41,21 +41,21 @@ const cargarTabla = async () => {
         <td data-valor-id=${mesa.numero}>${disponible}</td>
         <td>
           <div class="tablaAcciones">
-            <form action="mesaEditar.html#${hash}/${mesa.numero}" method="post">
+            ${esMesero ? "" : `<form action="mesaEditar.html#${hash}/${mesa.numero}" method="post">
               <input type="hidden" name="numero" value="${mesa.numero}">
               <button class="boton" type="submit">Editar</button>
             </form>
             
             <button id="BotonEliminar" class="boton" value="${mesa.numero}" type="button">Eliminar</button>
-            
+            `}
             <div class="TablaCheckbox">
               <input type="checkbox" class="cambiarEstado" id="cambiarEstado-${mesa.numero}" data-id="${mesa.numero}" ${mesa.disponible === "1" ? "checked" : ""}>
               <label for="cambiarEstado-${mesa.numero}">Cambiar estado</label>
-              <label ${mesa.disponible === "1" ? "class='checkboxTrue'" : "class='checkboxFalse'"} boton-id="${mesa.numero}" for="cambiarEstado-${mesa.numero}">${mesa.disponible === "1" ? "Disponible": "Ocupado"}</label>
+              <label ${mesa.disponible === "1" ? "class='checkboxTrue'" : "class='checkboxFalse'"} boton-id="${mesa.numero}" for="cambiarEstado-${mesa.numero}">${mesa.disponible === "1" ? "Disponible" : "Ocupado"}</label>
             </div>
           </div>
         </td>`;
-        
+
       table.appendChild(row);
     });
 
@@ -69,7 +69,7 @@ const cargarTabla = async () => {
 const cambiarEstado = async (e) => {
   let id = e.target.dataset.id;
   let valor = e.target.checked ? "1" : "0";
-  let checkbox = document.querySelector(`[data-valor-id="${id}"]`); 
+  let checkbox = document.querySelector(`[data-valor-id="${id}"]`);
   let labelBoton = document.querySelector(`[boton-id="${id}"]`);
   try {
     const disponibles = { disponible: valor };
@@ -85,8 +85,8 @@ const cambiarEstado = async (e) => {
 
     const resultado = await respuesta.text();
     checkbox.textContent = e.target.checked ? "Si" : "Ocupado";
-    labelBoton.classList = e.target.checked ? "checkboxTrue": "checkboxFalse";
-    labelBoton.textContent = e.target.checked ? "Disponible": "Ocupado";
+    labelBoton.classList = e.target.checked ? "checkboxTrue" : "checkboxFalse";
+    labelBoton.textContent = e.target.checked ? "Disponible" : "Ocupado";
   } catch (error) {
     console.error("Falló el cambio de estado:", error);
   }
@@ -117,9 +117,21 @@ const EliminarMesa = async (e) => {
     }
   }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
+const validarMesero = async () => {
+  try {
+    const res = await fetch(`http://localhost:8080/ApiRestaurente/api/trabajadores/${hash}`);
+    const data = await res.json();
+    data.idOficio == "3" ? esMesero = true : esMesero = false;
+    if (data.idOficio == "3") {
+      nuevoForm.style.display = "none";
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+document.addEventListener("DOMContentLoaded", async () => {
   cargarHeader(hash);
+  await validarMesero()
   cargarTabla();
 });
 
