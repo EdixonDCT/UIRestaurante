@@ -65,6 +65,7 @@ const esValido = async (e,cedula, contrasena) => {
     return false;
   }
 }
+
 const numeros = (event) => {
   if (!/^\d$/.test(event.key) && event.key !== "Backspace" && event.key !== "Tab") {
     event.preventDefault();
