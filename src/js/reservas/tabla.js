@@ -1,12 +1,20 @@
+// Importa funciones de alertas y de header
 import { alertaOK, alertaError, alertaPregunta, alertaMensaje } from "../alertas.js";
 import { cargarHeader } from "../header.js";
 
+// Extrae el hash de la URL (#usuario, #admin, etc.)
 const hash = window.location.hash.slice(1);
 const section = document.querySelector(".main");
 
+// ----------------------
+// CARGAR RESERVAS
+// ----------------------
 const cargarReservas = async () => {
+  // Botón "volver" al menú principal
   const botonVolver = document.getElementById("volver");
   botonVolver.action = `../menu.html#${hash}`;
+
+  // Botón "nuevo" para crear una reserva
   const nuevoForm = document.createElement("form");
   nuevoForm.action = `reservaCrear.html#${hash}`;
   nuevoForm.method = "post";
@@ -14,52 +22,72 @@ const cargarReservas = async () => {
   nuevoForm.innerHTML = `<button class="boton" type="submit">Nuevo</button>`;
   section.appendChild(nuevoForm);
 
+  // Títulos de tablas
   const titulo = document.createElement("h2");
-  titulo.textContent = "Reservas Actuales";
+  titulo.textContent = "Reservas Actuales";  // reservas aún no activas
   titulo.classList.add("tituloTable");
+
   const tituloActivos = document.createElement("h2");
-  tituloActivos.textContent = "Reservas Activas";
+  tituloActivos.textContent = "Reservas Activas"; // ya con caja y mesa
   tituloActivos.classList.add("tituloTable");
+
+  // Tablas
   const tabla = document.createElement("table");
   tabla.classList.add("tablas");
+
   const tablaActivos = document.createElement("table");
   tablaActivos.classList.add("tablas");
+
+  // Encabezados tabla reservas
   const encabezados = [
     "ID", "Correo Cliente", "No.Mesa", "Cantidad", "Fecha",
     "Hora", "Acciones"
   ];
+
+  // Encabezados tabla reservas activas
   const encabezadosActivos = [
     "ID", "Fecha", "Hora", "ID Caja", "No.Mesa",
     "No.Clientes", "Cli.Correo", "ID Reserva", "Método de Pago", "Total", "Acciones"
   ];
+
+  // Crear encabezado de cada tabla
   const filaEncabezado = document.createElement("tr");
   encabezados.forEach(text => {
     const th = document.createElement("th");
     th.textContent = text;
     filaEncabezado.appendChild(th);
   });
+
   const filaEncabezadoActivos = document.createElement("tr");
   encabezadosActivos.forEach(text => {
     const th = document.createElement("th");
     th.textContent = text;
     filaEncabezadoActivos.appendChild(th);
   });
+
   tablaActivos.appendChild(filaEncabezadoActivos)
   tabla.appendChild(filaEncabezado);
+
+  // Contadores para ocultar tablas si no hay registros
   let contador = 0;
   let contadorActivos = 0;
+
   try {
+    // Fetch pedidos y reservas
     const resPedidos = await fetch("http://localhost:8080/ApiRestaurente/api/pedidos");
     const pedidos = await resPedidos.json();
 
     const resReservas = await fetch("http://localhost:8080/ApiRestaurente/api/reservas");
     const reservas = await resReservas.json();
 
+    // Recorre pedidos y separa en "actuales" o "activos"
     pedidos.forEach(pedido => {
+      // Reservas pendientes (sin caja, no facturadas)
       if (pedido.facturado == "0" && !pedido.idCaja) {
         const reserva = reservas.find(r => r.id === pedido.idReserva);
         if (reserva) {
           contador++;
+          // Crear fila en la tabla de reservas actuales
           const fila = document.createElement("tr");
           fila.innerHTML = `
         <td>${pedido.id}</td>
@@ -83,6 +111,7 @@ const cargarReservas = async () => {
           tabla.appendChild(fila);
         }
       }
+      // Reservas activas (ya tienen caja, mesa asignada, pero no facturadas)
       else if (pedido.facturado == "0" && pedido.idCaja && pedido.idReserva) {
         contadorActivos++;
         const fila = document.createElement("tr");
@@ -116,6 +145,8 @@ const cargarReservas = async () => {
         tablaActivos.appendChild(fila);
       }
     });
+
+    // Ocultar tabla si no hay registros
     if (contador == 0) {
       titulo.style.display = "none";
       tabla.style.display = "none";
@@ -124,7 +155,11 @@ const cargarReservas = async () => {
       tituloActivos.style.display = "none";
       tablaActivos.style.display = "none";
     }
+
+    // Agregar tablas al DOM
     section.append(titulo, tabla, tituloActivos, tablaActivos);
+
+    // Si no hay nada en ambas → mostrar mensaje
     if (contador == 0 && contadorActivos == 0) {
       const tituloNada = document.createElement("h2");
       tituloNada.textContent = "No hay reservas...";
@@ -132,18 +167,23 @@ const cargarReservas = async () => {
       section.append(tituloNada)
     }
   } catch (error) {
+    // En caso de error en fetch
     section.innerHTML = "<p>Error al cargar los datos.</p>";
     console.error("Error:", error);
   }
 };
 
+// ----------------------
+// ELIMINAR PEDIDO
+// ----------------------
 const eliminarPedido = async (e) => {
-  const id = e.target.value;
-  const mesa = e.target.dataset.idMesa;
-  const reserva = e.target.dataset.idReserva;
+  const id = e.target.value;                  // id del pedido
+  const mesa = e.target.dataset.idMesa;       // mesa asociada
+  const reserva = e.target.dataset.idReserva; // reserva asociada
   const confirmacion = await alertaPregunta(`¿Desea eliminar el pedido #${id}?`);
   if (confirmacion.isConfirmed) {
     try {
+      // Elimina pedido
       const res = await fetch(`http://localhost:8080/ApiRestaurente/api/pedidos/${id}`, {
         method: "DELETE",
         headers: {
@@ -152,21 +192,30 @@ const eliminarPedido = async (e) => {
       });
       const mensaje = await res.text();
       if (!res.ok) throw new Error(mensaje);
-      if (mesa)
-      {
-      await cambiarEstado(mesa)  
+
+      // Liberar mesa si tiene
+      if (mesa) {
+        await cambiarEstado(mesa);
       }
-      await eliminarReserva(reserva)
+
+      // Eliminar reserva asociada
+      await eliminarReserva(reserva);
+
       await alertaOK(mensaje);
-      location.reload();
+      location.reload(); // refrescar página
     } catch (err) {
       alertaError(err.message);
     }
   }
 };
+
+// ----------------------
+// VER FACTURA (mostrar ticket)
+// ----------------------
 const VerFactura = async (e) => {
-    const total = parseFloat(e.target.dataset.idTotal);
+  const total = parseFloat(e.target.dataset.idTotal);
   if (total == 0) return await alertaError("Error: no se puede mostrar factura porque no tiene ningun pedido.");
+
   try {
     const idPedido = e.target.value;
 
@@ -174,7 +223,7 @@ const VerFactura = async (e) => {
     const resPedido = await fetch(`http://localhost:8080/ApiRestaurente/api/pedidos/${idPedido}`);
     const pedido = await resPedido.json();
 
-    // 2. Obtener caja
+    // 2. Obtener caja (cajero que atendió)
     const resCaja = await fetch(`http://localhost:8080/ApiRestaurente/api/caja/${pedido.idCaja}`);
     const caja = await resCaja.json();
 
@@ -182,19 +231,17 @@ const VerFactura = async (e) => {
     const resDetalle = await fetch(`http://localhost:8080/ApiRestaurente/api/detallePedido/${idPedido}`);
     const detalle = await resDetalle.json();
 
-    // 4. Obtener comidas
+    // 4, 5, 6. Obtener listas de comidas, bebidas y cocteles
     const resComidas = await fetch(`http://localhost:8080/ApiRestaurente/api/comidas`);
     const comidas = await resComidas.json();
 
-    // 5. Obtener bebidas
     const resBebidas = await fetch(`http://localhost:8080/ApiRestaurente/api/bebidas`);
     const bebidas = await resBebidas.json();
 
-    // 6. Obtener cocteles
     const resCocteles = await fetch(`http://localhost:8080/ApiRestaurente/api/cocteles`);
     const cocteles = await resCocteles.json();
 
-    // Función para buscar nombre y precio
+    // Buscar nombre y precio por id
     const buscarPrecioNombre = (id, lista) => {
       const item = lista.find(i => i.id == id);
       return item ? { nombre: item.nombre, precio: parseInt(item.precio) } : { nombre: "???", precio: 0 };
@@ -203,32 +250,24 @@ const VerFactura = async (e) => {
     let cuerpoFactura = "";
     let subtotal = parseInt(pedido.valorTotal);
 
+    // Recorre detalle del pedido y arma líneas de factura
     detalle.forEach(item => {
       if (item.id_comida) {
         const { nombre, precio } = buscarPrecioNombre(item.id_comida, comidas);
         let total = precio * item.cantidad_comida;
-
-        // Nota comida (si existe)
         const nota = item.nota_comida ? `\n  Nota: ${item.nota_comida}` : "";
-
         cuerpoFactura += `${item.cantidad_comida} x ${nombre.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
       }
       if (item.id_bebida) {
         const { nombre, precio } = buscarPrecioNombre(item.id_bebida, bebidas);
         let total = precio * item.cantidad_bebida;
-
-        // Nota bebida (si existe)
         const nota = item.nota_bebida ? `\n  Nota: ${item.nota_bebida}` : "";
-
         cuerpoFactura += `${item.cantidad_bebida} x ${nombre.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
       }
       if (item.id_coctel) {
         const { nombre, precio } = buscarPrecioNombre(item.id_coctel, cocteles);
         let total = precio * item.cantidad_coctel;
-
-        // Nota coctel (si existe)
         const nota = item.nota_coctel ? `\n  Nota: ${item.nota_coctel}` : "";
-
         cuerpoFactura += `${item.cantidad_coctel} x ${nombre.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
       }
     });
@@ -236,6 +275,7 @@ const VerFactura = async (e) => {
     let total = parseInt(pedido.valorTotal);
     let textoReserva = "";
 
+    // Si hay reserva asociada, sumarla
     if (pedido.idReserva) {
       const resReserva = await fetch(`http://localhost:8080/ApiRestaurente/api/reservas/${pedido.idReserva}`);
       const reserva = await resReserva.json();
@@ -243,6 +283,7 @@ const VerFactura = async (e) => {
       textoReserva = `Reserva:                   $${parseInt(reserva.precio).toLocaleString()}\n`;
     }
 
+    // Texto de factura en formato "ticket"
     const factura =
       `"QuickOrder"
 Fecha: ${pedido.fecha}
@@ -264,11 +305,16 @@ Método de pago: ${pedido.metodoPago.toUpperCase()}
   }
 };
 
+// ----------------------
+// FACTURAR (pagar)
+// ----------------------
 const facturar = async (e) => {
   const id = e.target.value;
   const mesa = e.target.dataset.idMesa;
   const total = parseFloat(e.target.dataset.idTotal);
+
   if (total == 0) return await alertaError("Error: no se puede facturar con Total 0$");
+
   const confirmacion = await alertaPregunta(`¿Desea facturar el pedido #${id}?`);
   if (confirmacion.isConfirmed) {
     try {
@@ -280,7 +326,10 @@ const facturar = async (e) => {
       });
       const mensaje = await res.text();
       if (!res.ok) throw new Error(mensaje);
+
+      // Liberar mesa al facturar
       await cambiarEstado(mesa)
+
       await alertaOK(mensaje);
       location.reload();
     } catch (err) {
@@ -288,14 +337,16 @@ const facturar = async (e) => {
     }
   }
 };
+
+// ----------------------
+// CAMBIAR ESTADO DE MESA
+// ----------------------
 const cambiarEstado = async (id) => {
   try {
-    const disponibles = { disponible: "1" };
+    const disponibles = { disponible: "1" }; // la mesa vuelve a estar disponible
     const respuesta = await fetch(`http://localhost:8080/ApiRestaurente/api/mesas/${id}`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(disponibles)
     });
 
@@ -306,14 +357,16 @@ const cambiarEstado = async (id) => {
     console.error("Falló el cambio de estado:", error);
   }
 }
+
+// ----------------------
+// ELIMINAR RESERVA
+// ----------------------
 const eliminarReserva = async (id) => {
   try {
     const respuesta = await fetch(`http://localhost:8080/ApiRestaurente/api/reservas/${id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      });
+      headers: { "Content-Type": "application/json" },
+    });
 
     if (!respuesta.ok) throw new Error("Error al cambiar el estado");
     const resultado = await respuesta.text();
@@ -322,12 +375,18 @@ const eliminarReserva = async (id) => {
     console.log("Falló el borrado de Reserva", error);
   }
 }
+
+// ----------------------
+// EVENTOS
+// ----------------------
 document.addEventListener("DOMContentLoaded", () => {
-  cargarHeader(hash);
-  cargarReservas();
+  cargarHeader(hash);   // Cargar encabezado según hash
+  cargarReservas();     // Mostrar reservas
 });
+
 window.addEventListener("click", (e) => {
-    if (e.target.matches("#BotonEliminar")) eliminarPedido(e);
-    if (e.target.matches("#VerFactura")) VerFactura(e);
-    if (e.target.matches("#Facturar")) facturar(e);
+  // Delegación de eventos para botones
+  if (e.target.matches("#BotonEliminar")) eliminarPedido(e);
+  if (e.target.matches("#VerFactura")) VerFactura(e);
+  if (e.target.matches("#Facturar")) facturar(e);
 });

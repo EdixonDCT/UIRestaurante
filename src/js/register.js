@@ -1,37 +1,37 @@
-import { alertaError, alertaOK, alertaPregunta } from "./alertas";
+import { alertaError, alertaOK, alertaPregunta } from "./alertas"; // importa funciones de alertas
 
 //formulario
-const registro = document.querySelector(".form");
+const registro = document.querySelector(".form"); // selecciona formulario
 //valores a postear
-const cedula = document.querySelector(".cedula");
-const nombre = document.querySelector(".nombre");
-const apellido = document.querySelector(".apellido");
-const fecha = document.querySelector(".fecha");
-const pass1 = document.querySelector(".contrasena");
-const pass2 = document.querySelector(".contrasenaValidar");
-const oficio = document.querySelector(".oficio");
-const comboxOficio = document.querySelector(".comboxOficio");
+const cedula = document.querySelector(".cedula"); // input cedula
+const nombre = document.querySelector(".nombre"); // input nombre
+const apellido = document.querySelector(".apellido"); // input apellido
+const fecha = document.querySelector(".fecha"); // input fecha
+const pass1 = document.querySelector(".contrasena"); // input contraseña
+const pass2 = document.querySelector(".contrasenaValidar"); // input validar contraseña
+const oficio = document.querySelector(".oficio"); // input oficio
+const comboxOficio = document.querySelector(".comboxOficio"); // select oficios
 
-const inputPerfil = document.getElementById("ArchivoFoto");
-const imagenPerfil = document.getElementById("imagenPerfil");
-const spanImagen = document.getElementById("ArchivoEstado");
+const inputPerfil = document.getElementById("ArchivoFoto"); // input archivo
+const imagenPerfil = document.getElementById("imagenPerfil"); // img vista previa
+const spanImagen = document.getElementById("ArchivoEstado"); // span estado imagen
 
-const validar = async (e) => {
-  e.preventDefault();
-  const archivo = inputPerfil.files[0];
-  if (!cedula.value == "")
+const validar = async (e) => { // función validar datos
+  e.preventDefault(); // evita refrescar
+  const archivo = inputPerfil.files[0]; // obtiene archivo
+  if (!cedula.value == "") // si hay cedula
   {
-    if (!validarCedula(cedula.value)) return alertaError("Error: Cedula debe tener 10 digitos minimo")  
+    if (!validarCedula(cedula.value)) return alertaError("Error: Cedula debe tener 10 digitos minimo")  // valida formato
   }
-  if (!fecha.value == "")
+  if (!fecha.value == "") // si hay fecha
   {
-    if(validarEdad(fecha.value)) return alertaError("Error: No es mayor de 18 Años")
-    if(validarEdadMayor(fecha.value)) return alertaError("Error: La edad máxima permitida para trabajar es 70 años")
+    if(validarEdad(fecha.value)) return alertaError("Error: No es mayor de 18 Años") // valida menor de edad
+    if(validarEdadMayor(fecha.value)) return alertaError("Error: La edad máxima permitida para trabajar es 70 años") // valida mayor a 70
   }
-  if (!archivo) return alertaError("Error: Seleccione una Imagen.");
-  if (pass1.value !== pass2.value)
-    return alertaError("Error: Las contraseñas no coinciden");
-  const datos = {
+  if (!archivo) return alertaError("Error: Seleccione una Imagen."); // valida imagen
+  if (pass1.value !== pass2.value) // compara contraseñas
+    return alertaError("Error: Las contraseñas no coinciden"); // error contraseñas
+  const datos = { // objeto trabajador
     cedula: cedula.value,
     nombre: nombre.value,
     apellido: apellido.value,
@@ -39,159 +39,159 @@ const validar = async (e) => {
     contrasena: pass1.value,
     idOficio: oficio.value,
   };
-  SubirTrabajador(datos);
+  SubirTrabajador(datos); // llama subir trabajador
 };
-const SubirTrabajador = async (datos) => {
+const SubirTrabajador = async (datos) => { // función post trabajador
   try {
     const response = await fetch(
-      "http://localhost:8080/ApiRestaurente/api/trabajadores",
+      "http://localhost:8080/ApiRestaurente/api/trabajadores", // endpoint trabajador
       {
-        method: "POST",
+        method: "POST", // método post
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // tipo json
         },
-        body: JSON.stringify(datos),
+        body: JSON.stringify(datos), // datos en json
       }
     );
 
-    const mensaje = await response.text();
+    const mensaje = await response.text(); // mensaje servidor
 
-    if (!response.ok) {
-      throw new Error(mensaje);
+    if (!response.ok) { // si falla
+      throw new Error(mensaje); // lanza error
     }
-    subirImagen();
+    subirImagen(); // si ok sube imagen
   } catch (error) {
-    alertaError(error.message);
+    alertaError(error.message); // alerta error
   }
 };
-const validarEdad = (fechaNacimiento) =>
+const validarEdad = (fechaNacimiento) => // función validar >=18
   {
-    const hoy = new Date();
-    const nacimiento = new Date(fechaNacimiento);
+    const hoy = new Date(); // fecha actual
+    const nacimiento = new Date(fechaNacimiento); // fecha nac
 
-    let edad = hoy.getFullYear() - nacimiento.getFullYear();
-    const mes = hoy.getMonth() - nacimiento.getMonth();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear(); // calcula edad
+    const mes = hoy.getMonth() - nacimiento.getMonth(); // resta meses
 
-    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
-        edad--;
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) { // si no cumplió año
+        edad--; // reduce edad
     }
     
-    if (edad >= 18) {
-      return false
+    if (edad >= 18) { // si mayor a 18
+      return false // válido
     } else {
-      return true;
+      return true; // menor de edad
     }
   }
-const validarEdadMayor = (fechaNacimiento) =>
+const validarEdadMayor = (fechaNacimiento) => // función validar <=70
   {
-    const hoy = new Date();
-    const nacimiento = new Date(fechaNacimiento);
+    const hoy = new Date(); // fecha actual
+    const nacimiento = new Date(fechaNacimiento); // fecha nac
 
-    let edad = hoy.getFullYear() - nacimiento.getFullYear();
-    const mes = hoy.getMonth() - nacimiento.getMonth();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear(); // calcula edad
+    const mes = hoy.getMonth() - nacimiento.getMonth(); // resta meses
 
-    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
-        edad--;
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) { // si no cumplió año
+        edad--; // reduce edad
     }
-    if (edad > 70) {
-      return true
+    if (edad > 70) { // si mayor a 70
+      return true // inválido
     } else {
-      return false;
+      return false; // válido
     }
   }
-  const validarCedula = (cedula) => {
-    const esValida = /^\d{10}$/.test(cedula);
-    return esValida;
+  const validarCedula = (cedula) => { // valida formato cedula
+    const esValida = /^\d{10}$/.test(cedula); // regex 10 digitos
+    return esValida; // retorna boolean
   };
-const subirImagen = async () => {
+const subirImagen = async () => { // función subir imagen
   try {
-    const archivo = inputPerfil.files[0];
+    const archivo = inputPerfil.files[0]; // obtiene archivo
 
-    const formData = new FormData();
-    formData.append("imagen", archivo);
+    const formData = new FormData(); // crea formdata
+    formData.append("imagen", archivo); // agrega imagen
 
-    const res = await fetch("http://localhost:8080/ApiRestaurente/api/imagen", {
-      method: "POST",
-      body: formData,
+    const res = await fetch("http://localhost:8080/ApiRestaurente/api/imagen", { // endpoint imagen
+      method: "POST", // post
+      body: formData, // body con formdata
     });
 
-    const json = await res.json();
-    if (!res.ok || !json.url) {
-      throw new Error(json.error || "Error al subir la imagen.");
+    const json = await res.json(); // obtiene json
+    if (!res.ok || !json.url) { // si error
+      throw new Error(json.error || "Error al subir la imagen."); // lanza error
     }
-    actualizarFotoTrabajador(json.nombre);
+    actualizarFotoTrabajador(json.nombre); // actualiza nombre imagen
   } catch (error) {
-    alertaError(error.message);
+    alertaError(error.message); // alerta error
   }
 };
-const actualizarFotoTrabajador = async (nombreFoto) => {
+const actualizarFotoTrabajador = async (nombreFoto) => { // función patch imagen
   try {
-    const imagen = { foto: nombreFoto };
+    const imagen = { foto: nombreFoto }; // objeto imagen
 
     const actualizar = await fetch(
-      `http://localhost:8080/ApiRestaurente/api/trabajadores/${cedula.value}`,
+      `http://localhost:8080/ApiRestaurente/api/trabajadores/${cedula.value}`, // endpoint patch
       {
-        method: "PATCH",
+        method: "PATCH", // método patch
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // tipo json
         },
-        body: JSON.stringify(imagen),
+        body: JSON.stringify(imagen), // body con imagen
       }
     );
-    const mensajeImagen = await actualizar.text();
-    if (!actualizar.ok) {
-      throw new Error(mensajeImagen);
+    const mensajeImagen = await actualizar.text(); // mensaje servidor
+    if (!actualizar.ok) { // si error
+      throw new Error(mensajeImagen); // lanza error
     }
-    console.log(mensajeImagen);
-    await alertaOK("Trabajador Creado con Exito.");
-    registro.submit();
+    console.log(mensajeImagen); // log
+    await alertaOK("Trabajador Creado con Exito."); // alerta ok
+    registro.submit(); // envía form
   } catch (error) {
-    alertaError(error.message);
+    alertaError(error.message); // alerta error
   }
 };
-const cargarOficios = async () => {
+const cargarOficios = async () => { // función cargar oficios
   try {
     const response = await fetch(
-      "http://localhost:8080/ApiRestaurente/api/oficios"
+      "http://localhost:8080/ApiRestaurente/api/oficios" // endpoint oficios
     );
-    if (!response.ok) {
-      const mensaje = await response.text();
-      throw new Error(mensaje);
+    if (!response.ok) { // si falla
+      const mensaje = await response.text(); // obtiene mensaje
+      throw new Error(mensaje); // lanza error
     }
 
-    const data = await response.json();
-    data.forEach((oficio) => {
-      const option = document.createElement("option");
-      option.value = oficio.codigo;
-      option.textContent = oficio.tipo;
-      comboxOficio.appendChild(option);
+    const data = await response.json(); // json oficios
+    data.forEach((oficio) => { // recorre oficios
+      const option = document.createElement("option"); // crea opción
+      option.value = oficio.codigo; // valor codigo
+      option.textContent = oficio.tipo; // texto tipo
+      comboxOficio.appendChild(option); // agrega opción al select
     });
   } catch (error) {
-    alertaError(error.message);
+    alertaError(error.message); // alerta error
   }
 };
 
-const vistaPreviaImg = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+const vistaPreviaImg = (e) => { // función vista previa
+  const file = e.target.files[0]; // obtiene archivo
+  if (!file) return; // si no archivo retorna
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    imagenPerfil.src = reader.result;
-    spanImagen.textContent = "Archivo imagen seleccionada";
+  const reader = new FileReader(); // crea reader
+  reader.onload = () => { // evento load
+    imagenPerfil.src = reader.result; // muestra imagen
+    spanImagen.textContent = "Archivo imagen seleccionada"; // texto estado
   };
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(file); // lee como url
 };
 
-const EliminarVistaPreviaImg = () => {
-  imagenPerfil.src = "../img/pfp.png";
-  inputPerfil.value = "";
-  spanImagen.textContent = "Ningún archivo seleccionado";
+const EliminarVistaPreviaImg = () => { // función quitar imagen
+  imagenPerfil.src = "../img/pfp.png"; // imagen por defecto
+  inputPerfil.value = ""; // limpia input
+  spanImagen.textContent = "Ningún archivo seleccionado"; // texto estado
 };
 
-document.addEventListener("DOMContentLoaded", cargarOficios);
-inputPerfil.addEventListener("change", vistaPreviaImg);
-window.addEventListener("click", async (e) => {
-  if (e.target.matches("#borrarImagen")) EliminarVistaPreviaImg();
+document.addEventListener("DOMContentLoaded", cargarOficios); // evento carga oficios
+inputPerfil.addEventListener("change", vistaPreviaImg); // evento vista previa
+window.addEventListener("click", async (e) => { // evento click global
+  if (e.target.matches("#borrarImagen")) EliminarVistaPreviaImg(); // si click borrar
 });
-registro.addEventListener("submit", validar);
+registro.addEventListener("submit", validar); // evento submit form

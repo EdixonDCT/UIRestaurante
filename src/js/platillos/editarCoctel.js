@@ -1,57 +1,57 @@
-import { alertaError, alertaOK } from "../alertas.js";
-import { cargarHeader } from "../header.js";
+import { alertaError, alertaOK } from "../alertas.js"; // importar alertas
+import { cargarHeader } from "../header.js"; // importar header
 
-const hash = window.location.hash.slice(1);
-const [idUser, idCoctel] = hash.split("/");
+const hash = window.location.hash.slice(1); // obtener hash de la url
+const [idUser, idCoctel] = hash.split("/"); // separar id usuario y cóctel
 
-const formulario = document.querySelector(".form");
-const nombreCoctel = document.querySelector(".nombre");
-const precioCoctel = document.querySelector(".precio");
+const formulario = document.querySelector(".form"); // seleccionar formulario
+const nombreCoctel = document.querySelector(".nombre"); // input nombre
+const precioCoctel = document.querySelector(".precio"); // input precio
 
-const validar = async (e) => {
-  e.preventDefault();
+const validar = async (e) => { // función validar
+  e.preventDefault(); // prevenir recarga
 
-  const datos = {
-    nombre: nombreCoctel.value,
-    precio: precioCoctel.value,
+  const datos = { // objeto datos
+    nombre: nombreCoctel.value, // valor nombre
+    precio: precioCoctel.value, // valor precio
   };
 
-  try {
-    const response = await fetch(`http://localhost:8080/ApiRestaurente/api/cocteles/${idCoctel}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(datos)
+  try { // intentar enviar
+    const response = await fetch(`http://localhost:8080/ApiRestaurente/api/cocteles/${idCoctel}`, { // petición put
+      method: "PUT", // método put
+      headers: { "Content-Type": "application/json" }, // cabecera json
+      body: JSON.stringify(datos) // cuerpo datos
     });
 
-    const mensaje = await response.text();
+    const mensaje = await response.text(); // leer respuesta
 
-    if (!response.ok) throw new Error(mensaje);
+    if (!response.ok) throw new Error(mensaje); // lanzar error si falla
 
-    await alertaOK(mensaje);
-    formulario.action = `platillosTablas.html#${idUser}`;
-    formulario.submit();
-  } catch (error) {
-    alertaError(error.message);
+    await alertaOK(mensaje); // mostrar mensaje ok
+    formulario.action = `platillosTablas.html#${idUser}`; // redirigir form
+    formulario.submit(); // enviar form
+  } catch (error) { // capturar error
+    alertaError(error.message); // mostrar error
   }
 };
 
-const infoCoctel = async () => {
-  const botonVolver = document.getElementById("volver");
-  botonVolver.action = `platillosTablas.html#${idUser}`;
+const infoCoctel = async () => { // función cargar info
+  const botonVolver = document.getElementById("volver"); // botón volver
+  botonVolver.action = `platillosTablas.html#${idUser}`; // asignar acción
 
-  try {
-    const res = await fetch(`http://localhost:8080/ApiRestaurente/api/cocteles/${idCoctel}`);
-    const data = await res.json();
+  try { // intentar obtener
+    const res = await fetch(`http://localhost:8080/ApiRestaurente/api/cocteles/${idCoctel}`); // petición get
+    const data = await res.json(); // convertir a json
 
-    nombreCoctel.value = data.nombre;
-    precioCoctel.value = data.precio;
-  } catch (error) {
-    console.error("Error al cargar el cóctel:", error);
+    nombreCoctel.value = data.nombre; // asignar nombre
+    precioCoctel.value = data.precio; // asignar precio
+  } catch (error) { // si falla
+    console.error("Error al cargar el cóctel:", error); // error consola
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  cargarHeader(idUser);
-  infoCoctel();
+document.addEventListener("DOMContentLoaded", () => { // al cargar
+  cargarHeader(idUser); // cargar header
+  infoCoctel(); // cargar cóctel
 });
-formulario.addEventListener("submit", validar);
+formulario.addEventListener("submit", validar); // validar submit
