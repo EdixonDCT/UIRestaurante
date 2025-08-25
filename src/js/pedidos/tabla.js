@@ -19,7 +19,7 @@ const cargarPedidos = async () => {
     // Creamos un formulario con un botón "Nuevo" para crear pedidos
     const nuevoForm = document.createElement("form");
     nuevoForm.action = `pedidoCrear.html#${hash}`;
-    nuevoForm.innerHTML = `<button class="boton" type="submit">Nuevo</button>`;
+    nuevoForm.innerHTML = `<button class="boton" type="submit">Nuevo Pedido</button>`;
     nuevoForm.method = "post";
     nuevoForm.classList.add("botonTabla")
     section.appendChild(nuevoForm);
