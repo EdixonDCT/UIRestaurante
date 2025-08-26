@@ -213,83 +213,68 @@ const eliminarPedido = async (e) => {
 // VER FACTURA (mostrar ticket)
 // ----------------------
 const VerFactura = async (e) => {
-  const total = parseFloat(e.target.dataset.idTotal);
-  if (total == 0) return await alertaError("Error: no se puede mostrar factura porque no tiene ningun pedido.");
+    const total = parseFloat(e.target.dataset.idTotal);
+    if (total == 0) return await alertaError("Error: no se puede mostrar factura porque no tiene ningun pedido.");
+    try {
+        const idPedido = e.target.value;
 
-  try {
-    const idPedido = e.target.value;
+        // Obtener datos del pedido (trae valorTotal, fecha, hora, mesa, idReserva, etc.)
+        const resPedido = await fetch(`http://localhost:8080/ApiRestaurente/api/pedidos/${idPedido}`);
+        const pedido = await resPedido.json();
 
-    // 1. Obtener pedido
-    const resPedido = await fetch(`http://localhost:8080/ApiRestaurente/api/pedidos/${idPedido}`);
-    const pedido = await resPedido.json();
+        // Obtener detalle del pedido (este endpoint ya trae comidas, bebidas, cocteles con precios y notas)
+        const resDetalle = await fetch(`http://localhost:8080/ApiRestaurente/api/detallePedido/pedido/${idPedido}`);
+        const data = await resDetalle.json();
+        
+        let caja = pedido.idCaja;
 
-    // 2. Obtener caja (cajero que atendió)
-    const resCaja = await fetch(`http://localhost:8080/ApiRestaurente/api/caja/${pedido.idCaja}`);
-    const caja = await resCaja.json();
+        const cajeroDetalle = await fetch(`http://localhost:8080/ApiRestaurente/api/caja/${caja}`);
+        const cajaDatos = await cajeroDetalle.json();
+        
+        let cajero = cajaDatos.nombreCajero;
 
-    // 3. Obtener detalle del pedido
-    const resDetalle = await fetch(`http://localhost:8080/ApiRestaurente/api/detallePedido/${idPedido}`);
-    const detalle = await resDetalle.json();
+        let cuerpoFactura = "";
+        let subtotal = parseInt(pedido.valorTotal);
+        //Recorremos el detalle y construimos las líneas de la factura
+        data.forEach(item => {
+            if (item.id_comida) {
+                let valoresComida = item.cantidad_comida.split("/");
+                let total = valoresComida[0] * valoresComida[1];
+                const nota = item.nota_comida ? `\n  Nota: ${item.nota_comida}` : "";
+                cuerpoFactura += `${valoresComida[0]} x ${item.id_comida.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
+            }
+            if (item.id_bebida) {
+                let valoresBebidas = item.cantidad_bebida.split("/");
+                let total = valoresBebidas[0] * valoresBebidas[1];
+                const nota = item.nota_bebida ? `\n  Nota: ${item.nota_bebida}` : "";
+                cuerpoFactura += `${valoresBebidas[0]} x ${item.id_bebida.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
+            }
+            if (item.id_coctel) {
+                let valoresCoctel = item.cantidad_coctel.split("/");
+                let total = valoresCoctel[0] * valoresCoctel[1];
+                const nota = item.nota_coctel ? `\n  Nota: ${item.nota_coctel}` : "";
+                cuerpoFactura += `${valoresCoctel[0]} x ${item.id_coctel.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
+            }
+        });
 
-    // 4, 5, 6. Obtener listas de comidas, bebidas y cocteles
-    const resComidas = await fetch(`http://localhost:8080/ApiRestaurente/api/comidas`);
-    const comidas = await resComidas.json();
+        //Calculamos el total (considerando la reserva si existe)
+        let total = subtotal;
+        let textoReserva = "";
+        if (pedido.idReserva) {
+            // Hacemos un fetch de la reserva porque el pedido solo tiene el id
+            const resReserva = await fetch(`http://localhost:8080/ApiRestaurente/api/reservas/${pedido.idReserva}`);
+            const reserva = await resReserva.json();
+            total = subtotal + parseInt(reserva.precio);
+            textoReserva = `Reserva:                   $${parseInt(reserva.precio).toLocaleString()}\n`;
+        }
 
-    const resBebidas = await fetch(`http://localhost:8080/ApiRestaurente/api/bebidas`);
-    const bebidas = await resBebidas.json();
-
-    const resCocteles = await fetch(`http://localhost:8080/ApiRestaurente/api/cocteles`);
-    const cocteles = await resCocteles.json();
-
-    // Buscar nombre y precio por id
-    const buscarPrecioNombre = (id, lista) => {
-      const item = lista.find(i => i.id == id);
-      return item ? { nombre: item.nombre, precio: parseInt(item.precio) } : { nombre: "???", precio: 0 };
-    };
-
-    let cuerpoFactura = "";
-    let subtotal = parseInt(pedido.valorTotal);
-
-    // Recorre detalle del pedido y arma líneas de factura
-    detalle.forEach(item => {
-      if (item.id_comida) {
-        const { nombre, precio } = buscarPrecioNombre(item.id_comida, comidas);
-        let total = precio * item.cantidad_comida;
-        const nota = item.nota_comida ? `\n  Nota: ${item.nota_comida}` : "";
-        cuerpoFactura += `${item.cantidad_comida} x ${nombre.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
-      }
-      if (item.id_bebida) {
-        const { nombre, precio } = buscarPrecioNombre(item.id_bebida, bebidas);
-        let total = precio * item.cantidad_bebida;
-        const nota = item.nota_bebida ? `\n  Nota: ${item.nota_bebida}` : "";
-        cuerpoFactura += `${item.cantidad_bebida} x ${nombre.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
-      }
-      if (item.id_coctel) {
-        const { nombre, precio } = buscarPrecioNombre(item.id_coctel, cocteles);
-        let total = precio * item.cantidad_coctel;
-        const nota = item.nota_coctel ? `\n  Nota: ${item.nota_coctel}` : "";
-        cuerpoFactura += `${item.cantidad_coctel} x ${nombre.padEnd(25)} $${total.toLocaleString()}${nota}\n`;
-      }
-    });
-
-    let total = parseInt(pedido.valorTotal);
-    let textoReserva = "";
-
-    // Si hay reserva asociada, sumarla
-    if (pedido.idReserva) {
-      const resReserva = await fetch(`http://localhost:8080/ApiRestaurente/api/reservas/${pedido.idReserva}`);
-      const reserva = await resReserva.json();
-      total = subtotal + parseInt(reserva.precio);
-      textoReserva = `Reserva:                   $${parseInt(reserva.precio).toLocaleString()}\n`;
-    }
-
-    // Texto de factura en formato "ticket"
-    const factura =
-      `"QuickOrder"
+        //Construimos el texto final de la factura
+        const factura =
+            `"QuickOrder"
 Fecha: ${pedido.fecha}
 Hora: ${pedido.hora}
 Mesa: ${pedido.numeroMesa}
-Atendido por: ${caja.nombreCajero}
+Atendido por: ${cajero}
 ------------------------------------
 ${cuerpoFactura}------------------------------------
 Subtotal:                  $${subtotal.toLocaleString()}
@@ -298,11 +283,11 @@ Método de pago: ${pedido.metodoPago.toUpperCase()}
 ------------------------------------
 ¡Gracias por su visita!`;
 
-    await alertaMensaje(factura);
-
-  } catch (error) {
-    await alertaMensaje("Error al generar factura:", error);
-  }
+        // Mostramos factura en alerta
+        await alertaMensaje(factura);
+    } catch (error) {
+        await alertaMensaje("Error al generar factura: " + error.message);
+    }
 };
 
 // ----------------------
