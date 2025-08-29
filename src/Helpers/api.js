@@ -38,6 +38,19 @@ export const put = async (endpoint, objeto) => {
   return datos;
 }
 
+export const patch = async (endpoint, objeto) => {
+  const respuesta = await fetch(url + endpoint, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(objeto),
+  });
+  const datos = await respuesta.json();
+  return datos;
+};
+
 export const del = async (endpoint) => {
   const respuesta = await fetch(url + endpoint, {
     method: 'DELETE',
@@ -57,7 +70,6 @@ export const imagen = (foto) => {
 }
 
 export const postPublic = async (endpoint, objeto) => {
-  console.log(objeto);
   const respuesta = await fetch(url + endpoint, {
     method: 'POST',
     headers: {

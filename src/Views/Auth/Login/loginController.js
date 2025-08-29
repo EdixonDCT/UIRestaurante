@@ -1,11 +1,10 @@
-import "../../../css/login.css";
 import { alertaError, alertaOK } from "../../../Helpers/alertas";
 import * as api from "../../../Helpers/api";
 import * as validacion from "../../../Helpers/validaciones";
 export const loginController = () => {
-  const form = document.querySelector(".container");
-  const cedula = document.querySelector(".login__input.cedula");
-  const contrasena = document.querySelector(".login__input.contraseña");
+  const form = document.querySelector(".form");
+  const cedula = document.querySelector(".cedula");
+  const contrasena = document.querySelector(".contrasena");
   
   cedula.addEventListener("blur", validacion.validarCampo);
   cedula.addEventListener("keydown", (e) => {

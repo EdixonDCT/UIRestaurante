@@ -22,10 +22,10 @@ export const alertaOK = (mensaje) => {
         }
     });
 }
-export const alertaWarning = (mensaje) => {
+export const alertaWarning = (titulo,mensaje) => {
     return Swal.fire({
         icon: "warning",
-        title: "Espera.",
+        title: titulo,
         text: mensaje,
         confirmButtonText: 'Ok',
         customClass: {
@@ -54,6 +54,15 @@ export const alertaMensaje = (mensaje) => {
             confirmButton: "botonOK"
         }
     })
+}
+export const alertaToken = (mensaje) => {
+  return Swal.fire({
+    position: "top-end",
+    icon: "success",
+    title: mensaje,
+    showConfirmButton: false,
+    timer: 500,
+  });
 }
 export const alertaTiempo = (tiempo) => {
     let timerInterval;

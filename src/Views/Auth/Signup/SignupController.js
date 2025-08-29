@@ -1,4 +1,3 @@
-import "../../../css/register.css";
 import { alertaError, alertaOK } from "../../../Helpers/alertas";
 import * as api from "../../../Helpers/api";
 import * as validacion from "../../../Helpers/validaciones";

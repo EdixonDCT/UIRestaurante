@@ -1,29 +1,15 @@
-  <form class="container" action="" method="post">
-    <div class="titulo">
-      <p>QuickOrder</p>
-      <p>iniciar sesion</p>
+<div class="titulos">
+  <p class="titulos__relevante">QuickOrder</p>
+  <p>iniciar sesion</p>
+</div>
+<form class="form" method="post">
+    <div class="input">
+      <label>Cédula:</label>
+      <input class="cedula" type="text" placeholder="Ingrese la Cédula" autocomplete="off" name="cedula">
     </div>
-    <div class="login">
-      <div class="login__contenedor">
-        <p class="login__texto">cedula:</p>
-        <input class="login__input cedula" type="text" placeholder="ingrese la cedula" autocomplete="off" name="cedula">
-      </div>
-      <div class="login__contenedor ">
-        <p class="login__texto">contraseña:</p>
-        <input class="login__input contraseña" type="password" placeholder="ingrese la contraseña" autocomplete="off" name="contrasena">
-      </div>
-    </div>
-    <div class="botonera">
-      <button type="submit" class="boton__submit">
-        <h4>iniciar sesion</h4>
-      </button>
-
-    </div>
-    <div class="deco1"></div>
-    <div class="deco2"></div>
-    <div class="deco3"></div>
-    <div class="deco4"></div>
-    <div class="vacio4"></div>
-    <div class="vacio5"></div>
-    <div class="vacio6"></div>
-  </form>
+  <div class="input">
+    <label>Contraseña:</label>
+    <input class="contrasena" type="password" placeholder="Ingrese la Contraseña" autocomplete="off" name="contrasena">
+  </div>
+    <button class="boton" type="submit">Iniciar Sesion</button>
+</form>
