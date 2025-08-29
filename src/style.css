@@ -185,3 +185,9 @@ body{
   background-color: var(--color-oscuro);
   color: white;
 }
+.error{
+  width: 100%;
+  color: red;
+  font-size: var(--tamano-pequeno);
+  text-align: end;
+}

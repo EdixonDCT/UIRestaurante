@@ -95,6 +95,10 @@
 .login__contenedor:focus-within .login__texto{
   transform: translateX(-100px);
 }
+.login__contenedor{
+  display: flex;
+  flex-direction: column;
+}
 .titulo{
   grid-area: titulo;
   width: 100%;
