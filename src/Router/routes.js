@@ -2,8 +2,9 @@ import homeController from '../Views/Home/homeController.js'
 
 import { loginController } from '../Views/Auth/Login/loginController.js'
 import { SignupController } from '../Views/Auth/Signup/signupController.js'
-import { MesaController } from '../Views/Mesa/mesaController.js'
-import { CajaController } from '../Views/Caja/cajaController.js'
+// import { MesaController } from '../Views/Mesa/mesaController.js'
+import * as mesa from '../Views/Mesa/index.js'
+import * as caja from '../Views/Caja/index.js'
 import { PedidoController } from '../Views/Pedido/pedidoController.js'
 import { ReservaController } from '../Views/Reserva/reservaController.js'
 import { IngredienteController } from '../Views/Ingrediente/ingredienteController.js'
@@ -27,16 +28,56 @@ export const routes = {
     private: false
   },
   Mesa: {
-    path: `Mesa/index.html`,
-    controlador: MesaController,
-    private: true,
-    can: "Mesa.listar"
+    "/": {
+      path: `Mesa/index.html`,
+      controlador: mesa.MesaController,
+      private: true,
+      can: "Mesa.listar"
+    },
+    Crear: {
+      path: `Mesa/Crear/index.html`,
+      controlador: mesa.CrearController,
+      private: true,
+      can: "Mesa.crear"
+    },
+    Editar: {
+      path: `Mesa/Editar/index.html`,
+      controlador: mesa.EditarController,
+      private: true,
+      can: "Mesa.editar"
+    }
   },
   Caja: {
-    path: `Caja/index.html`,
-    controlador: CajaController,
-    private: true,
-    can: "Caja.listar"
+    "/": {
+      path: `Caja/index.html`,
+      controlador: caja.CajaController,
+      private: true,
+      can: "Caja.listar"
+    },
+    Apertura: {
+      path: `Caja/Apertura/index.html`,
+      controlador: caja.AperturaController,
+      private: true,
+      can: "Caja.crear"
+    },
+    Cierre:{
+      path: `Caja/Cierre/index.html`,
+      controlador: caja.CierreController,
+      private: true,
+      can: "Caja.crear"
+    },
+    Editar:{
+      path: `Caja/Editar/index.html`,
+      controlador: caja.EditarController,
+      private: true,
+      can: "Caja.editar"
+    },
+    EditarApertura: {
+      path: `Caja/EditarApertura/index.html`,
+      controlador: caja.EditarAperturaController,
+      private: true,
+      can: "Caja.editar"
+    }
   },
   Pedido: {
     path: `Pedido/index.html`,

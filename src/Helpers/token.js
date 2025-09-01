@@ -2,6 +2,7 @@ import { alertaToken, alertaWarning } from "./alertas";
 import * as api from "./api";
 
 export default async () => {
+  let login = false;
   const localHost = localStorage.getItem("token");
   if (!localHost) return;
   const Valortoken = window.localStorage.getItem("token");
@@ -25,8 +26,10 @@ export default async () => {
     }
     if (mensaje != "") await alertaToken(mensaje);
   } else {
+    login = true;
     await alertaWarning("Logeado Terminado", "");
     localStorage.clear();
     window.location.href = "#/Login";
   }
+  return login;
 };
