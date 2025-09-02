@@ -1,0 +1,37 @@
+<div class="titulos">
+  <p>Editar Pedido</p>
+</div>
+<form class="form" method="post">
+  <div class="input">
+    <label>Numero de Mesa:</label>
+    <select class="numeroMesa" name="Numero de Mesa">
+      <option value="0" hidden>Seleccione una Mesa</option>
+    </select>
+  </div>
+  <div class="input">
+    <label>Caja:</label>
+    <select class="idCaja" name="Id de Caja">
+      <option value="0" hidden>Seleccione una Caja</option>
+    </select>
+  </div>
+  <div class="input">
+    <label>Numero de Clientes:</label>
+    <input class="numeroClientes" type="text" placeholder="Ingrese el numero de Clientes" autocomplete="off"
+      name="Numero de Clientes">
+  </div>
+  <div class="input">
+    <label>Correo de Cliente:</label>
+    <input class="correoCliente" type="text" placeholder="Ingrese el correo del Cliente" autocomplete="off"
+      name="Correo del Cliente">
+  </div>
+  <div class="input">
+    <label>Metodo de Pago:</label>
+    <select class="metodoPago" name="Metodo de Pago">
+      <option value="0" hidden>Seleccione un Metodo de Pago</option>
+      <option value="Efectivo">Efectivo</option>
+      <option value="Tarjeta">Tarjeta</option>
+      <option value="Nequi">Nequi</option>
+    </select>
+  </div>
+  <button class="boton" type="submit">Editar Pedido</button>
+</form>

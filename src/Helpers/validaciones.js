@@ -62,12 +62,17 @@ export const validarContrasena = (campo) => {
 }
 
 // Validación para el correo electrónico
-export const validarCorreo = (correo) => {
+export const validarCorreo = (campo) => {
+  let regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
   // Validamos si el correo es válido
-  if (correo.value.trim() != "" && !regexCorreo.test(correo.value)) {
-    agregarError(correo.parentElement, "El correo electrónico no es válido."); // Agregamos el error
+    if (campo.parentElement.querySelector('.error')) {
+    quitarError(campo.parentElement);
+  }
+  if (campo.value.trim() != "" && !regexCorreo.test(campo.value)) {
+    agregarError(campo.parentElement, "El correo electrónico no es válido."); // Agregamos el error
     return false; // Si el correo es inválido, el formulario no es válido
   }
+  else validarCampo(campo)
   return true;
 }
 // Validación para el correo electrónico

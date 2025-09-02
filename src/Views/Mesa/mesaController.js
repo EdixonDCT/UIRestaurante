@@ -9,7 +9,7 @@ export default async () => {
   if (crear) {
     const boton = document.createElement("button");
     boton.classList.add("boton");
-    boton.id = "BotonCrear";
+    boton.id = "BotonCrearMesa";
     boton.textContent = "Crear Mesa";
     app.appendChild(boton);
   }
@@ -53,7 +53,7 @@ export default async () => {
     let editar = validarPermiso("Mesa.editar");
     const btnEditar = document.createElement("button");
     btnEditar.classList.add("boton");
-    btnEditar.id = "BotonEditar";
+    btnEditar.id = "BotonEditarMesa";
     btnEditar.value = mesa.numero;
     btnEditar.textContent = "Editar";
     divAcciones.appendChild(btnEditar);
@@ -63,7 +63,7 @@ export default async () => {
     let eliminar = validarPermiso("Mesa.eliminar");
     const btnEliminar = document.createElement("button");
     btnEliminar.classList.add("boton");
-    btnEliminar.id = "BotonEliminar";
+    btnEliminar.id = "BotonEliminarMesa";
     btnEliminar.value = mesa.numero;
     btnEliminar.textContent = "Eliminar";
     divAcciones.appendChild(btnEliminar);
@@ -137,8 +137,8 @@ export default async () => {
 
   window.addEventListener("click", async (e) => {
     if (e.target.matches(".cambiarEstado")) cambiarEstado(e);
-    else if (e.target.matches("#BotonEliminar")) EliminarMesa(e);
-    else if (e.target.matches("#BotonEditar")) window.location.href = `#/Mesa/Editar/id=${e.target.value}`;
-    else if (e.target.matches("#BotonCrear")) window.location.href = `#/Mesa/Crear`;
+    else if (e.target.matches("#BotonEliminarMesa")) EliminarMesa(e);
+    else if (e.target.matches("#BotonEditarMesa")) window.location.href = `#/Mesa/Editar/id=${e.target.value}`;
+    else if (e.target.matches("#BotonCrearMesa")) window.location.href = `#/Mesa/Crear`;
   });
 };

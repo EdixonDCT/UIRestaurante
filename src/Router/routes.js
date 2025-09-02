@@ -5,11 +5,13 @@ import { SignupController } from '../Views/Auth/Signup/signupController.js'
 // import { MesaController } from '../Views/Mesa/mesaController.js'
 import * as mesa from '../Views/Mesa/index.js'
 import * as caja from '../Views/Caja/index.js'
-import { PedidoController } from '../Views/Pedido/pedidoController.js'
+import * as pedido from '../Views/Pedido/index.js'
+import * as detallePedido from '../Views/DetallePedido/index.js'
 import { ReservaController } from '../Views/Reserva/reservaController.js'
 import { IngredienteController } from '../Views/Ingrediente/ingredienteController.js'
 import { PlatilloController } from '../Views/Platillo/platilloController.js'
 import { TrabajadoresController } from '../Views/Trabajadores/trabajadoresController.js'
+
 
 export const routes = {
   Home: {
@@ -60,13 +62,13 @@ export const routes = {
       private: true,
       can: "Caja.crear"
     },
-    Cierre:{
+    Cierre: {
       path: `Caja/Cierre/index.html`,
       controlador: caja.CierreController,
       private: true,
       can: "Caja.crear"
     },
-    Editar:{
+    Editar: {
       path: `Caja/Editar/index.html`,
       controlador: caja.EditarController,
       private: true,
@@ -80,10 +82,44 @@ export const routes = {
     }
   },
   Pedido: {
-    path: `Pedido/index.html`,
-    controlador: PedidoController,
-    private: true,
-    can: "Pedido.listar"
+    "/": {
+      path: `Pedido/index.html`,
+      controlador: pedido.PedidoController,
+      private: true,
+      can: "Pedido.listar"
+    },
+    Crear: {
+      path: `Pedido/Crear/index.html`,
+      controlador: pedido.CrearController,
+      private: true,
+      can: "Pedido.crear"
+    },
+    Editar: {
+      path: `Pedido/Editar/index.html`,
+      controlador: pedido.EditarController,
+      private: true,
+      can: "Pedido.editar"
+    },
+    CrearCliente: {
+      path: `Pedido/CrearCliente/index.html`,
+      controlador: pedido.CrearClienteController,
+      private: true,
+      can: "Pedido.crear"
+    },
+    VerificarCliente: {
+      path: `Pedido/VerificarCliente/index.html`,
+      controlador: pedido.VerificarClienteController,
+      private: true,
+      can: "Pedido.crear"
+    }
+  },
+  DetallePedido: {
+    Editar: {
+      path: `DetallePedido/index.html`,
+      controlador: detallePedido.DetallePedidoController,
+      private: true,
+      can: "Pedido.crear"
+    }
   },
   Reserva: {
     path: `Reserva/index.html`,

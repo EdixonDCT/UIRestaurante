@@ -88,7 +88,7 @@ export default async () => {
 
       const btnActualizar = document.createElement("button");
       btnActualizar.classList.add("boton");
-      btnActualizar.id = "BotonActualizar"
+      btnActualizar.id = "BotonEditarApertura"
       btnActualizar.value = caja.id;
       btnActualizar.textContent = "Actualizar Apertura";
       !editar ? btnActualizar.style.display = "none" : editar = true;
@@ -101,7 +101,7 @@ export default async () => {
 
       const btnEliminar = document.createElement("button");
       btnEliminar.classList.add("boton");
-      btnEliminar.id = "BotonEliminar";
+      btnEliminar.id = "BotonEliminarCaja";
       btnEliminar.value = caja.id;
       btnEliminar.textContent = "Eliminar";
       !eliminar ? btnEliminar.style.display = "none" : eliminar = true;
@@ -143,7 +143,7 @@ export default async () => {
 
         const btnEditar = document.createElement("button");
         btnEditar.classList.add("boton");
-        btnEditar.id = "BotonEditar";
+        btnEditar.id = "BotonEditarCaja";
         btnEditar.value = caja.id;
         btnEditar.textContent = "Editar";
 
@@ -188,9 +188,9 @@ export default async () => {
 
   app.append(tituloAbiertas, tablaAbiertas, tituloCerradas, tablaCerradas);
   window.addEventListener("click", async (e) => {
-    if (e.target.matches("#BotonEliminar")) EliminarMesa(e);
-    else if (e.target.matches("#BotonEditar")) window.location.href = `#/Caja/Editar/id=${e.target.value}`;
-    else if (e.target.matches("#BotonActualizar")) window.location.href = `#/Caja/EditarApertura/id=${e.target.value}`;
+    if (e.target.matches("#BotonEliminarCaja")) EliminarMesa(e);
+    else if (e.target.matches("#BotonEditarCaja")) window.location.href = `#/Caja/Editar/id=${e.target.value}`;
+    else if (e.target.matches("#BotonEditarApertura")) window.location.href = `#/Caja/EditarApertura/id=${e.target.value}`;
     else if (e.target.matches("#BotonApertura")) window.location.href = `#/Caja/Apertura`;
     else if (e.target.matches("#BotonCierre")) window.location.href = `#/Caja/Cierre/id=${e.target.value}`;
   });
