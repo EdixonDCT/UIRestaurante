@@ -7,7 +7,7 @@ import * as mesa from '../Views/Mesa/index.js'
 import * as caja from '../Views/Caja/index.js'
 import * as pedido from '../Views/Pedido/index.js'
 import * as detallePedido from '../Views/DetallePedido/index.js'
-import { ReservaController } from '../Views/Reserva/reservaController.js'
+import * as reserva from "../Views/Reserva/index.js";
 import { IngredienteController } from '../Views/Ingrediente/ingredienteController.js'
 import { PlatilloController } from '../Views/Platillo/platilloController.js'
 import { TrabajadoresController } from '../Views/Trabajadores/trabajadoresController.js'
@@ -17,7 +17,7 @@ export const routes = {
   Home: {
     path: "Home/index.html",
     controlador: homeController,
-    private: false
+    private: false,
   },
   Login: {
     path: `Auth/Login/index.html`,
@@ -27,122 +27,142 @@ export const routes = {
   Signup: {
     path: `Auth/Signup/index.html`,
     controlador: SignupController,
-    private: false
+    private: false,
   },
   Mesa: {
     "/": {
       path: `Mesa/index.html`,
       controlador: mesa.MesaController,
       private: true,
-      can: "Mesa.listar"
+      can: "Mesa.listar",
     },
     Crear: {
       path: `Mesa/Crear/index.html`,
       controlador: mesa.CrearController,
       private: true,
-      can: "Mesa.crear"
+      can: "Mesa.crear",
     },
     Editar: {
       path: `Mesa/Editar/index.html`,
       controlador: mesa.EditarController,
       private: true,
-      can: "Mesa.editar"
-    }
+      can: "Mesa.editar",
+    },
   },
   Caja: {
     "/": {
       path: `Caja/index.html`,
       controlador: caja.CajaController,
       private: true,
-      can: "Caja.listar"
+      can: "Caja.listar",
     },
     Apertura: {
       path: `Caja/Apertura/index.html`,
       controlador: caja.AperturaController,
       private: true,
-      can: "Caja.crear"
+      can: "Caja.crear",
     },
     Cierre: {
       path: `Caja/Cierre/index.html`,
       controlador: caja.CierreController,
       private: true,
-      can: "Caja.crear"
+      can: "Caja.crear",
     },
     Editar: {
       path: `Caja/Editar/index.html`,
       controlador: caja.EditarController,
       private: true,
-      can: "Caja.editar"
+      can: "Caja.editar",
     },
     EditarApertura: {
       path: `Caja/EditarApertura/index.html`,
       controlador: caja.EditarAperturaController,
       private: true,
-      can: "Caja.editar"
-    }
+      can: "Caja.editar",
+    },
   },
   Pedido: {
     "/": {
       path: `Pedido/index.html`,
       controlador: pedido.PedidoController,
       private: true,
-      can: "Pedido.listar"
+      can: "Pedido.listar",
     },
     Crear: {
       path: `Pedido/Crear/index.html`,
       controlador: pedido.CrearController,
       private: true,
-      can: "Pedido.crear"
+      can: "Pedido.crear",
     },
     Editar: {
       path: `Pedido/Editar/index.html`,
       controlador: pedido.EditarController,
       private: true,
-      can: "Pedido.editar"
+      can: "Pedido.editar",
     },
     CrearCliente: {
       path: `Pedido/CrearCliente/index.html`,
       controlador: pedido.CrearClienteController,
       private: true,
-      can: "Pedido.crear"
+      can: "Pedido.crear",
     },
     VerificarCliente: {
       path: `Pedido/VerificarCliente/index.html`,
       controlador: pedido.VerificarClienteController,
       private: true,
-      can: "Pedido.crear"
-    }
+      can: "Pedido.crear",
+    },
   },
   DetallePedido: {
     Editar: {
       path: `DetallePedido/index.html`,
       controlador: detallePedido.DetallePedidoController,
       private: true,
-      can: "Pedido.crear"
-    }
+      can: "Pedido.crear",
+    },
   },
   Reserva: {
-    path: `Reserva/index.html`,
-    controlador: ReservaController,
-    private: true,
-    can: "Reserva.listar"
+    "/": {
+      path: `Reserva/index.html`,
+      controlador: reserva.ReservaController,
+      private: true,
+      can: "Reserva.listar",
+    },
+    Crear: {
+      path: `Reserva/Crear/index.html`,
+      controlador: reserva.CrearController,
+      private: true,
+      can: "Reserva.crear",
+    },
+    Editar: {
+      path: `Reserva/Editar/index.html`,
+      controlador: reserva.EditarController,
+      private: true,
+      can: "Reserva.editar",
+    },
+    ActivarReserva: {
+      path: `Reserva/ActivarReserva/index.html`,
+      controlador: reserva.ActivarReservaController,
+      private: true,
+      can: "Reserva.editar",
+    },
   },
   Ingrediente: {
     path: `Ingrediente/index.html`,
     controlador: IngredienteController,
     private: true,
-    can: "Ingrediente.listar"
+    can: "Ingrediente.listar",
   },
   Platillo: {
     path: `Platillo/index.html`,
     controlador: PlatilloController,
     private: true,
-    can: "Platillo.listar"
+    can: "Platillo.listar",
   },
   Trabajadores: {
     path: `Trabajadores/index.html`,
     controlador: TrabajadoresController,
     private: true,
-    can: "Trabajadores.listar"
+    can: "Trabajadores.listar",
   },
-}
+};

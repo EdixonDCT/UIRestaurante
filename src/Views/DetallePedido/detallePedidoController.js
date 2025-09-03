@@ -35,7 +35,7 @@ export default async () => {
 
     div.innerHTML = `
       <p>${item.nombre}</p>
-      <img src="http://localhost:8080/ApiRestaurente/IMAGENES/${item.imagen}" alt="${item.nombre}" />
+      <img src="http://localhost:8080/ApiRestaurante/IMAGENES/${item.imagen}" alt="${item.nombre}" />
       <p class="descripcion">${extra}, Precio: ${item.precio}$</p>
       <div class="itemBotones">
         <button type="button" class="btn-restar">-</button>

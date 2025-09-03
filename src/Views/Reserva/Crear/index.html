@@ -1,0 +1,30 @@
+<div class="titulos">
+  <p>Crear Reserva</p>
+</div>
+<form class="form" method="post">
+  <div class="input">
+    <label>Correo de Cliente:</label>
+    <input class="correoCliente" type="text" placeholder="Ingrese el correo del Cliente" autocomplete="off"
+      name="Correo del Cliente">
+  </div>
+  <div class="input">
+    <label>Numero de Mesa:</label>
+    <select class="numeroMesa" name="Numero de Mesa">
+      <option value="0" hidden>Seleccione una Mesa</option>
+    </select>
+  </div>
+  <div class="input">
+    <label>Cantidad Tentativa:</label>
+    <input class="cantidadTentativa" type="text" placeholder="Ingrese la cantidad Tentativa" autocomplete="off"
+      name="Cantidad Tentativa">
+  </div>
+  <div class="input">
+    <label>Fecha Tentativa:</label>
+    <input class="fechaTentativa" type="date" autocomplete="off" name="Fecha Tentativa">
+  </div>
+  <div class="input">
+    <label>Hora Tentativa:</label>
+    <input class="horaTentativa" type="time" autocomplete="off" name="Hora Tentativa">
+  </div>
+  <button class="boton" type="submit">Crear Reserva</button>
+</form>
