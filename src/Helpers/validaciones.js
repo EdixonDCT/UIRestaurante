@@ -1,233 +1,164 @@
 // Teclas espeiales
-const teclasEspeciales = [
-  "Backspace",
-  "Tab",
-  "Enter",
-  "ArrowLeft",
-  "ArrowRight",
-  "Delete",
-  "Home",
-  "End",
+const teclasEspeciales = [ // Lista de teclas especiales que se permiten
+  "Backspace", // Borrar
+  "Tab", // Tabulación
+  "Enter", // Enter
+  "ArrowLeft", // Flecha izquierda
+  "ArrowRight", // Flecha derecha
+  "Delete", // Suprimir
+  "Home", // Ir al inicio
+  "End", // Ir al final
 ]; // Teclas especiales que se permiten
 
 // Validación para los campos de texto con límite de caracteres
-export const validarLimiteKey = (event, limite) => {
-  const key = event.key;
-  if (!teclasEspeciales.includes(key) && event.target.value.length >= limite)
+export const validarLimiteKey = (event, limite) => { // Función para validar longitud máxima
+  const key = event.key; // Obtenemos la tecla presionada
+  if (!teclasEspeciales.includes(key) && event.target.value.length >= limite) // Si no es tecla especial y ya superó el límite
     event.preventDefault(); // Evitamos la acción de la tecla si el campo supera el límite
 };
 
 // Validación para los campos de texto
-export const validarTextoKey = (event) => {
+export const validarTextoKey = (event) => { // Solo letras sin espacios
   const key = event.key; // Obtenemos la tecla presionada
   const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/; // Expresión regular para letras y caracteres especiales
-
-  // Validamos si la tecla no es una letra
-  if (!regex.test(key) && !teclasEspeciales.includes(key)) {
+  if (!regex.test(key) && !teclasEspeciales.includes(key)) { // Si no es letra ni tecla especial
     event.preventDefault(); // Evitamos la acción de la tecla
   }
 };
 
-export const validarTextoEspacioKey = (event) => {
+export const validarTextoEspacioKey = (event) => { // Letras y espacios
   const key = event.key; // Obtenemos la tecla presionada
-  // Expresión regular que permite letras (con tildes, ñ) y espacios
-  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/; 
-
-  // Validamos si la tecla no es válida
-  if (!regex.test(key) && !teclasEspeciales.includes(key)) {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/; // Expresión regular que permite letras y espacios
+  if (!regex.test(key) && !teclasEspeciales.includes(key)) { // Si no cumple con lo permitido
     event.preventDefault(); // Evitamos la acción de la tecla
   }
 };
 
 // Validación para los campos de número
-export const validarNumeroKey = (event) => {
+export const validarNumeroKey = (event) => { // Solo números
   const key = event.key; // Obtenemos la tecla presionada
   const regex = /^[\d]*$/; // Expresión regular para números
-
-  // Validamos si la tecla no es un número
-  if (!regex.test(key) && !teclasEspeciales.includes(key))
+  if (!regex.test(key) && !teclasEspeciales.includes(key)) // Si no es número ni tecla especial
     event.preventDefault(); // Evitamos la acción de la tecla
 };
 
 // Validación para la contraseña
-export const validarContrasena = (campo) => {
+export const validarContrasena = (campo) => { // Valida que cumpla requisitos
   let regexContra = /^(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$/; // Expresión regular para validar la contraseña
-  if (campo.parentElement.querySelector(".error")) {
-    quitarError(campo.parentElement);
+  if (campo.parentElement.querySelector(".error")) { // Si ya tiene un error
+    quitarError(campo.parentElement); // Lo quitamos
   }
-  if (!regexContra.test(campo.value) && campo.value.trim() != "") {
-    let error = `${campo.name}: `;
-    let cont = 0;
-    if (!/[A-Z]/.test(campo.value))
-      // Validamos si la contraseña contiene al menos una mayúscula
-      error += "Una mayúscula";
-    cont++;
-    if (!/[a-z]/.test(campo.value))
-      // Validamos si la contraseña contiene al menos una minúscula
-      cont > 0 ? (error += ",Una minúscula") : (error += "Una minúscula");
-    cont++;
-    if (!/\d/.test(campo.value))
-      // Validamos si la contraseña contiene al menos un número
-      cont > 0 ? (error += ",Un número") : (error += "Un número");
-    cont++;
-    if (!/\W/.test(campo.value))
-      // Validamos si la contraseña contiene al menos un carácter especial
-      cont > 0
-        ? (error += ",Un carácter especial")
-        : (error += "Un carácter especial");
-    cont++;
-    if (campo.value.length < 8)
-      // Validamos si la contraseña tiene al menos 8 caracteres
-      cont > 0
-        ? (error += ",Al menos 8 caracteres")
-        : (error += "Al menos 8 caracteres");
-    error += ".";
-    agregarError(campo.parentElement, error); // Agregamos el error
-    return false; // Si la contraseña es inválida, el formulario no es válido
-  } else validarCampo(campo);
-  return true;
+  if (!regexContra.test(campo.value) && campo.value.trim() != "") { // Si la contraseña no cumple reglas
+    let error = `${campo.name}: `; // Mensaje de error base
+    let cont = 0; // Contador de errores
+    if (!/[A-Z]/.test(campo.value)) error += "Una mayúscula"; cont++; // Falta mayúscula
+    if (!/[a-z]/.test(campo.value)) cont > 0 ? (error += ",Una minúscula") : (error += "Una minúscula"); cont++; // Falta minúscula
+    if (!/\d/.test(campo.value)) cont > 0 ? (error += ",Un número") : (error += "Un número"); cont++; // Falta número
+    if (!/\W/.test(campo.value)) cont > 0 ? (error += ",Un carácter especial") : (error += "Un carácter especial"); cont++; // Falta símbolo
+    if (campo.value.length < 8) cont > 0 ? (error += ",Al menos 8 caracteres") : (error += "Al menos 8 caracteres"); // Falta longitud
+    error += "."; // Punto final
+    agregarError(campo.parentElement, error); // Mostramos el error
+    return false; // Contraseña inválida
+  } else  // Si cumple, se valida
+  return validarCampo(campo);
 };
 
-export const validarFecha = (campo) => {
-  if (campo.parentElement.querySelector(".error")) {
-    quitarError(campo.parentElement);
-  }
-  const fechaSeleccionada = new Date(campo.value);
-  // Obtener fecha
-  const ahora = new Date();
-  const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
-  // Validar que la fecha no sea pasada ni hoy
-  if (fechaSeleccionada < hoy) {
-    agregarError(
-      campo.parentElement,
-      "La fecha no puede ser hoy, ayer ni un día pasado"
-    );
+export const validarFecha = (campo) => { // Valida fechas
+  if (campo.parentElement.querySelector(".error")) { quitarError(campo.parentElement); } // Quitamos error si existe
+  const fechaSeleccionada = new Date(campo.value); // Fecha seleccionada
+  const ahora = new Date(); // Fecha actual
+  const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate()); // Solo día actual
+  if (fechaSeleccionada < hoy) { // Si es fecha pasada
+    agregarError(campo.parentElement, "La fecha no puede ser hoy, ayer ni un día pasado"); 
     return false;
   }
-  if (fechaSeleccionada.getTime() === hoy.getTime()) {
+  if (fechaSeleccionada.getTime() === hoy.getTime()) { // Si es hoy
     agregarError(campo.parentElement, "La fecha no puede ser hoy");
     return false;
   }
-  validarCampo(campo);
+  validarCampo(campo); // Validamos campo si está correcto
   return true;
 };
 
-export const validarHora = (campo, campoFecha) => {
-  if (campo.parentElement.querySelector(".error")) {
-    quitarError(campo.parentElement);
-  }
-  const fechaSeleccionada = new Date(campoFecha.value);
-  const horaSeleccionada = campo.value;
-
-  // Convertir fecha y hora seleccionada a Date completo
-  const [hh, mm] = horaSeleccionada.split(":");
-  fechaSeleccionada.setHours(parseInt(hh), parseInt(mm), 0, 0);
-
-  // Validar que la fecha no sea pasada ni hoy
-  if (parseInt(hh) <= 8) {
-    agregarError(
-      campo.parentElement,
-      "Si es mañana, debe ser después de las 8:00 a.m."
-    );
+export const validarHora = (campo, campoFecha) => { // Valida hora
+  if (campo.parentElement.querySelector(".error")) { quitarError(campo.parentElement); }
+  const fechaSeleccionada = new Date(campoFecha.value); // Fecha seleccionada
+  const horaSeleccionada = campo.value; // Hora seleccionada
+  const [hh, mm] = horaSeleccionada.split(":"); // Separa horas y minutos
+  fechaSeleccionada.setHours(parseInt(hh), parseInt(mm), 0, 0); // Asigna hora a la fecha
+  if (parseInt(hh) <= 8) { // Si es antes de 8 AM
+    agregarError(campo.parentElement, "Si es mañana, debe ser después de las 8:00 a.m.");
     return false;
   }
-  if (parseInt(hh) >= 22) {
-    agregarError(
-      campo.parentElement,
-      "Si es en la noche, debe ser antes de las 10:00 p.m"
-    );
+  if (parseInt(hh) >= 22) { // Si es después de 10 PM
+    agregarError(campo.parentElement, "Si es en la noche, debe ser antes de las 10:00 p.m");
     return false;
   }
-  validarCampo(campo);
+  validarCampo(campo); // Validamos campo si es correcto
   return true;
 };
 
 // Validación para el correo electrónico
-export const validarCorreo = (campo) => {
-  let regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
-  // Validamos si el correo es válido
-  if (campo.parentElement.querySelector(".error")) {
-    quitarError(campo.parentElement);
-  }
-  if (campo.value.trim() != "" && !regexCorreo.test(campo.value)) {
-    agregarError(campo.parentElement, "El correo electrónico no es válido."); // Agregamos el error
-    return false; // Si el correo es inválido, el formulario no es válido
-  } else validarCampo(campo);
+export const validarCorreo = (campo) => { 
+  let regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i; // Expresión regular para correo
+  if (campo.parentElement.querySelector(".error")) { quitarError(campo.parentElement); }
+  if (campo.value.trim() != "" && !regexCorreo.test(campo.value)) { // Si no cumple
+    agregarError(campo.parentElement, "El correo electrónico no es válido.");
+    return false;
+  } else validarCampo(campo); // Si cumple, validamos
   return true;
 };
-// Validación para el correo electrónico
-export const validarCantidad = (campo, cantidad) => {
-  // Validamos si la cantidad es la indicada
-  if (campo.parentElement.querySelector(".error")) {
-    quitarError(campo.parentElement);
+
+export const validarCantidad = (campo, cantidad) => { // Valida mínimo de caracteres
+  if (campo.parentElement.querySelector(".error")) { quitarError(campo.parentElement); }
+  if (campo.value.length < cantidad && campo.value.trim() != "") { // Si es menor a lo requerido
+    agregarError(campo.parentElement, `${campo.name}: Al menos debe tener ${cantidad} caracteres.`);
+    return false;
   }
-  if (campo.value.length < cantidad && campo.value.trim() != "") {
-    // Validamos si la contraseña tiene al menos 8 caracteres
-    agregarError(
-      campo.parentElement,
-      `${campo.name}: Al menos debe tener ${cantidad} caracteres.`
-    ); // Agregamos el error
-    return false; // Si el correo es inválido, el formulario no es válido
-  }
-  validarCampo(campo); // Validamos el campo para agregar o quitar el error
+  validarCampo(campo); // Validamos campo
   return true;
 };
-export const validarMayorEdad = (campo) => {
+
+export const validarMayorEdad = (campo) => { // Valida mayoría de edad
   if (!validarCampo(campo)) return false;
   const fecha = new Date(campo.value);
   const hoy = new Date();
-  const cumple18 = new Date(
-    fecha.getFullYear() + 18,
-    fecha.getMonth(),
-    fecha.getDate()
-  );
-  if (hoy >= cumple18) {
-    return true;
-  } else {
-    agregarError(campo.parentElement, `${campo.name}: Debe ser mayor de edad.`); // Agregamos el error
+  const cumple18 = new Date(fecha.getFullYear() + 18, fecha.getMonth(), fecha.getDate()); // Fecha +18 años
+  if (hoy >= cumple18) { return true; } // Si ya tiene 18
+  else {
+    agregarError(campo.parentElement, `${campo.name}: Debe ser mayor de edad.`);
     return false;
   }
 };
-export const validarContrasenaIgual = (campo, igual) => {
-  // Validamos si la cantidad es la indicada
-  if (campo.parentElement.querySelector(".error")) {
-    quitarError(campo.parentElement);
+
+export const validarContrasenaIgual = (campo, igual) => { // Valida confirmación de contraseña
+  if (campo.parentElement.querySelector(".error")) { quitarError(campo.parentElement); }
+  if (campo.value !== igual.value && campo.value.trim() != "") { // Si no coinciden
+    agregarError(campo.parentElement, `Contraseñas deben ser iguales.`);
+    return false;
   }
-  if (campo.value !== igual.value && campo.value.trim() != "") {
-    // Validamos si la contraseña tiene al menos 8 caracteres
-    agregarError(campo.parentElement, `Contraseñas deben ser iguales.`); // Agregamos el error
-    return false; // Si el correo es inválido, el formulario no es válido
-  }
-  validarCampo(campo); // Validamos el campo para agregar o quitar el error
+  validarCampo(campo);
   return true;
 };
 
-export const validarImagen = (campo) => {
-  if (campo.parentElement.querySelector(".error")) {
-    quitarError(campo.parentElement);
-  }
-  let foto = campo.files[0];
-  if (!foto) {
+export const validarImagen = (campo) => { // Valida carga de imagen
+  if (campo.parentElement.querySelector(".error")) { quitarError(campo.parentElement); }
+  let foto = campo.files[0]; // Obtiene archivo
+  if (!foto) { // Si no hay
     agregarError(campo.parentElement, `Imagen: Debe añadir una foto`);
     return false;
   }
   return true;
 };
-// --------------------------------------------------------
 
-// Validación para los campos de texto y las listas desplegables
-// Retorna true o false dependiendo de si el campo es válido o no
+// Validación general de campos vacíos
 export const validarCampo = (campo) => {
-  // Quitamos el error
-  if (campo.parentElement.querySelector(".error")) {
-    quitarError(campo.parentElement);
-  }
+  if (campo.parentElement.querySelector(".error")) { quitarError(campo.parentElement); }
   if (
-    ((campo.tagName == "INPUT" || campo.tagName == "TEXTAREA") &&
-      campo.value.trim() == "") || // Validamos si el campo es un input o un textarea y está vacío
-    (campo.tagName == "SELECT" && campo.selectedIndex == 0) // Validamos si el campo es un select y no se ha seleccionado una opción
+    ((campo.tagName == "INPUT" || campo.tagName == "TEXTAREA") && campo.value.trim() == "") || // Si input/textarea vacío
+    (campo.tagName == "SELECT" && campo.selectedIndex == 0) // Si select sin opción
   ) {
-    agregarError(campo.parentElement, `${campo.name}: no puede estar vacio.`); // Agregamos el error
+    agregarError(campo.parentElement, `${campo.name}: no puede estar vacio.`);
     return false;
   }
   return true;
@@ -235,17 +166,14 @@ export const validarCampo = (campo) => {
 
 // --------------------------------------------------------
 // Funciones para agregar y quitar errores
-
-// Agrega un borde rojo y un mensaje de advertencia al campo
-const agregarError = (campoPadre, mensaje) => {
+const agregarError = (campoPadre, mensaje) => { // Crea mensaje de error
   const campo = document.createElement("span");
   campo.classList.add("error");
   campo.textContent = mensaje;
   campoPadre.appendChild(campo);
 };
 
-// Quita el borde rojo y el mensaje de advertencia del campo
-export const quitarError = (campo) => {
+export const quitarError = (campo) => { // Quita mensaje de error
   const hijo = campo.querySelector(".error");
   if (hijo) {
     campo.removeChild(hijo);

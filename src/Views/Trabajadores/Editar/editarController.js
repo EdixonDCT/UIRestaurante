@@ -1,11 +1,16 @@
+// Importa funciones de alertas
 import { alertaError, alertaOK } from "../../../Helpers/alertas";
+// Importa funciones para interactuar con la API
 import * as api from "../../../Helpers/api";
+// Importa funciones de validación
 import * as validacion from "../../../Helpers/validaciones";
+
+// Función principal exportada
 export default async () => {
-    //formulario
+    // Selecciona el formulario
     const form = document.querySelector(".form");
 
-    //valores a postear
+    // Selecciona inputs del formulario
     const cedula = document.querySelector(".cedula");
     const nombre = document.querySelector(".nombre");
     const apellido = document.querySelector(".apellido");
@@ -14,10 +19,10 @@ export default async () => {
     const contrasenaConfirm = document.querySelector(".contrasenaConfirmar");
     const comboRoles = document.querySelector(".comboRoles");
 
+    // Función para rellenar el select de roles
     const rellenarRoles = async () => {
         const roles = await api.getPublic("roles")
         roles.forEach(rol => {
-            // if (rol.id == "1") return;
             let option = document.createElement("option");
             option.value = rol.id;
             option.textContent = rol.nombre;
@@ -25,9 +30,12 @@ export default async () => {
         });
     }
     await rellenarRoles();
+
+    // Obtiene id del trabajador desde la URL
     const hash = location.hash.slice(1);
     const [url, id] = hash.split("=");
 
+    // Trae los datos del trabajador
     const traerDatos = await api.get(`trabajadores/${id}`);
     cedula.value = traerDatos.cedula
     nombre.value = traerDatos.nombre;
@@ -37,6 +45,7 @@ export default async () => {
     contrasenaConfirm.value = traerDatos.contrasena;
     comboRoles.value = traerDatos.idRol;
 
+    // Eventos de validación
     nombre.addEventListener("blur", () => { validacion.quitarError(nombre.parentElement) });
     nombre.addEventListener("keydown", (e) => {
         validacion.validarTextoKey(e);
@@ -49,16 +58,13 @@ export default async () => {
     });
     fecha.addEventListener("blur", () => { validacion.quitarError(fecha.parentElement) });
     contrasena.addEventListener("blur", () => { validacion.quitarError(contrasena.parentElement) });
-    contrasena.addEventListener("keydown", (e) => {
-        validacion.validarLimiteKey(e, 20);
-    });
+    contrasena.addEventListener("keydown", (e) => { validacion.validarLimiteKey(e, 20); });
     contrasenaConfirm.addEventListener("blur", () => { validacion.quitarError(contrasenaConfirm.parentElement) });
-    contrasenaConfirm.addEventListener("keydown", (e) => {
-        validacion.validarLimiteKey(e, 20);
-    });
+    contrasenaConfirm.addEventListener("keydown", (e) => { validacion.validarLimiteKey(e, 20); });
     comboRoles.addEventListener("blur", () => { validacion.quitarError(comboRoles.parentElement) });
-    form.addEventListener("submit", async (e) => {
 
+    // Evento submit del formulario
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
         let validarNombre = validacion.validarCampo(nombre);
         let validarApellido = validacion.validarCampo(apellido);
@@ -68,6 +74,7 @@ export default async () => {
         let validarRol = validacion.validarCampo(comboRoles);
 
         if (validarNombre && validarApellido && validarFecha && validarContrasena && validarIgualdad && validarRol) {
+            // Objeto para actualizar
             const objetoActualizado = {
                 nombre: nombre.value,
                 apellido: apellido.value,
@@ -75,12 +82,12 @@ export default async () => {
                 contrasena: contrasena.value,
                 idRol: comboRoles.value
             }
+            // Llamada a la API para actualizar
             const actualizacion = await api.put(`trabajadores/${cedula.value}`, objetoActualizado);
             if (actualizacion.Error) {
-                alertaError(registro.Error);
+                alertaError(actualizacion.Error);
                 return;
-            }
-            else {
+            } else {
                 await alertaOK(actualizacion.Ok);
                 window.location.href = '#/Trabajadores';
             }

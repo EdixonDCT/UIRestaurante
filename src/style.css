@@ -622,4 +622,7 @@ textarea.nota {
   #imagenPerfil{
     display: none;
   }
+  .item{
+    width: 100%;
+  }
 }

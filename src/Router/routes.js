@@ -1,55 +1,55 @@
-import homeController from '../Views/Home/homeController.js'
+import homeController from '../Views/Home/homeController.js' // Importa el controlador de Home
 
-import { loginController } from '../Views/Auth/Login/loginController.js'
-import { SignupController } from '../Views/Auth/Signup/signupController.js'
-// import { MesaController } from '../Views/Mesa/mesaController.js'
-import * as mesa from '../Views/Mesa/index.js'
-import * as caja from '../Views/Caja/index.js'
-import * as pedido from '../Views/Pedido/index.js'
-import * as detallePedido from '../Views/DetallePedido/index.js'
-import * as reserva from "../Views/Reserva/index.js";
-import * as ingrediente from '../Views/Ingrediente/index.js'
-import * as platillo from '../Views/Platillo/index.js'
-import * as trabajadores from '../Views/Trabajadores/index.js'
+import { loginController } from '../Views/Auth/Login/loginController.js' // Importa el controlador de Login
+import { SignupController } from '../Views/Auth/Signup/signupController.js' // Importa el controlador de Registro
+// import { MesaController } from '../Views/Mesa/mesaController.js' // Comentado, ya no se usa
+import * as mesa from '../Views/Mesa/index.js' // Importa todos los controladores de Mesa
+import * as caja from '../Views/Caja/index.js' // Importa todos los controladores de Caja
+import * as pedido from '../Views/Pedido/index.js' // Importa todos los controladores de Pedido
+import * as detallePedido from '../Views/DetallePedido/index.js' // Importa todos los controladores de DetallePedido
+import * as reserva from "../Views/Reserva/index.js"; // Importa todos los controladores de Reserva
+import * as ingrediente from '../Views/Ingrediente/index.js' // Importa todos los controladores de Ingrediente
+import * as platillo from '../Views/Platillo/index.js' // Importa todos los controladores de Platillo
+import * as trabajadores from '../Views/Trabajadores/index.js' // Importa todos los controladores de Trabajadores
 
 
-export const routes = {
-  Home: {
-    path: "Home/index.html",
-    controlador: homeController,
-    private: false,
+export const routes = { // Objeto con todas las rutas del sistema
+  Home: { // Ruta Home
+    path: "Home/index.html", // HTML de la vista
+    controlador: homeController, // Controlador JS
+    private: false, // Acceso público
   },
-  Login: {
-    path: `Auth/Login/index.html`,
+  Login: { // Ruta Login
+    path: `Auth/Login/index.html`, 
     controlador: loginController,
     private: false,
   },
-  Signup: {
+  Signup: { // Ruta de registro
     path: `Auth/Signup/index.html`,
     controlador: SignupController,
     private: false,
   },
-  Mesa: {
-    "/": {
+  Mesa: { // Grupo de rutas Mesa
+    "/": { // Ruta por defecto de Mesa
       path: `Mesa/index.html`,
       controlador: mesa.MesaController,
-      private: true,
-      can: "Mesa.listar",
+      private: true, // Solo con sesión
+      can: "Mesa.listar", // Permiso requerido
     },
-    Crear: {
+    Crear: { // Ruta crear mesa
       path: `Mesa/Crear/index.html`,
       controlador: mesa.CrearController,
       private: true,
       can: "Mesa.crear",
     },
-    Editar: {
+    Editar: { // Ruta editar mesa
       path: `Mesa/Editar/index.html`,
       controlador: mesa.EditarController,
       private: true,
       can: "Mesa.editar",
     },
   },
-  Caja: {
+  Caja: { // Grupo de rutas Caja
     "/": {
       path: `Caja/index.html`,
       controlador: caja.CajaController,
@@ -81,7 +81,7 @@ export const routes = {
       can: "Caja.editar",
     },
   },
-  Pedido: {
+  Pedido: { // Grupo de rutas Pedido
     "/": {
       path: `Pedido/index.html`,
       controlador: pedido.PedidoController,
@@ -113,7 +113,7 @@ export const routes = {
       can: "Pedido.crear",
     },
   },
-  DetallePedido: {
+  DetallePedido: { // Ruta DetallePedido
     Editar: {
       path: `DetallePedido/index.html`,
       controlador: detallePedido.DetallePedidoController,
@@ -121,7 +121,7 @@ export const routes = {
       can: "Pedido.crear",
     },
   },
-  Reserva: {
+  Reserva: { // Grupo de rutas Reserva
     "/": {
       path: `Reserva/index.html`,
       controlador: reserva.ReservaController,
@@ -147,7 +147,7 @@ export const routes = {
       can: "Reserva.editar",
     },
   },
-  Ingrediente: {
+  Ingrediente: { // Grupo de rutas Ingrediente
     "/": {
       path: `Ingrediente/index.html`,
       controlador: ingrediente.IngredienteController,
@@ -161,7 +161,7 @@ export const routes = {
       can: "Ingrediente.crear"
     }
   },
-  Platillo: {
+  Platillo: { // Grupo de rutas Platillo
     "/": {
       path: `Platillo/index.html`,
       controlador: platillo.PlatilloController,
@@ -226,7 +226,7 @@ export const routes = {
       path: `Platillo/AsignarIngredientesComida/index.html`,
       controlador: platillo.AsignarIngredienteComidaController,
       private: true,
-      can: "Platillo.editar", // asignar ingredientes también es modificar
+      can: "Platillo.editar", // Asignar ingredientes se considera modificar
     },
     AsignarIngredienteCoctel: {
       path: `Platillo/AsignarIngredientesCoctel/index.html`,
@@ -236,7 +236,7 @@ export const routes = {
     },
   },
 
-  Trabajadores: {
+  Trabajadores: { // Grupo de rutas Trabajadores
     "/": {
       path: `Trabajadores/index.html`,
       controlador: trabajadores.TrabajadoresController,

@@ -1,12 +1,22 @@
-import { alertaOK,alertaError } from "../../Helpers/alertas";
+// Importa funciones de alerta para mostrar mensajes de éxito o error
+import { alertaOK, alertaError } from "../../Helpers/alertas";
+
+// Importa funciones para interactuar con la API
 import * as api from "../../Helpers/api";
+
+// Importa función para validar permisos de usuario
 import validarPermiso from "../../Helpers/permisos";
 
+// Exporta la función principal que se ejecuta al cargar el módulo
 export default async () => {
+  // Obtiene el contenedor principal de la app
   const app = document.getElementById("app");
 
+  // Verifica permisos para crear y editar platillos
   const crear = validarPermiso("Pedido.crear");
   const editar = validarPermiso("Pedido.editar");
+
+  // Si tiene permiso de crear, se crean botones para agregar platillos
   if (crear) {
     const botonCrearComida = document.createElement("button");
     botonCrearComida.classList.add("boton");
@@ -23,14 +33,16 @@ export default async () => {
     botonCrearCoctel.id = "BotonCrearCoctel";
     botonCrearCoctel.textContent = "Crear Coctel";
 
+    // Se agregan los botones al contenedor principal
     app.append(botonCrearComida, botonCrearBebida, botonCrearCoctel);
   }
 
+  // Función para cargar y mostrar platillos según su tipo
   const cargarPlatillos = async (tipo) => {
     const tabla = document.createElement("table");
     tabla.classList.add("tablas");
 
-    // Encabezados
+    // Crear encabezados de tabla
     const encabezado = document.createElement("tr");
     const columnas = ["ID", "Imagen", "Nombre", "Precio"];
     if (tipo === "comidas") columnas.push("Tipo");
@@ -44,8 +56,10 @@ export default async () => {
     });
     tabla.appendChild(encabezado);
 
+    // Trae los datos desde la API
     const datos = await api.get(tipo);
 
+    // Por cada item, crear fila con sus datos
     datos.forEach(async (item) => {
       const fila = document.createElement("tr");
 
@@ -62,17 +76,16 @@ export default async () => {
       tdImg.appendChild(img);
       fila.appendChild(tdImg);
 
-      // Nombre
+      // Nombre y Precio
       const tdNombre = document.createElement("td");
       tdNombre.textContent = item.nombre;
       fila.appendChild(tdNombre);
 
-      // Precio
       const tdPrecio = document.createElement("td");
       tdPrecio.textContent = `${item.precio}$`;
       fila.appendChild(tdPrecio);
 
-      // Tipo y Unidad
+      // Tipo y Unidad según corresponda
       if (tipo === "comidas") {
         const tdTipo = document.createElement("td");
         tdTipo.textContent = item.tipo;
@@ -98,34 +111,34 @@ export default async () => {
       const tdAcciones = document.createElement("td");
       const divAcciones = document.createElement("div");
       divAcciones.classList.add("tablaAcciones");
+
+      // Si tiene permiso de editar, se crean botones de edición
       if (editar) {
-        // Botón Editar
         const btnEditar = document.createElement("button");
         btnEditar.classList.add("boton");
         btnEditar.textContent = "Editar";
-        btnEditar.id = `BotonEditar${tipo}`
+        btnEditar.id = `BotonEditar${tipo}`;
         btnEditar.value = item.id;
         divAcciones.appendChild(btnEditar);
 
-        // Botón Editar Foto
         const btnFoto = document.createElement("button");
         btnFoto.classList.add("boton");
         btnFoto.textContent = "Editar Foto";
-        btnFoto.id = `BotonEditarImagen${tipo}`
+        btnFoto.id = `BotonEditarImagen${tipo}`;
         btnFoto.value = item.id;
         divAcciones.appendChild(btnFoto);
 
-        // Botón Editar Ingredientes (solo comidas y cocteles)
         if (tipo === "comidas" || tipo === "cocteles") {
           const btnIngredientes = document.createElement("button");
           btnIngredientes.classList.add("boton");
           btnIngredientes.textContent = "Editar Ingredientes";
           btnIngredientes.value = item.id;
-          btnIngredientes.id = `BotonEditarIngredientes${tipo}`
+          btnIngredientes.id = `BotonEditarIngredientes${tipo}`;
           divAcciones.appendChild(btnIngredientes);
         }
       }
-      // Checkbox cambiar estado
+
+      // Checkbox para cambiar estado de disponible
       const divCheck = document.createElement("div");
       divCheck.classList.add("TablaCheckbox");
 
@@ -151,28 +164,26 @@ export default async () => {
       divCheck.append(check, lblCambiar, lblEstado);
       divAcciones.appendChild(divCheck);
       tdAcciones.appendChild(divAcciones);
-
       fila.appendChild(tdAcciones);
 
       tabla.appendChild(fila);
     });
 
-    // Título
+    // Crear título y agregar tabla al contenedor
     const titulo = document.createElement("div");
     const p = document.createElement("p");
     p.textContent = tipo.charAt(0).toUpperCase() + tipo.slice(1);
     titulo.classList.add("titulos");
     titulo.appendChild(p);
-
     app.append(titulo, tabla);
   };
 
-  // Llamadas
+  // Cargar todos los platillos
   await cargarPlatillos("comidas");
   await cargarPlatillos("bebidas");
   await cargarPlatillos("cocteles");
 
-  // Listener para checkbox
+  // Listener global para cambiar estado de disponible
   document.addEventListener("change", async (e) => {
     if (e.target.classList.contains("cambiarEstado")) {
       const checkbox = e.target;
@@ -184,7 +195,7 @@ export default async () => {
         const objetoDisponible = { disponible: nuevoEstado };
         await api.patch(`${tipo}/${id}`, objetoDisponible);
 
-        // Actualizar label
+        // Actualizar label y celda
         const labelEstado = document.querySelector(
           `label[data-estado="${tipo}-${id}"]`
         );
@@ -194,7 +205,6 @@ export default async () => {
             nuevoEstado === "1" ? "checkboxTrue" : "checkboxFalse";
         }
 
-        // Actualizar celda disponible
         const tdDisponible = document.querySelector(
           `td[data-clave="${tipo}-${id}"]`
         );
@@ -203,11 +213,12 @@ export default async () => {
         }
       } catch (error) {
         alertaError("Error al cambiar estado: " + (error.message || "Error desconocido"));
-        checkbox.checked = !checkbox.checked; 
+        checkbox.checked = !checkbox.checked; // Revertir checkbox si falla
       }
     }
-  })
+  });
 
+  // Listener para botones de crear y editar platillos
   window.addEventListener("click", async (e) => {
     if (e.target.matches("#BotonCrearComida")) window.location.href = `#/Platillo/CrearComida`;
     else if (e.target.matches("#BotonCrearBebida")) window.location.href = `#/Platillo/CrearBebida`;

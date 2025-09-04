@@ -1,57 +1,77 @@
-import { alertaError, alertaOK,alertaTiempo } from "../../../Helpers/alertas";
+// ==================== Imports ====================
+// Funciones de alertas
+import { alertaError, alertaOK, alertaTiempo } from "../../../Helpers/alertas";
+// Funciones para interactuar con la API
 import * as api from "../../../Helpers/api";
+// Funciones de validación
 import * as validacion from "../../../Helpers/validaciones";
+
+// ==================== Función principal ====================
 export default async () => {
-  const form = document.querySelector(".form");
 
-  const imagenVieja = document.querySelector(".imagenVieja")
-  const inputPerfil = document.getElementById("ArchivoFoto");
-  const imagenPerfil = document.getElementById("imagenPlatillo");
-  const spanImagen = document.getElementById("ArchivoEstado");
+  // ==================== Selección de elementos del DOM ====================
+  const form = document.querySelector(".form"); // Formulario
+  const imagenVieja = document.querySelector(".imagenVieja"); // Imagen actual del platillo
+  const inputPerfil = document.getElementById("ArchivoFoto"); // Input de nueva imagen
+  const imagenPerfil = document.getElementById("imagenPlatillo"); // Vista previa
+  const spanImagen = document.getElementById("ArchivoEstado"); // Texto que indica estado del input
 
+  // ==================== Obtener ID del platillo desde el hash ====================
   const hash = location.hash.slice(1);
   const [url, id] = hash.split("=");
 
+  // ==================== Traer imagen existente ====================
   const traerDatos = await api.get(`comidas/${id}`);
-  imagenVieja.src = await api.imagen(traerDatos.imagen);
+  imagenVieja.src = await api.imagen(traerDatos.imagen); // Mostrar la imagen actual
 
+  // ==================== Función vista previa ====================
   const vistaPreviaImg = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = () => {
-      imagenPerfil.src = reader.result;
+      imagenPerfil.src = reader.result; // Muestra la nueva imagen antes de subirla
       spanImagen.textContent = "Archivo imagen seleccionada";
     };
     reader.readAsDataURL(file);
   };
+
+  // ==================== Función para eliminar vista previa ====================
   const EliminarVistaPreviaImg = () => {
-    imagenPerfil.src = "../../../../public/comida.png";
+    imagenPerfil.src = "../../../../public/comida.png"; // Imagen por defecto
     inputPerfil.value = "";
     spanImagen.textContent = "Ningún archivo seleccionado";
   };
-  inputPerfil.addEventListener("blur", () => {validacion.quitarError(inputPerfil.parentElement)});
+
+  // ==================== Eventos ====================
+  inputPerfil.addEventListener("blur", () => { validacion.quitarError(inputPerfil.parentElement) });
   inputPerfil.addEventListener("change", vistaPreviaImg);
   window.addEventListener("click", async (e) => {
     if (e.target.matches("#borrarImagen")) EliminarVistaPreviaImg();
   });
+
+  // ==================== Enviar formulario ====================
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // Validar que se haya seleccionado una imagen
     let validarImagen = validacion.validarImagen(inputPerfil);
-    if (validarImagen)
-      {
-        const imagen = await api.postImagen(inputPerfil);
-        const bodyImagenPlatillo = {
-          imagen: imagen.nombre
-        }
-        const borarImagen = await api.imagendel(`imagen/${traerDatos.imagen}`);
-        const subidaFoto = await api.patch(`comidas/imagen/${id}`,bodyImagenPlatillo)
-        if (subidaFoto.Ok) {
-          await alertaTiempo(5000);
-          await alertaOK(subidaFoto.Ok);
-          window.location.href = '#/Platillo';
-        }
+    if (validarImagen) {
+      // Subir nueva imagen
+      const imagen = await api.postImagen(inputPerfil);
+      const bodyImagenPlatillo = { imagen: imagen.nombre };
+
+      // Borrar imagen anterior
+      const borarImagen = await api.imagendel(`imagen/${traerDatos.imagen}`);
+
+      // Actualizar registro con la nueva imagen
+      const subidaFoto = await api.patch(`comidas/imagen/${id}`, bodyImagenPlatillo);
+      if (subidaFoto.Ok) {
+        await alertaTiempo(5000); // Espera 5 segundos antes de continuar
+        await alertaOK(subidaFoto.Ok); // Mensaje de éxito
+        window.location.href = '#/Platillo'; // Redirige a la lista de platillos
+      }
     }
-  })
+  });
 }

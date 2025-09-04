@@ -1,30 +1,45 @@
 import { alertaError, alertaOK, alertaPregunta } from "../../Helpers/alertas";
+// Importa funciones para mostrar alertas de error, éxito o confirmación
+
 import * as api from "../../Helpers/api";
+// Importa funciones para llamadas a la API (GET, POST, PATCH, DELETE)
+
 import validarPermiso from "../../Helpers/permisos";
+// Importa función para validar permisos de usuario
 
 export default async () => {
   const app = document.getElementById("app");
+  // Selecciona el contenedor principal donde se renderizará todo
 
-  const crear = validarPermiso("Mesa.crear")
+  const crear = validarPermiso("Mesa.crear");
+  // Verifica si el usuario tiene permiso para crear mesas
   if (crear) {
     const boton = document.createElement("button");
     boton.classList.add("boton");
     boton.id = "BotonCrearMesa";
     boton.textContent = "Crear Mesa";
     app.appendChild(boton);
+    // Si tiene permiso, crea un botón para crear nuevas mesas
   }
 
   const table = document.createElement("table");
   table.classList.add("tablas");
+  // Crea la tabla para mostrar las mesas
+
   const headerRow = document.createElement("tr");
   const headers = ["Número", "Capacidad", "Disponible", "Acciones"];
+  // Define los encabezados de la tabla
   headers.forEach((text) => {
     const th = document.createElement("th");
     th.textContent = text;
     headerRow.appendChild(th);
+    // Agrega cada encabezado a la fila de encabezado
   });
   table.appendChild(headerRow);
+
   const mesas = await api.get("mesas");
+  // Obtiene la lista de mesas desde la API
+
   mesas.forEach((mesa) => {
     const row = document.createElement("tr");
 
@@ -58,6 +73,7 @@ export default async () => {
     btnEditar.textContent = "Editar";
     divAcciones.appendChild(btnEditar);
     !editar ? btnEditar.style.display = "none" : editar = true;
+    // Si no tiene permiso de edición, oculta el botón
 
     // Botón Eliminar
     let eliminar = validarPermiso("Mesa.eliminar");
@@ -68,12 +84,12 @@ export default async () => {
     btnEliminar.textContent = "Eliminar";
     divAcciones.appendChild(btnEliminar);
     !eliminar ? btnEliminar.style.display = "none" : eliminar = true;
+    // Si no tiene permiso de eliminación, oculta el botón
 
-    // Contenedor checkbox
+    // Contenedor y checkbox para cambiar estado
     const divCheckbox = document.createElement("div");
     divCheckbox.classList.add("TablaCheckbox");
 
-    // Checkbox
     const check = document.createElement("input");
     check.type = "checkbox";
     check.classList.add("cambiarEstadoMesa");
@@ -82,13 +98,11 @@ export default async () => {
     if (mesa.disponible === "1") check.checked = true;
     divCheckbox.appendChild(check);
 
-    // Label cambiar estado
     const lblCambiar = document.createElement("label");
     lblCambiar.setAttribute("for", `cambiarEstado-${mesa.numero}`);
     lblCambiar.textContent = "Cambiar estado";
     divCheckbox.appendChild(lblCambiar);
 
-    // Label estado actual
     const lblEstado = document.createElement("label");
     lblEstado.setAttribute("for", `cambiarEstado-${mesa.numero}`);
     lblEstado.setAttribute("boton-id", mesa.numero);
@@ -102,8 +116,10 @@ export default async () => {
 
     table.appendChild(row);
   });
+
   app.appendChild(table);
 
+  // Función para cambiar el estado de disponibilidad de la mesa
   const cambiarEstado = async (e) => {
     let id = e.target.dataset.id;
     let valor = e.target.checked ? "1" : "0";
@@ -118,23 +134,24 @@ export default async () => {
     }
   }
 
+  // Función para eliminar una mesa
   const EliminarMesa = async (e) => {
     const id = e.target.value;
     const pregunta = await alertaPregunta(`Desea Eliminar esta Mesa #${id}?`);
     if (pregunta.isConfirmed) {
       const eliminado = await api.del(`mesas/${id}`);
-      if (eliminado.Ok)
-      {
-        await alertaOK(eliminado.Ok)
-        const fila = e.target.parentElement.parentElement.parentElement
-        fila.remove()
+      if (eliminado.Ok) {
+        await alertaOK(eliminado.Ok);
+        const fila = e.target.parentElement.parentElement.parentElement;
+        fila.remove();
       }
-        if (eliminado.Error) {
+      if (eliminado.Error) {
         await alertaError(eliminado.Error);
       }
     }
   }
 
+  // Eventos globales para botones y checkbox
   window.addEventListener("click", async (e) => {
     if (e.target.matches(".cambiarEstadoMesa")) cambiarEstado(e);
     else if (e.target.matches("#BotonEliminarMesa")) EliminarMesa(e);
