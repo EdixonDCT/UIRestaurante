@@ -1,0 +1,24 @@
+<div class="titulos">
+  <p>Crear Coctel</p>
+</div>
+<form class="form" method="post">
+  <div class="input">
+    <label>Nombre de la Coctel:</label>
+    <input class="nombre" type="text" placeholder="Ingrese el nombre de la Coctel" autocomplete="off" name="nombre">
+  </div>
+  <div class="input">
+    <label>Precio:</label>
+    <input class="precio" type="text" placeholder="Ingrese el precio de la Coctel" autocomplete="off" name="precio">
+  </div>
+    <div class="inputFoto">
+    <img src="../../../../public/coctel.png" alt="imagenPlatillo" id="imagenPlatillo">
+    <div>
+      <label>Fotografía:</label>
+      <label class="boton" class="ArchivoFoto" for="ArchivoFoto">Seleccionar Fotografia</label>
+      <input class="boton" type="file" id="ArchivoFoto" name="foto">
+      <span id="ArchivoEstado">Ningún archivo seleccionado</span>
+      <a class="boton" id="borrarImagen">Eliminar Fotografía</a>
+    </div>
+  </div>
+  <button class="boton" type="submit">Crear Coctel</button>
+</form>

@@ -40,6 +40,8 @@ export const loginController = () => {
           }
           window.localStorage.setItem(element, respuesta[element]);
         }
+        localStorage.removeItem("contrasena");
+        localStorage.removeItem("rol");
         // console.log(JSON.parse(window.localStorage.getItem("permisos")));
         await alertaOK("Inicio de Sesion Correctamente.");
         window.location.href = '#/Home';

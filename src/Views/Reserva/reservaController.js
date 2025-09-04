@@ -1,7 +1,6 @@
 import { alertaWarning, alertaPregunta, alertaError, alertaOK } from "../../Helpers/alertas";
 import * as api from "../../Helpers/api";
 import validarPermiso from "../../Helpers/permisos";
-import * as validacion from "../../Helpers/validaciones";
 
 export default async () => {
   const app = document.getElementById("app");

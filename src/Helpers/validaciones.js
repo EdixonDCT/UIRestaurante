@@ -28,6 +28,17 @@ export const validarTextoKey = (event) => {
   }
 };
 
+export const validarTextoEspacioKey = (event) => {
+  const key = event.key; // Obtenemos la tecla presionada
+  // Expresión regular que permite letras (con tildes, ñ) y espacios
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/; 
+
+  // Validamos si la tecla no es válida
+  if (!regex.test(key) && !teclasEspeciales.includes(key)) {
+    event.preventDefault(); // Evitamos la acción de la tecla
+  }
+};
+
 // Validación para los campos de número
 export const validarNumeroKey = (event) => {
   const key = event.key; // Obtenemos la tecla presionada

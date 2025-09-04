@@ -8,9 +8,9 @@ import * as caja from '../Views/Caja/index.js'
 import * as pedido from '../Views/Pedido/index.js'
 import * as detallePedido from '../Views/DetallePedido/index.js'
 import * as reserva from "../Views/Reserva/index.js";
-import { IngredienteController } from '../Views/Ingrediente/ingredienteController.js'
-import { PlatilloController } from '../Views/Platillo/platilloController.js'
-import { TrabajadoresController } from '../Views/Trabajadores/trabajadoresController.js'
+import * as ingrediente from '../Views/Ingrediente/index.js'
+import * as platillo from '../Views/Platillo/index.js'
+import * as trabajadores from '../Views/Trabajadores/index.js'
 
 
 export const routes = {
@@ -148,21 +148,112 @@ export const routes = {
     },
   },
   Ingrediente: {
-    path: `Ingrediente/index.html`,
-    controlador: IngredienteController,
-    private: true,
-    can: "Ingrediente.listar",
+    "/": {
+      path: `Ingrediente/index.html`,
+      controlador: ingrediente.IngredienteController,
+      private: true,
+      can: "Ingrediente.listar",
+    },
+    Crear: {
+      path: `Ingrediente/Crear/index.html`,
+      controlador: ingrediente.CrearController,
+      private: true,
+      can: "Ingrediente.crear"
+    }
   },
   Platillo: {
-    path: `Platillo/index.html`,
-    controlador: PlatilloController,
-    private: true,
-    can: "Platillo.listar",
+    "/": {
+      path: `Platillo/index.html`,
+      controlador: platillo.PlatilloController,
+      private: true,
+      can: "Platillo.listar",
+    },
+    CrearComida: {
+      path: `Platillo/CrearComida/index.html`,
+      controlador: platillo.CrearComidaController,
+      private: true,
+      can: "Platillo.crear",
+    },
+    CrearBebida: {
+      path: `Platillo/CrearBebida/index.html`,
+      controlador: platillo.CrearBebidaController,
+      private: true,
+      can: "Platillo.crear",
+    },
+    CrearCoctel: {
+      path: `Platillo/CrearCoctel/index.html`,
+      controlador: platillo.CrearCoctelController,
+      private: true,
+      can: "Platillo.crear",
+    },
+    EditarComida: {
+      path: `Platillo/EditarComida/index.html`,
+      controlador: platillo.EditarComidaController,
+      private: true,
+      can: "Platillo.editar",
+    },
+    EditarBebida: {
+      path: `Platillo/EditarBebida/index.html`,
+      controlador: platillo.EditarBebidaController,
+      private: true,
+      can: "Platillo.editar",
+    },
+    EditarCoctel: {
+      path: `Platillo/EditarCoctel/index.html`,
+      controlador: platillo.EditarCoctelController,
+      private: true,
+      can: "Platillo.editar",
+    },
+    EditarImagenComida: {
+      path: `Platillo/EditarImagenComida/index.html`,
+      controlador: platillo.EditarImagenComidaController,
+      private: true,
+      can: "Platillo.editar",
+    },
+    EditarImagenBebida: {
+      path: `Platillo/EditarImagenBebida/index.html`,
+      controlador: platillo.EditarImagenBebidaController,
+      private: true,
+      can: "Platillo.editar",
+    },
+    EditarImagenCoctel: {
+      path: `Platillo/EditarImagenCoctel/index.html`,
+      controlador: platillo.EditarImagenCoctelController,
+      private: true,
+      can: "Platillo.editar",
+    },
+    AsignarIngredienteComida: {
+      path: `Platillo/AsignarIngredientesComida/index.html`,
+      controlador: platillo.AsignarIngredienteComidaController,
+      private: true,
+      can: "Platillo.editar", // asignar ingredientes también es modificar
+    },
+    AsignarIngredienteCoctel: {
+      path: `Platillo/AsignarIngredientesCoctel/index.html`,
+      controlador: platillo.AsignarIngredienteCoctelController,
+      private: true,
+      can: "Platillo.editar"
+    },
   },
+
   Trabajadores: {
-    path: `Trabajadores/index.html`,
-    controlador: TrabajadoresController,
-    private: true,
-    can: "Trabajadores.listar",
-  },
+    "/": {
+      path: `Trabajadores/index.html`,
+      controlador: trabajadores.TrabajadoresController,
+      private: true,
+      can: "Trabajadores.listar",
+    },
+    Editar: {
+      path: `Trabajadores/Editar/index.html`,
+      controlador: trabajadores.EditarController,
+      private: true,
+      can: "Trabajadores.editar",
+    },
+    EditarImagen: {
+      path: `Trabajadores/EditarImagen/index.html`,
+      controlador: trabajadores.EditarImagenController,
+      private: true,
+      can: "Trabajadores.editar",
+    }
+  }
 };

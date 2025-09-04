@@ -88,7 +88,7 @@ export const alertaTiempo = (tiempo) => {
         },
     });
 };
-export const alertaOpciones = (oficio, nombreApellido) => {
+export const alertaOpciones = (rol, nombreApellido) => {
     return Swal.fire({
         title: `Como desea que sea activado el Trabajador ${nombreApellido}`,
         icon: "question",
@@ -96,9 +96,9 @@ export const alertaOpciones = (oficio, nombreApellido) => {
         showCancelButton: true,
         showConfirmButton: false,
         html: `
-    <button class="swal2-confirm swal2-styled botonOK" id="op1">Activar con Mesero${oficio == "3" ? "(Escojido)" : ""}</button>
-    <button class="swal2-confirm swal2-styled botonOK" id="op2">Activar con Cajero${oficio == "2" ? "(Escojido)" : ""}</button>
-    <button class="swal2-confirm swal2-styled botonOK" id="op3">Activar con Administrador${oficio == "1" ? "(Escojido)" : ""}</button>
+    <button class="swal2-confirm swal2-styled botonOK" id="op1">Activar con Mesero${rol == "3" ? "(Escojido)" : ""}</button>
+    <button class="swal2-confirm swal2-styled botonOK" id="op2">Activar con Cajero${rol == "2" ? "(Escojido)" : ""}</button>
+    <button class="swal2-confirm swal2-styled botonOK" id="op3">Activar con Administrador${rol == "1" ? "(Escojido)" : ""}</button>
   `,
         didOpen: () => {
            document.getElementById('op1').addEventListener('click', () => {

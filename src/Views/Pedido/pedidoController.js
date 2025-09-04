@@ -422,6 +422,7 @@ Método de pago: ${pedido.metodoPago.toUpperCase()}
           );
           pCaja.remove();
           padreTabla.remove();
+          location.reload();
         }
       } else if (facturacion.Error) {
         await alertaError(facturacion.Error);

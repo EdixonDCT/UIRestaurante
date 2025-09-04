@@ -76,7 +76,7 @@ export default async () => {
     // Checkbox
     const check = document.createElement("input");
     check.type = "checkbox";
-    check.classList.add("cambiarEstado");
+    check.classList.add("cambiarEstadoMesa");
     check.id = `cambiarEstado-${mesa.numero}`;
     check.dataset.id = mesa.numero;
     if (mesa.disponible === "1") check.checked = true;
@@ -136,7 +136,7 @@ export default async () => {
   }
 
   window.addEventListener("click", async (e) => {
-    if (e.target.matches(".cambiarEstado")) cambiarEstado(e);
+    if (e.target.matches(".cambiarEstadoMesa")) cambiarEstado(e);
     else if (e.target.matches("#BotonEliminarMesa")) EliminarMesa(e);
     else if (e.target.matches("#BotonEditarMesa")) window.location.href = `#/Mesa/Editar/id=${e.target.value}`;
     else if (e.target.matches("#BotonCrearMesa")) window.location.href = `#/Mesa/Crear`;

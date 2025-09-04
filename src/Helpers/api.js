@@ -138,11 +138,23 @@ export const imagen = (foto) => {
   return imagenApi;
 }
 
+export const imagendel = async (endpoint) => {
+  const respuesta = await fetch(url + endpoint, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${window.localStorage.getItem("token")}`
+    }
+  });
+  let datos = await respuesta.text();
+  return datos;
+}
+
 export const postPublic = async (endpoint, objeto) => {
   const respuesta = await fetch(url + endpoint, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(objeto)
   });

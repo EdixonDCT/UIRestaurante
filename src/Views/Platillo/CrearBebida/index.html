@@ -1,0 +1,45 @@
+<div class="titulos">
+  <p>Crear Bebida</p>
+</div>
+<form class="form" method="post">
+  <div class="input">
+    <label>Nombre de la Bebida:</label>
+    <input class="nombre" type="text" placeholder="Ingrese el nombre de la Bebida" autocomplete="off" name="nombre">
+  </div>
+  <div class="input">
+    <label>Precio:</label>
+    <input class="precio" type="text" placeholder="Ingrese el precio de la Bebida" autocomplete="off" name="precio">
+  </div>
+  <div class="input">
+    <label>Tipo de Bebida:</label>
+    <select class="comboTipo" name="Tipo de Bebida">
+      <option value="0" hidden>Seleccione el tipo de Bebida</option>
+      <option value="fruta">Fruta</option>
+      <option value="caliente">Caliente</option>
+      <option value="gaseosa">Gaseosa</option>
+      <option value="natural">Natural</option>
+      <option value="otro">Otro</option>
+    </select>
+  </div>
+  <div class="input">
+    <label>Unidad de Bebida:</label>
+    <select class="comboUnidad" name="Unidad de Bebida">
+      <option value="0" hidden>Seleccione la Unidad de Bebida</option>
+      <option value="Vaso">Vaso</option>
+      <option value="Taza">Taza</option>
+      <option value="Botella">Botella</option>
+      <option value="otro">Otro</option>
+    </select>
+  </div>
+  <div class="inputFoto">
+    <img src="../../../../public/bebida.png" alt="imagenPlatillo" id="imagenPlatillo">
+    <div>
+      <label>Fotografía:</label>
+      <label class="boton" class="ArchivoFoto" for="ArchivoFoto">Seleccionar Fotografia</label>
+      <input class="boton" type="file" id="ArchivoFoto" name="foto">
+      <span id="ArchivoEstado">Ningún archivo seleccionado</span>
+      <a class="boton" id="borrarImagen">Eliminar Fotografía</a>
+    </div>
+  </div>
+  <button class="boton" type="submit">Crear Bebida</button>
+</form>

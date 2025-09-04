@@ -64,7 +64,7 @@ export default async () => {
         };
         const crearPedidoConReserva = await api.post("pedidos/reserva", objetoPedidoReserva);
         if (crearPedidoConReserva.Ok) {
-          alertaOK(creado.Ok);
+          await alertaOK(creado.Ok);
           window.location.href = '#/Reserva';
         }
         if (crearPedidoConReserva.Error) {
