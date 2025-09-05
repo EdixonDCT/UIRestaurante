@@ -16,22 +16,9 @@ export const SignupController = () => {
   const fecha = document.querySelector(".fecha"); // Input de fecha de nacimiento
   const contrasena = document.querySelector(".contrasena"); // Input de contraseña
   const contrasenaConfirm = document.querySelector(".contrasenaConfirmar"); // Confirmación de contraseña
-  const comboRoles = document.querySelector(".comboRoles"); // Select de roles
   const inputPerfil = document.getElementById("ArchivoFoto"); // Input de archivo de imagen
   const imagenPerfil = document.getElementById("imagenPerfil"); // Imagen de vista previa
   const spanImagen = document.getElementById("ArchivoEstado"); // Texto que indica estado de la imagen
-
-  // Función para rellenar el select de roles desde la API
-  const rellenarRoles = async () => {
-    const roles = await api.getPublic("roles"); // Obtener lista de roles
-    roles.forEach(rol => {
-      let option = document.createElement("option"); // Crear un elemento <option>
-      option.value = rol.id; // Valor del option = id del rol
-      option.textContent = rol.nombre; // Texto visible = nombre del rol
-      comboRoles.appendChild(option); // Agregar el option al select
-    });
-  }
-  rellenarRoles(); // Ejecutamos la función para llenar el select al cargar el controlador
 
   // Función para mostrar la vista previa de la imagen seleccionada
   const vistaPreviaImg = (e) => {
@@ -81,7 +68,6 @@ export const SignupController = () => {
   contrasenaConfirm.addEventListener("blur", () => { validacion.quitarError(contrasenaConfirm.parentElement) });
   contrasenaConfirm.addEventListener("keydown", (e) => { validacion.validarLimiteKey(e, 20) });
 
-  comboRoles.addEventListener("blur", () => { validacion.quitarError(comboRoles.parentElement) });
   inputPerfil.addEventListener("blur", () => { validacion.quitarError(inputPerfil.parentElement) });
   inputPerfil.addEventListener("change", vistaPreviaImg); // Actualiza preview cuando se selecciona archivo
 
@@ -100,11 +86,10 @@ export const SignupController = () => {
     let validarFecha = validacion.validarMayorEdad(fecha); // Mayor de edad
     let validarContrasena = validacion.validarContrasena(contrasena); // Contraseña válida
     let validarIgualdad = validacion.validarContrasenaIgual(contrasenaConfirm, contrasena); // Contraseñas coinciden
-    let validarRol = validacion.validarCampo(comboRoles); // Rol seleccionado
     let validarImagen = validacion.validarImagen(inputPerfil); // Imagen cargada
 
     // Si todas las validaciones son correctas
-    if (validarCedula && validarNombre && validarApellido && validarFecha && validarContrasena && validarIgualdad && validarRol && validarImagen) {
+    if (validarCedula && validarNombre && validarApellido && validarFecha && validarContrasena && validarIgualdad && validarImagen) {
       // Crear objeto con los datos del usuario
       const objetoLogin = {
         cedula: cedula.value,
@@ -112,7 +97,6 @@ export const SignupController = () => {
         apellido: apellido.value,
         nacimiento: fecha.value,
         contrasena: contrasena.value,
-        idRol: comboRoles.value
       }
 
       // Enviar datos del usuario a la API

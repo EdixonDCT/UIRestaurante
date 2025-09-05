@@ -36,9 +36,10 @@ export default () => {
 
         if (validarMontoCierre) {
             // Crear objeto con datos para enviar a la API
-            const objetoCaja = {
-                montoCierre: montoCierre.value // Valor ingresado en el input
-            }
+          const objetoCaja = {
+            cedulaTrabajador: window.localStorage.getItem("cedula"),
+            montoCierre: montoCierre.value, // Valor ingresado en el input
+          };
 
             // Llamada a la API para actualizar el cierre de la caja
             const parchear = await api.patch(`caja/${id}`, objetoCaja);

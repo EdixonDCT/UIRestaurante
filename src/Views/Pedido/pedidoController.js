@@ -56,7 +56,8 @@ export default async () => {
     "ID Caja",
     "No.Mesa",
     "No.Clientes",
-    "Cli.Correo",
+    "CC.Cliente",
+    "Nombre Cliente",
     "Reserva",
     "Método de Pago",
     "Total",
@@ -71,7 +72,8 @@ export default async () => {
     "ID Caja",
     "No.Mesa",
     "No.Clientes",
-    "Cli.Correo",
+    "CC.Cliente",
+    "Nombre Cliente",
     "Reserva",
     "Método de Pago",
     "Total",
@@ -100,10 +102,11 @@ export default async () => {
 
   data.forEach((pedido) => {
     // ================== SIN FACTURAR ==================
+    console.log(pedido);
     if (pedido.facturado == "0" && pedido.metodoPago && pedido.idCaja) {
       contadorSinFactura++;
       const fila = document.createElement("tr");
-
+    
       const celdas = [
         pedido.id,
         pedido.fecha,
@@ -111,7 +114,8 @@ export default async () => {
         pedido.idCaja,
         `#${pedido.numeroMesa}`,
         pedido.numeroClientes,
-        pedido.correoCliente,
+        pedido.cedulaUsuario,
+        pedido.nombreApellidoCliente,
         pedido.idReserva || "-",
         pedido.metodoPago,
         `${pedido.valorTotal}$`,
@@ -193,7 +197,8 @@ export default async () => {
           pedido.idCaja,
           `#${pedido.numeroMesa}`,
           pedido.numeroClientes,
-          pedido.correoCliente,
+          pedido.cedulaUsuario,
+          pedido.nombreApellidoCliente,
           pedido.idReserva || "-",
           pedido.metodoPago,
           `${pedido.valorTotal}$`,
@@ -382,7 +387,9 @@ export default async () => {
 Fecha: ${pedido.fecha}
 Hora: ${pedido.hora}
 Mesa: ${pedido.numeroMesa}
-Cajero: ${caja.nombreCajero}
+Cajero: ${caja.nombreApellidoTrabajador}
+CC.Cliente: ${pedido.cedulaUsuario}
+Cliente: ${pedido.nombreApellidoCliente}
 ------------------------------------
 ${cuerpoFactura}------------------------------------
 Subtotal:                  $${subtotal.toLocaleString()}

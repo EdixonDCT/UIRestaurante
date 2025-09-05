@@ -16,7 +16,7 @@ export default async () => {
   const numeroMesa = document.querySelector(".numeroMesa");
   const idCaja = document.querySelector(".idCaja");
   const numeroClientes = document.querySelector(".numeroClientes");
-  const correoCliente = document.querySelector(".correoCliente");
+  const cedulaCliente = document.querySelector(".cedulaCliente");
   const metodoPago = document.querySelector(".metodoPago");
 
   // Lista para almacenar las mesas disponibles
@@ -59,7 +59,7 @@ export default async () => {
   const traerDatos = await api.get(`pedidos/${id}`);
   idCaja.value = traerDatos.idCaja;
   numeroClientes.value = traerDatos.numeroClientes;
-  correoCliente.value = traerDatos.correoCliente;
+  cedulaCliente.value = traerDatos.cedulaUsuario;
   metodoPago.value = traerDatos.metodoPago;
 
   // Verifica si la mesa original del pedido sigue disponible
@@ -81,8 +81,13 @@ export default async () => {
     validacion.validarNumeroKey(e); // Solo números
     validacion.validarLimiteKey(e, 2); // Máx 2 dígitos
   });
-  correoCliente.addEventListener("blur", () => { validacion.quitarError(correoCliente.parentElement) });
-  correoCliente.addEventListener("keydown", (e) => { validacion.validarLimiteKey(e, 30); });
+  cedulaCliente.addEventListener("blur", () => {
+    validacion.quitarError(cedulaCliente.parentElement);
+  });
+  cedulaCliente.addEventListener("keydown", (e) => {
+    validacion.validarNumeroKey(e)
+    validacion.validarLimiteKey(e, 10);
+  });
   metodoPago.addEventListener("blur", () => { validacion.quitarError(metodoPago.parentElement) });
 
   // Evento submit para actualizar el pedido
@@ -93,18 +98,18 @@ export default async () => {
     let validarNumeroMesa = validacion.validarCampo(numeroMesa);
     let validaridCaja = validacion.validarCampo(idCaja);
     let validarNumeroClientes = validacion.validarCampo(numeroClientes);
-    let validarCorreoCliente = validacion.validarCorreo(correoCliente);
+    let validarCedulaCliente = validacion.validarCantidad(cedulaCliente,6);
     let validarMetodoPago = validacion.validarCampo(metodoPago);
 
     // Si todos los campos son válidos
-    if (validarNumeroMesa && validaridCaja && validarNumeroClientes && validarCorreoCliente && validarMetodoPago) {
+    if (validarNumeroMesa && validaridCaja && validarNumeroClientes && validarCedulaCliente && validarMetodoPago) {
       const objetoPedido = {
         numeroMesa: numeroMesa.value,
         idCaja: idCaja.value,
         numeroClientes: numeroClientes.value,
-        correoCliente: correoCliente.value,
-        metodoPago: metodoPago.value
-      }
+        cedulaUsuario: cedulaCliente.value,
+        metodoPago: metodoPago.value,
+      };
 
       // Actualiza el pedido en la API
       const creado = await api.put(`pedidos/${id}`, objetoPedido);

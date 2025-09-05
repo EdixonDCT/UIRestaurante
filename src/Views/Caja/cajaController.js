@@ -48,7 +48,7 @@ export default async () => {
   const headersCerradas = [
     "ID", "Fecha Apertura", "Hora Apertura", "Monto Apertura",
     "Fecha Cierre", "Hora Cierre", "Monto Cierre",
-    "Cédula Trabajador", "Nombre Cajero"
+    "Cédula Trabajador", "Nombre Trabajador"
   ];
   if (editar) headersCerradas.push("Acciones"); // Añadir columna acciones si puede editar
   headersCerradas.forEach(text => {
@@ -76,17 +76,17 @@ export default async () => {
   let contadorCajaAbierta = 0; // Contador para ocultar tabla si no hay cajas abiertas
 
   data.forEach(caja => {
+    console.log(caja);
     if (!caja.fechaCierre && !caja.horaCierre && !caja.montoCierre) {
       // ------------------- FILA CAJA ABIERTA -------------------
       const row = document.createElement("tr");
-
       const celdas = [
         caja.id,
         caja.fechaApertura || "-",
         caja.horaApertura || "-",
         caja.montoApertura || "-",
         caja.cedulaTrabajador,
-        caja.nombreCajero
+        caja.nombreApellidoTrabajador,
       ];
 
       // Llenar celdas de la fila
@@ -145,7 +145,7 @@ export default async () => {
         caja.horaCierre || "-",
         caja.montoCierre || "-",
         caja.cedulaTrabajador,
-        caja.nombreCajero
+        caja.nombreApellidoTrabajador,
       ];
 
       celdas.forEach(valor => {

@@ -9,85 +9,78 @@ import * as validacion from "../../../Helpers/validaciones";
 
 // Exporta por defecto una función anónima que contiene toda la lógica del formulario
 export default () => {
-    // Obtiene el formulario del DOM
-    const form = document.querySelector(".form");
+  // Obtiene el formulario del DOM
+  const form = document.querySelector(".form");
 
-    // Obtiene los campos de entrada (inputs) del DOM
-    const correo = document.querySelector(".correo");
-    const cedula = document.querySelector(".cedula");
-    const telefono = document.querySelector(".telefono");
-  
-    // Evento blur para quitar errores cuando el usuario sale del input de correo
-    correo.addEventListener("blur", () => { 
-        validacion.quitarError(correo.parentElement) 
-    });
+  // Obtiene los campos de entrada (inputs) del DOM
+  const cedula = document.querySelector(".cedula");
+  const nombre = document.querySelector(".nombre");
+  const apellido = document.querySelector(".apellido");
 
-    // Evento keydown para limitar el correo a 30 caracteres
-    correo.addEventListener("keydown", (e) => {
-        validacion.validarLimiteKey(e, 30);
-    });
+  // Evento blur para quitar errores cuando el usuario sale del input de correo
+  cedula.addEventListener("blur", () => {
+    validacion.quitarError(cedula.parentElement);
+  });
 
-    // Evento blur para quitar errores cuando el usuario sale del input de cédula
-    cedula.addEventListener("blur", () => { 
-        validacion.quitarError(cedula.parentElement) 
-    });
+  // Evento keydown para limitar el correo a 30 caracteres
+  cedula.addEventListener("keydown", (e) => {
+    validacion.validarNumeroKey(e);
+    validacion.validarLimiteKey(e, 10);
+  });
 
-    // Evento keydown para permitir solo números y limitar la cédula a 10 dígitos
-    cedula.addEventListener("keydown", (e) => {
-        validacion.validarNumeroKey(e);
-        validacion.validarLimiteKey(e, 10);
-    });
+  // Evento blur para quitar errores cuando el usuario sale del input de cédula
+  nombre.addEventListener("blur", () => {
+    validacion.quitarError(nombre.parentElement);
+  });
 
-    // Evento blur para quitar errores cuando el usuario sale del input de teléfono
-    telefono.addEventListener("blur", () => { 
-        validacion.quitarError(telefono.parentElement) 
-    });
+  // Evento keydown para permitir solo números y limitar la cédula a 10 dígitos
+  nombre.addEventListener("keydown", (e) => {
+    validacion.validarTextoKey(e);
+    validacion.validarLimiteKey(e, 20);
+  });
 
-    // Evento keydown para permitir solo números y limitar el teléfono a 10 dígitos
-    telefono.addEventListener("keydown", (e) => {
-        validacion.validarNumeroKey(e);
-        validacion.validarLimiteKey(e, 10);
-    });
+  // Evento blur para quitar errores cuando el usuario sale del input de teléfono
+  apellido.addEventListener("blur", () => {
+    validacion.quitarError(apellido.parentElement);
+  });
 
-    // Evento submit del formulario
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault(); // Evita que se recargue la página al enviar el formulario
+  // Evento keydown para permitir solo números y limitar el teléfono a 10 dígitos
+  apellido.addEventListener("keydown", (e) => {
+    validacion.validarTextoKey(e);
+    validacion.validarLimiteKey(e, 20);
+  });
 
-        // Valida el correo con la función de validación específica
-        let validarCorreo = validacion.validarCorreo(correo);
+  // Evento submit del formulario
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // Evita que se recargue la página al enviar el formulario
 
-        // Inicialmente se asume que cédula y teléfono son válidos
-        let validarCedula = true;
-        let validarTelefono = true;
+    // Valida el correo con la función de validación específica
+    let validarCedula = validacion.validarCantidad(cedula, 6); // Verificar que tenga al menos 6 dígitos
+    let validarNombre = validacion.validarCampo(nombre); // No vacío
+    let validarApellido = validacion.validarCampo(apellido);
 
-        // Si se ingresaron valores en cédula y teléfono, se validan sus campos
-        if (cedula.value != "" && telefono.value != "") {
-            validarCedula = validacion.validarCampo(cedula);
-            validarTelefono = validacion.validarCampo(telefono);
-        }
+    // Si todas las validaciones pasan, se prepara el objeto a enviar a la API
+    if (validarCedula && validarNombre && validarApellido) {
+      const objetoCliente = {
+        cedula: cedula.value,
+        nombre: nombre.value,
+        apellido: apellido.value,
+      };
 
-        // Si todas las validaciones pasan, se prepara el objeto a enviar a la API
-        if (validarCorreo && validarCedula && validarTelefono) {
-            const objetoMesa = {
-                correo: correo.value,
-                cedula: cedula.value,
-                telefono: telefono.value,
-            };
+      // Envía los datos a la API para crear un nuevo cliente
+      const creado = await api.post("clientes", objetoCliente);
 
-            // Envía los datos a la API para crear un nuevo cliente
-            const creado = await api.post("clientes", objetoMesa);
+      // Si la API devuelve un error, se muestra en pantalla
+      if (creado.Error) {
+        alertaError(creado.Error);
+        return;
+      }
 
-            // Si la API devuelve un error, se muestra en pantalla
-            if (creado.Error) {
-                alertaError(creado.Error);
-                return;
-            }
-
-            // Si la API devuelve éxito, se muestra alerta y se redirige a la página de pedidos
-            if (creado.Ok) {
-                await alertaOK(creado.Ok);
-                window.location.href = '#/Pedido';
-            }
-        }
-    })
-}
+      // Si la API devuelve éxito, se muestra alerta y se redirige a la página de pedidos
+      if (creado.Ok) {
+        await alertaOK(creado.Ok);
+        window.location.href = "#/Pedido";
+      }
+    }
+  });
+};

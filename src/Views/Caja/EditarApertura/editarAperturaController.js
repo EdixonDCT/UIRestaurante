@@ -37,7 +37,10 @@ export default async() => {
 
         if (validarMontoApertura) {
             // OBJETO A ENVIAR A LA API
-            const objetoCaja = { montoApertura: montoApertura.value };
+          const objetoCaja = {
+            cedulaTrabajador: window.localStorage.getItem("cedula"),
+            montoApertura: montoApertura.value,
+          };
 
             // LLAMADA A LA API PARA ACTUALIZAR EL MONTO DE APERTURA
             const parchear = await api.patch(`caja/apertura/${id}`, objetoCaja);

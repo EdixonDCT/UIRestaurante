@@ -15,7 +15,7 @@ export default () => {
   const numeroMesa = document.querySelector(".numeroMesa");
   const idCaja = document.querySelector(".idCaja");
   const numeroClientes = document.querySelector(".numeroClientes");
-  const correoCliente = document.querySelector(".correoCliente");
+  const cedulaCliente = document.querySelector(".cedulaCliente");
   const metodoPago = document.querySelector(".metodoPago");
 
   // Función para rellenar el select de mesas disponibles
@@ -51,7 +51,7 @@ export default () => {
   numeroMesa.addEventListener("blur", () => { validacion.quitarError(numeroMesa.parentElement) });
   idCaja.addEventListener("blur", () => { validacion.quitarError(idCaja.parentElement) });
   numeroClientes.addEventListener("blur", () => { validacion.quitarError(numeroClientes.parentElement) });
-  correoCliente.addEventListener("blur", () => { validacion.quitarError(correoCliente.parentElement) });
+  cedulaCliente.addEventListener("blur", () => { validacion.quitarError(cedulaCliente.parentElement); });
   metodoPago.addEventListener("blur", () => { validacion.quitarError(metodoPago.parentElement) });
 
   // Validación mientras se escribe
@@ -59,8 +59,9 @@ export default () => {
     validacion.validarNumeroKey(e); // Solo números
     validacion.validarLimiteKey(e, 2); // Máx 2 dígitos
   });
-  correoCliente.addEventListener("keydown", (e) => {
-    validacion.validarLimiteKey(e, 30); // Máx 30 caracteres
+  cedulaCliente.addEventListener("keydown", (e) => {
+    validacion.validarNumeroKey(e); // Solo números
+    validacion.validarLimiteKey(e, 10); // Máx 30 caracteres
   });
 
   // Evento submit del formulario
@@ -71,18 +72,18 @@ export default () => {
     let validarNumeroMesa = validacion.validarCampo(numeroMesa);
     let validaridCaja = validacion.validarCampo(idCaja);
     let validarNumeroClientes = validacion.validarCampo(numeroClientes);
-    let validarCorreoCliente = validacion.validarCorreo(correoCliente);
+    let validarCedulaCliente = validacion.validarCantidad(cedulaCliente, 6);
     let validarMetodoPago = validacion.validarCampo(metodoPago);
 
-    if (validarNumeroMesa && validaridCaja && validarNumeroClientes && validarCorreoCliente && validarMetodoPago) {
+    if (validarNumeroMesa && validaridCaja && validarNumeroClientes && validarCedulaCliente && validarMetodoPago) {
       // Construye el objeto del nuevo pedido
       const objetoPedido = {
         numeroMesa: numeroMesa.value,
         idCaja: idCaja.value,
         numeroClientes: numeroClientes.value,
-        correoCliente: correoCliente.value,
-        metodoPago: metodoPago.value
-      }
+        cedulaUsuario: cedulaCliente.value,
+        metodoPago: metodoPago.value,
+      };
 
       // Llama a la API para crear el pedido
       const creado = await api.post("pedidos", objetoPedido);
