@@ -88,7 +88,7 @@ export const alertaTiempo = (tiempo) => { // Exporta función para mostrar alert
         },
     });
 };
-export const alertaOpciones = (rol, nombreApellido) => { // Exporta función para mostrar opciones de activación
+export const alertaOpciones = (nombreApellido) => { // Exporta función para mostrar opciones de activación
     return Swal.fire({ // Retorna la alerta
         title: `Como desea que sea activado el Trabajador ${nombreApellido}`, // Título dinámico con el nombre
         icon: "question", // Ícono de pregunta
@@ -96,19 +96,19 @@ export const alertaOpciones = (rol, nombreApellido) => { // Exporta función par
         showCancelButton: true, // Muestra botón cancelar
         showConfirmButton: false, // Oculta botón confirmar por defecto
         html: `
-    <button class="swal2-confirm swal2-styled botonOK" id="op1">Activar con Mesero${rol == "3" ? "(Escojido)" : ""}</button>
-    <button class="swal2-confirm swal2-styled botonOK" id="op2">Activar con Cajero${rol == "2" ? "(Escojido)" : ""}</button>
-    <button class="swal2-confirm swal2-styled botonOK" id="op3">Activar con Administrador${rol == "1" ? "(Escojido)" : ""}</button>
+    <button class="swal2-confirm swal2-styled botonOK" id="op1">Activar con Mesero</button>
+    <button class="swal2-confirm swal2-styled botonOK" id="op2">Activar con Cajero</button>
+    <button class="swal2-confirm swal2-styled botonOK" id="op3">Activar con Administrador</button>
   `,
         didOpen: () => { // Al abrir la alerta
            document.getElementById('op1').addEventListener('click', () => { // Evento click en opción 1
-                Swal.close({ isDismissed: true, opcion: '3' }); // Cierra alerta con opción 3
+                Swal.close({ isDismissed: true, opcion: '5' }); // Cierra alerta con opción 3
             });
             document.getElementById('op2').addEventListener('click', () => { // Evento click en opción 2
-                Swal.close({ isDismissed: true, opcion: '2' }); // Cierra alerta con opción 2
+                Swal.close({ isDismissed: true, opcion: '4' }); // Cierra alerta con opción 2
             });
             document.getElementById('op3').addEventListener('click', () => { // Evento click en opción 3
-                Swal.close({ isDismissed: true, opcion: '1' }); // Cierra alerta con opción 1
+                Swal.close({ isDismissed: true, opcion: '3' }); // Cierra alerta con opción 1
             });
         },
         customClass: { // Personalización de clases

@@ -15,25 +15,7 @@ export default async () => {
     const nombre = document.querySelector(".nombre");
     const apellido = document.querySelector(".apellido");
     const fecha = document.querySelector(".fecha");
-    const contrasena = document.querySelector(".contrasena");
-    const contrasenaConfirm = document.querySelector(".contrasenaConfirmar");
-    const comboRoles = document.querySelector(".comboRoles");
-
-    // Función para rellenar el select de roles
-    const rellenarRoles = async () => {
-        const roles = await api.getPublic("roles")
-        roles.forEach(rol => {
-            let option = document.createElement("option");
-            option.value = rol.id;
-            option.textContent = rol.nombre;
-            comboRoles.appendChild(option);
-        });
-    }
-    await rellenarRoles();
-
-    // Obtiene id del trabajador desde la URL
-    const hash = location.hash.slice(1);
-    const [url, id] = hash.split("=");
+    const id = window.localStorage.getItem("cedula")
 
     // Trae los datos del trabajador
     const traerDatos = await api.get(`trabajadores/${id}`);
@@ -41,9 +23,6 @@ export default async () => {
     nombre.value = traerDatos.nombre;
     apellido.value = traerDatos.apellido;
     fecha.value = traerDatos.nacimiento;
-    contrasena.value = traerDatos.contrasena;
-    contrasenaConfirm.value = traerDatos.contrasena;
-    comboRoles.value = traerDatos.idRol;
 
     // Eventos de validación
     nombre.addEventListener("blur", () => { validacion.quitarError(nombre.parentElement) });
@@ -57,39 +36,29 @@ export default async () => {
         validacion.validarLimiteKey(e, 20);
     });
     fecha.addEventListener("blur", () => { validacion.quitarError(fecha.parentElement) });
-    contrasena.addEventListener("blur", () => { validacion.quitarError(contrasena.parentElement) });
-    contrasena.addEventListener("keydown", (e) => { validacion.validarLimiteKey(e, 20); });
-    contrasenaConfirm.addEventListener("blur", () => { validacion.quitarError(contrasenaConfirm.parentElement) });
-    contrasenaConfirm.addEventListener("keydown", (e) => { validacion.validarLimiteKey(e, 20); });
-    comboRoles.addEventListener("blur", () => { validacion.quitarError(comboRoles.parentElement) });
-
     // Evento submit del formulario
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         let validarNombre = validacion.validarCampo(nombre);
         let validarApellido = validacion.validarCampo(apellido);
         let validarFecha = validacion.validarMayorEdad(fecha);
-        let validarContrasena = validacion.validarContrasena(contrasena);
-        let validarIgualdad = validacion.validarContrasenaIgual(contrasenaConfirm, contrasena);
-        let validarRol = validacion.validarCampo(comboRoles);
 
-        if (validarNombre && validarApellido && validarFecha && validarContrasena && validarIgualdad && validarRol) {
+        if (validarNombre && validarApellido && validarFecha) {
             // Objeto para actualizar
             const objetoActualizado = {
                 nombre: nombre.value,
                 apellido: apellido.value,
                 nacimiento: fecha.value,
-                contrasena: contrasena.value,
-                idRol: comboRoles.value
             }
             // Llamada a la API para actualizar
-            const actualizacion = await api.put(`trabajadores/${cedula.value}`, objetoActualizado);
+            const actualizacion = await api.put(`trabajadores/${id}`, objetoActualizado);
             if (actualizacion.Error) {
                 alertaError(actualizacion.Error);
                 return;
             } else {
                 await alertaOK(actualizacion.Ok);
-                window.location.href = '#/Trabajadores';
+                window.localStorage.setItem("nombreApellido",`${nombre.value} ${apellido.value}`);
+                window.location.href = '#/Trabajadores'; 
             }
         }
     })

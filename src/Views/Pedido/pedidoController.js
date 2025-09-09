@@ -440,38 +440,54 @@ Método de pago: ${pedido.metodoPago.toUpperCase()}
     const disponibles = { disponible: "1" };
     await api.patch(`mesas/${id}`, disponibles);
   };
-  const eliminadoSuavePedido = async (e) => {
-    console.log(e.target);
-    const id = e.target.value;
-    const eliminado = e.target.dataset.idEliminado;
-    if (eliminado == "0") {
-      const eliminadoSuaveSi = await api.patch(`pedidos/eliminadosi/${id}`);
-      if (eliminadoSuaveSi.Ok) {
-        await alertaOK(eliminadoSuaveSi.Ok);
-        e.target.dataset.idEliminado = "1";
-        e.target.textContent = "Incluir";
-        let padre = e.target.parentElement.parentElement.parentElement;
-        let textoEliminado = padre.querySelector(":nth-last-child(2)");
-        textoEliminado.textContent = "Si";
-      }
-      if (eliminadoSuaveSi.Error) {
-        await alertaOK(eliminadoSuaveSi.Error);
-      }
-    } else if (eliminado == "1") {
-      const eliminadoSuaveNo = await api.patch(`pedidos/eliminadono/${id}`);
-      if (eliminadoSuaveNo.Ok) {
-        await alertaOK(eliminadoSuaveNo.Ok);
-        e.target.dataset.idEliminado = "0";
-        e.target.textContent = "Eliminado";
-        let padre = e.target.parentElement.parentElement.parentElement;
-        let textoEliminado = padre.querySelector(":nth-last-child(2)");
-        textoEliminado.textContent = "No";
-      }
-      if (eliminadoSuaveNo.Error) {
-        await alertaOK(eliminadoSuaveNo.Error);
-      }
+const eliminadoSuavePedido = async (e) => {
+  const id = e.target.value;
+  const eliminado = e.target.dataset.idEliminado;
+
+  // Mensaje según el estado actual
+  const mensaje =
+    eliminado == "0"
+      ? `¿Desea marcar como eliminado el pedido con ID ${id}?`
+      : `¿Desea incluir nuevamente el pedido con ID ${id}?`;
+
+  const respuesta = await alertaPregunta(mensaje);
+  if (!respuesta.isConfirmed) {
+    return; // No hacer nada si cancela
+  }
+
+  if (eliminado == "0") {
+    // Marcar como eliminado
+    const eliminadoSuaveSi = await api.patch(`pedidos/eliminadosi/${id}`);
+    if (eliminadoSuaveSi.Ok) {
+      await alertaOK(eliminadoSuaveSi.Ok);
+      e.target.dataset.idEliminado = "1";
+      e.target.textContent = "Incluir";
+
+      let padre = e.target.parentElement.parentElement.parentElement;
+      let textoEliminado = padre.querySelector(":nth-last-child(2)");
+      textoEliminado.textContent = "Si";
     }
-  };
+    if (eliminadoSuaveSi.Error) {
+      await alertaError(eliminadoSuaveSi.Error);
+    }
+  } else if (eliminado == "1") {
+    // Incluir nuevamente
+    const eliminadoSuaveNo = await api.patch(`pedidos/eliminadono/${id}`);
+    if (eliminadoSuaveNo.Ok) {
+      await alertaOK(eliminadoSuaveNo.Ok);
+      e.target.dataset.idEliminado = "0";
+      e.target.textContent = "Eliminado";
+
+      let padre = e.target.parentElement.parentElement.parentElement;
+      let textoEliminado = padre.querySelector(":nth-last-child(2)");
+      textoEliminado.textContent = "No";
+    }
+    if (eliminadoSuaveNo.Error) {
+      await alertaError(eliminadoSuaveNo.Error);
+    }
+  }
+};
+
   app.append(
     tituloSinFactura,
     tablaSinFactura,

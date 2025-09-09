@@ -247,13 +247,19 @@ export const routes = { // Objeto con todas las rutas del sistema
       path: `Trabajadores/Editar/index.html`,
       controlador: trabajadores.EditarController,
       private: true,
-      can: "Trabajadores.editar",
+      can: "Trabajadores.listar",
     },
     EditarImagen: {
       path: `Trabajadores/EditarImagen/index.html`,
       controlador: trabajadores.EditarImagenController,
       private: true,
-      can: "Trabajadores.editar",
+      can: "Trabajadores.listar",
+    }
+    ,EditarContrasena: {
+      path: `Trabajadores/EditarContrasena/index.html`,
+      controlador: trabajadores.editarContrasenaController,
+      private: true,
+      can: "Trabajadores.listar",
     }
   }
 };

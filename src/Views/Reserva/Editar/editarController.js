@@ -18,7 +18,7 @@ export default async () => {
   // ==================== Obtener ID desde el hash de la URL ====================
   const hash = location.hash.slice(1);
   const [url, id] = hash.split("=");
-
+  
   // ==================== Traer datos existentes de la reserva ====================
   const traerDatos = await api.get(`reservas/${id}`);
   idReserva.value = traerDatos.id; // Mostrar el ID en el input

@@ -16,9 +16,8 @@ export default async () => {
   const imagenPerfil = document.getElementById("imagenUsuario");
   const spanImagen = document.getElementById("ArchivoEstado");
 
-  // Obtiene el id del trabajador desde la URL
-  const hash = location.hash.slice(1);
-  const [url, id] = hash.split("=");
+  // Obtiene el id del trabajador desde el localstorage
+  const id = window.localStorage.getItem("cedula")
 
   // Traer datos del trabajador
   const traerDatos = await api.get(`trabajadores/${id}`);
@@ -63,12 +62,13 @@ export default async () => {
       const imagen = await api.postImagen(inputPerfil);
       const bodyImagen = { foto: imagen.nombre }
       // Borrar imagen anterior
-      const borarImagen = await api.imagendel(`imagen/${traerDatos.foto}`);
+      await api.imagendel(`imagen/${traerDatos.foto}`);
       // Actualizar trabajador con nueva foto
       const subidaFoto = await api.patch(`trabajadores/${id}`, bodyImagen)
       if (subidaFoto.Ok) {
         await alertaTiempo(5000);
         await alertaOK(subidaFoto.Ok);
+        window.localStorage.setItem("fotoPerfil", imagen.nombre);
         window.location.href = '#/Trabajadores';
       }
     }

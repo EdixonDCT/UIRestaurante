@@ -120,19 +120,32 @@ export default async () => {
   app.appendChild(table);
 
   // Función para cambiar el estado de disponibilidad de la mesa
-  const cambiarEstado = async (e) => {
-    let id = e.target.dataset.id;
-    let valor = e.target.checked ? "1" : "0";
-    let checkbox = document.querySelector(`[data-valor-id="${id}"]`);
-    let labelBoton = document.querySelector(`[boton-id="${id}"]`);
-    const disponibles = { disponible: valor };
-    const estado = await api.patch(`mesas/${id}`, disponibles);
-    if (estado.Ok) {
-      checkbox.textContent = e.target.checked ? "Si" : "Ocupado";
-      labelBoton.classList = e.target.checked ? "checkboxTrue" : "checkboxFalse";
-      labelBoton.textContent = e.target.checked ? "Disponible" : "Ocupado";
-    }
+const cambiarEstado = async (e) => {
+  const checkboxInput = e.target; // el input checkbox que disparó el evento
+  const respuesta = await alertaPregunta(`¿Desea cambiar el estado de la mesa con ID ${checkboxInput.dataset.id}?`);
+
+  if (!respuesta.isConfirmed) {
+    // Revertir el cambio si canceló
+    checkboxInput.checked = !checkboxInput.checked;
+    return;
   }
+
+  let id = checkboxInput.dataset.id;
+  let valor = checkboxInput.checked ? "1" : "0";
+
+  let checkbox = document.querySelector(`[data-valor-id="${id}"]`);
+  let labelBoton = document.querySelector(`[boton-id="${id}"]`);
+
+  const disponibles = { disponible: valor };
+  const estado = await api.patch(`mesas/${id}`, disponibles);
+
+  if (estado.Ok) {
+    checkbox.textContent = checkboxInput.checked ? "Si" : "Ocupado";
+    labelBoton.classList = checkboxInput.checked ? "checkboxTrue" : "checkboxFalse";
+    labelBoton.textContent = checkboxInput.checked ? "Disponible" : "Ocupado";
+  }
+};
+
 
   // Función para eliminar una mesa
   const EliminarMesa = async (e) => {

@@ -11,7 +11,7 @@ export default async () => {
 
   // ==================== Selección de elementos del DOM ====================
   const form = document.querySelector(".form"); // Formulario principal
-  const correoCliente = document.querySelector(".correoCliente"); // Input correo del cliente
+  const cedula = document.querySelector(".cedula"); // Input correo del cliente
   const numeroMesa = document.querySelector(".numeroMesa"); // Selector de mesas
   const cantidadTentativa = document.querySelector(".cantidadTentativa"); // Número de clientes previstos
   const fechaTentativa = document.querySelector(".fechaTentativa"); // Fecha tentativa de reserva
@@ -30,8 +30,11 @@ export default async () => {
   rellenarMesas(); // Ejecutar llenado de mesas
 
   // ==================== Validaciones en tiempo real ====================
-  correoCliente.addEventListener("blur", () => { validacion.quitarError(correoCliente.parentElement); });
-  correoCliente.addEventListener("keydown", (e) => { validacion.validarLimiteKey(e, 30); });
+  cedula.addEventListener("blur", () => { validacion.quitarError(cedula.parentElement); });
+  cedula.addEventListener("keydown", (e) => { 
+    validacion.validarNumeroKey(e); // Solo números
+    validacion.validarLimiteKey(e, 10); 
+  });
 
   numeroMesa.addEventListener("blur", () => { validacion.quitarError(numeroMesa.parentElement) });
 
@@ -49,21 +52,21 @@ export default async () => {
     e.preventDefault();
 
     // Validar todos los campos
-    let validarCorreoCliente = validacion.validarCorreo(correoCliente);
+    let validarCedula = validacion.validarCantidad(cedula,6);
     let validarNumeroMesa = validacion.validarCampo(numeroMesa);
     let validarCantidadTentativa = validacion.validarCampo(cantidadTentativa);
     let validarFechaTentativa = validacion.validarFecha(fechaTentativa);
     let validarHoraTentativa = validacion.validarHora(horaTentativa, fechaTentativa);
 
     // Si todos son válidos, se crea la reserva
-    if (validarCorreoCliente && validarNumeroMesa && validarCantidadTentativa && validarFechaTentativa && validarHoraTentativa) {
+    if (validarCedula && validarNumeroMesa && validarCantidadTentativa && validarFechaTentativa && validarHoraTentativa) {
 
       // Obtener capacidad de la mesa seleccionada
       const { capacidad } = await api.get(`mesas/${numeroMesa.value}`);
 
       // Objeto para crear la reserva
       const objetoReserva = {
-        cantidadTentativa: `${cantidadTentativa.value}/${capacidad}/${correoCliente.value}`,
+        cantidadTentativa: `${cantidadTentativa.value}/${capacidad}/${cedula.value}`,
         fechaTentativa: fechaTentativa.value,
         horaTentativa: horaTentativa.value + ":00",
       };
@@ -79,12 +82,10 @@ export default async () => {
         const objetoPedidoReserva = {
           numeroMesa: numeroMesa.value,
           numeroClientes: cantidadTentativa.value,
-          correoCliente: correoCliente.value,
+          cedulaUsuario: cedula.value,
           idReserva: creado.id,
         };
-
         const crearPedidoConReserva = await api.post("pedidos/reserva", objetoPedidoReserva);
-
         // Manejo de respuestas
         if (crearPedidoConReserva.Ok) {
           await alertaOK(creado.Ok); // Mensaje de éxito

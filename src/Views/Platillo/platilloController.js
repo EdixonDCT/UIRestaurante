@@ -1,5 +1,5 @@
 // Importa funciones de alerta para mostrar mensajes de éxito o error
-import { alertaOK, alertaError } from "../../Helpers/alertas";
+import {alertaPregunta, alertaOK, alertaError } from "../../Helpers/alertas";
 
 // Importa funciones para interactuar con la API
 import * as api from "../../Helpers/api";
@@ -184,39 +184,49 @@ export default async () => {
   await cargarPlatillos("cocteles");
 
   // Listener global para cambiar estado de disponible
-  document.addEventListener("change", async (e) => {
-    if (e.target.classList.contains("cambiarEstado")) {
-      const checkbox = e.target;
-      const id = checkbox.dataset.id;
-      const tipo = checkbox.dataset.tipo;
-      const nuevoEstado = checkbox.checked ? "1" : "0";
+document.addEventListener("change", async (e) => {
+  if (e.target.classList.contains("cambiarEstado")) {
+    const checkbox = e.target;
+    const id = checkbox.dataset.id;
+    const tipo = checkbox.dataset.tipo;
+    const nuevoEstado = checkbox.checked ? "1" : "0";
 
-      try {
-        const objetoDisponible = { disponible: nuevoEstado };
-        await api.patch(`${tipo}/${id}`, objetoDisponible);
-
-        // Actualizar label y celda
-        const labelEstado = document.querySelector(
-          `label[data-estado="${tipo}-${id}"]`
-        );
-        if (labelEstado) {
-          labelEstado.textContent = nuevoEstado === "1" ? "Activo" : "Inactivo";
-          labelEstado.className =
-            nuevoEstado === "1" ? "checkboxTrue" : "checkboxFalse";
-        }
-
-        const tdDisponible = document.querySelector(
-          `td[data-clave="${tipo}-${id}"]`
-        );
-        if (tdDisponible) {
-          tdDisponible.textContent = nuevoEstado === "1" ? "Sí" : "No";
-        }
-      } catch (error) {
-        alertaError("Error al cambiar estado: " + (error.message || "Error desconocido"));
-        checkbox.checked = !checkbox.checked; // Revertir checkbox si falla
-      }
+    // Preguntar antes de aplicar el cambio
+    const respuesta = await alertaPregunta(`¿Desea cambiar el estado del ${tipo} con ID ${id}?`);
+    if (!respuesta.isConfirmed) {
+      // Revertir el cambio si canceló
+      checkbox.checked = !checkbox.checked;
+      return;
     }
-  });
+
+    try {
+      const objetoDisponible = { disponible: nuevoEstado };
+      await api.patch(`${tipo}/${id}`, objetoDisponible);
+
+      // Actualizar label y celda
+      const labelEstado = document.querySelector(
+        `label[data-estado="${tipo}-${id}"]`
+      );
+      if (labelEstado) {
+        labelEstado.textContent = nuevoEstado === "1" ? "Activo" : "Inactivo";
+        labelEstado.className =
+          nuevoEstado === "1" ? "checkboxTrue" : "checkboxFalse";
+      }
+
+      const tdDisponible = document.querySelector(
+        `td[data-clave="${tipo}-${id}"]`
+      );
+      if (tdDisponible) {
+        tdDisponible.textContent = nuevoEstado === "1" ? "Sí" : "No";
+      }
+    } catch (error) {
+      alertaError("Error al cambiar estado: " + (error.message || "Error desconocido"));
+      // Revertir checkbox si falla
+      checkbox.checked = !checkbox.checked;
+    }
+  }
+});
+
 
   // Listener para botones de crear y editar platillos
   window.addEventListener("click", async (e) => {

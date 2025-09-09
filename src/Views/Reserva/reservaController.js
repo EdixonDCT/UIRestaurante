@@ -34,7 +34,7 @@ export default async () => {
   const tabla = document.createElement("table");
   tabla.classList.add("tablas");
 
-  const encabezados = ["ID","Correo Cliente","No.Mesa","Cantidad","Fecha","Hora","Acciones"];
+  const encabezados = ["ID","CC.Cliente","Nombre Cliente","No.Mesa","Cantidad","Fecha","Hora","Acciones"];
   const filaEncabezado = document.createElement("tr");
   encabezados.forEach((text) => {
     const th = document.createElement("th");
@@ -60,7 +60,8 @@ export default async () => {
         // Columnas con los datos de cada reserva
         const columnas = [
           pedido.id,
-          pedido.correoCliente,
+          pedido.cedulaUsuario,
+          pedido.nombreApellidoCliente,
           pedido.numeroMesa,
           reserva.cantidadTentativa,
           reserva.fechaTentativa,

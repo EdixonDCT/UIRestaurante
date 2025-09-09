@@ -13,7 +13,7 @@ export default async () => {
   const form = document.querySelector(".form"); // Formulario principal
   const numeroMesa = document.querySelector(".numeroMesa"); // Selector de mesa
   const numeroClientes = document.querySelector(".numeroClientes"); // Input de número de clientes
-  const correoCliente = document.querySelector(".correoCliente"); // Input correo del cliente
+  const cedula = document.querySelector(".cedula"); // Input correo del cliente
   const idCaja = document.querySelector(".idCaja"); // Selector de caja
   const metodoPago = document.querySelector(".metodoPago"); // Selector de método de pago
 
@@ -54,7 +54,7 @@ export default async () => {
   let idPedido = traerDatos.id;
   numeroMesa.value = traerDatos.numeroMesa;
   numeroClientes.value = traerDatos.numeroClientes;
-  correoCliente.value = traerDatos.correoCliente;
+  cedula.value = traerDatos.cedulaUsuario;
 
   // ==================== Validaciones de campos en tiempo real ====================
   numeroMesa.addEventListener("blur", () => { validacion.quitarError(numeroMesa.parentElement) });
@@ -64,8 +64,11 @@ export default async () => {
     validacion.validarNumeroKey(e);
     validacion.validarLimiteKey(e, 2); // Máximo 2 dígitos
   });
-  correoCliente.addEventListener("blur", () => { validacion.quitarError(correoCliente.parentElement) });
-  correoCliente.addEventListener("keydown", (e) => { validacion.validarLimiteKey(e, 30) }); // Max 30 caracteres
+  cedula.addEventListener("blur", () => { validacion.quitarError(cedula.parentElement) });
+  cedula.addEventListener("keydown", (e) => { 
+    validacion.validarNumeroKey(e); // Solo números
+    validacion.validarLimiteKey(e, 10); 
+  }); // Max 30 caracteres
   metodoPago.addEventListener("blur", () => { validacion.quitarError(metodoPago.parentElement) });
 
   // ==================== Enviar formulario ====================
@@ -76,11 +79,11 @@ export default async () => {
     let validarNumeroMesa = validacion.validarCampo(numeroMesa);
     let validaridCaja = validacion.validarCampo(idCaja);
     let validarNumeroClientes = validacion.validarCampo(numeroClientes);
-    let validarCorreoCliente = validacion.validarCorreo(correoCliente);
+    let validarCedula = validacion.validarCantidad(cedula,6);
     let validarMetodoPago = validacion.validarCampo(metodoPago);
 
     // Si todos los campos son válidos, actualizamos el pedido
-    if (validarNumeroMesa && validaridCaja && validarNumeroClientes && validarCorreoCliente && validarMetodoPago) {
+    if (validarNumeroMesa && validaridCaja && validarNumeroClientes && validarCedula && validarMetodoPago) {
       const objetoPedido = {
         idCaja: idCaja.value,
         metodoPago: metodoPago.value

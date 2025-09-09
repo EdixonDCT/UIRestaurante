@@ -374,7 +374,11 @@ body {
   background-color: var(--color-oscuro);
   color: var(--color-gris);
 }
-
+.tablaAcciones--derecha {
+  display: flex;
+  justify-content: end;
+  gap: 20px;
+}
 .tablaCheckBox {
   width: 200px;
   display: flex;
